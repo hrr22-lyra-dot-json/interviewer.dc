@@ -5,7 +5,13 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha --timeout 20000",
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "db:create": "sequelize db:migrate",
+    "db:seed": "sequelize db:seed:all",
+    "db:unseed": "sequelize db:seed:undo:all",
+    "db:reseed": "npm run db:unseed && npm run db:seed",
+    "db:setup": "npm run db:create && npm run db:unseed && npm run db:seed",
+    "db:drop": "sequelize db:migrate:undo:all"
   },
   "repository": {
     "type": "git",
@@ -16,11 +22,13 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "morgan": "^1.8.1"
+    "morgan": "^1.8.1",
+    "sequelize": "^3.30.4"
   },
   "devDependencies": {
     "chai": "*",
     "mocha": "*",
+    "sequelize-cli": "^2.7.0",
     "supertest": "*"
   }
 }
