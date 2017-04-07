@@ -4,7 +4,7 @@
   "description": "Interviewing platform",
   "main": "server.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --timeout 20000",
     "start": "node server/server.js"
   },
   "repository": {
@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "chai": "*",
-    "mocha": "*"
+    "mocha": "*",
+    "supertest": "*"
   }
 }

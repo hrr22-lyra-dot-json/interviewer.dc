@@ -1,3 +1,5 @@
+// DO NOT use arrow functions in testing
+
 const assert = require('assert');
 
 describe('Array', () => {
