@@ -16,16 +16,13 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
-<<<<<<< HEAD
-    "morgan": "^1.8.1"
+    "morgan": "^1.8.1",
+    "sequelize": "^3.30.4",
+    "sequelize-cli": "^2.7.0"
   },
   "devDependencies": {
     "chai": "*",
     "mocha": "*",
     "supertest": "*"
-=======
-    "morgan": "^1.8.1",
-    "sequelize": "^3.30.4"
->>>>>>> Database file reconfiguration and supporting mysql
   }
 }
