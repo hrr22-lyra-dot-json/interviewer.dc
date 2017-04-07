@@ -16,6 +16,9 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "morgan": "^1.8.1"
+    "morgan": "^1.8.1",
+    "auth0-lock": "^10.13.0",
+    "react-dom": "^15.3.1",
+    "react-router": "^2.8.0"
   }
 }
