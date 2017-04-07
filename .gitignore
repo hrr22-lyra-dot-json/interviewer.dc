@@ -10,6 +10,7 @@ npm-debug.log
 .floo
 .floobit
 .flooignore
+.DS_Store
 
 # Local development
 *.env
