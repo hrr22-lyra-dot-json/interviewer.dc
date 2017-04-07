@@ -4,7 +4,7 @@
   "description": "Interviewing platform",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --timeout 20000",
+    "test": "mocha --timeout 20000 && casperjs test-end/EndSpec.js",
     "start": "node server/server.js"
   },
   "repository": {
@@ -19,8 +19,11 @@
     "morgan": "^1.8.1"
   },
   "devDependencies": {
+    "casperjs": "*",
     "chai": "*",
     "mocha": "*",
+    "phantomjs": "*",
+    "phantomjs-prebuilt": "*",
     "supertest": "*"
   }
 }
