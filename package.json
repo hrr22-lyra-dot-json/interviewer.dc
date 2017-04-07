@@ -10,7 +10,7 @@
     "db:seed": "sequelize db:seed:all",
     "db:unseed": "sequelize db:seed:undo:all",
     "db:reseed": "npm run db:unseed && npm run db:seed",
-    "db:setup": "npm run db:create && npm run db:seed",
+    "db:setup": "npm run db:create && npm run db:unseed && npm run db:seed",
     "db:drop": "sequelize db:migrate:undo:all"
   },
   "repository": {
