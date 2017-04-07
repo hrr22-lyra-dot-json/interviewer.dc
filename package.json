@@ -1,0 +1,21 @@
+{
+  "name": "interviewer.dc",
+  "version": "1.0.0",
+  "description": "Interviewing platform",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hrr22-lyra-dot-json/interviewer.dc"
+  },
+  "author": "hrr22-lyra-dot-json",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "morgan": "^1.8.1"
+  }
+}
