@@ -4,7 +4,8 @@
   "description": "Interviewing platform",
   "main": "server.js",
   "scripts": {
-    "test": "nyc mocha --timeout 20000 && casperjs test-end/EndSpec.js",
+    "test": "nyc mocha --timeout 20000 --reporter mochawesome && casperjs test-end/EndSpec.js",
+    "test-unit": "nyc mocha --timeout 20000",
     "start": "node server/server.js",
     "db:create": "sequelize db:migrate",
     "db:seed": "sequelize db:seed:all",
@@ -36,19 +37,21 @@
     "babel-preset-react": "^6.5.0"
   },
   "devDependencies": {
+    "auth0-lock": "^10.13.0",
+    "babel-cli": "^6.6.5",
+    "babel-watch": "^2.0.6",
     "casperjs": "*",
     "chai": "*",
     "mocha": "*",
+    "mochawesome": "^2.0.4",
     "nyc": "^10.2.0",
+    "pg": "^6.1.5",
     "phantomjs": "*",
     "phantomjs-prebuilt": "*",
+    "react-dom": "^15.3.1",
+    "react-router": "^2.8.0",
     "sequelize-cli": "^2.7.0",
     "supertest": "*",
-    "webpack-dev-server": "^2.4.2",
-    "babel-cli": "^6.6.5",
-    "babel-watch": "^2.0.6",
-    "auth0-lock": "^10.13.0",
-    "react-dom": "^15.3.1",
-    "react-router": "^2.8.0"
+    "webpack-dev-server": "^2.4.2"
   }
 }
