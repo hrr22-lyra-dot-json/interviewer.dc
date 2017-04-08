@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 // import 'bootstrap/dist/css/bootstrap.css'
 // import './app.css'
 
-import App from '/Components/App.jsx'
+import App from './Components/App.jsx'
 
 // import {browserHistory} from 'react-router'
 // import makeRoutes from './routes'
