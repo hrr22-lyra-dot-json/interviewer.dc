@@ -27,7 +27,7 @@ or `npm run quick` which builds then runs.
 
 ## Testing
 
-To test the app, run the following (requires PhantomJS and CasperJS):
+To test the app, run the following (requires PhantomJS and CasperJS, which I recommend installing via Homebrew - they must be installed globally):
 ```
 npm test
 OR

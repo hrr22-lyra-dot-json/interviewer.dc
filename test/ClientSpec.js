@@ -1,6 +1,7 @@
 // DO NOT use arrow functions in testing
 
 const assert = require('assert');
+const app = require('../client/index.js');
 
 describe('Array', () => {
   describe('#indexOf', () => {
