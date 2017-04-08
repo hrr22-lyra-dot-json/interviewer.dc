@@ -5,9 +5,10 @@ import AuthService from '../Services/AuthService.js'
 export class Login extends React.Component {
 
 
+
   render() {
 
-    console.log('props', this.props.routes[1].auth);
+    console.log('props', this.props);
     const { auth } = this.props.routes[1]
 
 

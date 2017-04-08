@@ -7,16 +7,16 @@ import AuthService from '../Services/AuthService.js'
 
 
 const auth = new AuthService('bIi5wFickS2TiO4JVTmyXIsfsLEJAYor', 'sdm.auth0.com')
-const requireAuth = (nextState, replace) => {
-  if (!auth.loggedIn()) {
-    replace({ pathname: '/login' })
-  }
-}
-const routes = ( <div>
-        <Route path="/" component={Home} auth={auth} onEnter={requireAuth} />
-          <Route path={peth} component={Home} auth={auth} onEnter={requireAuth} />
-          <Route path="/login" component={Login} auth={auth} />
-        </div>)
+// const requireAuth = (nextState, replace) => {
+//   if (!auth.loggedIn()) {
+//     replace({ pathname: '/login' })
+//   }
+// }
+// const routes = ( <div>
+//         <Route path="/" component={Home} auth={auth} onEnter={requireAuth} />
+//           <Route path='/home' component={Home} auth={auth} onEnter={requireAuth} />
+//           <Route path="/login" component={Login} auth={auth} />
+//         </div>)
 
 
 export default class App extends React.Component {
@@ -50,12 +50,14 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <Router history={hashHistory}>
-       <div>
-        <Route path="/" component={Home} auth={auth} onEnter={requireAuth} />
-          <Route path='/home' component={Home} auth={auth} onEnter={requireAuth} />
+      <Router history={hashHistory} >
+      <div>
+
+        <Route path="/" component={Home} auth={auth} onEnter={this.requireAuth} />
+          <Route path='/home' component={Home} auth={auth} onEnter={this.requireAuth} />
           <Route path="/login" component={Login} auth={auth} />
-        </div>)
+          </div>
+
       </Router>
     )
   }
