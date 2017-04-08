@@ -22,7 +22,8 @@ export class Home extends React.Component {
 
   logout(){
     this.props.routes[1].auth.logout()
-    console.log('ello')//go to other frigging page!!!!
+    console.log('ello')
+    //go to other frigging page!!!!
     // return (
     //   <Redirect pushg/>
     //   )
@@ -44,7 +45,7 @@ export class Home extends React.Component {
               <small>Hello {this.state.profile.name}</small>
             </p>
 
-            <button onClick={this.logout.bind(this)} className="btn btn-primary">Sign Out</button>
+            <Link to='/login' onClick={this.logout.bind(this)} className="btn btn-primary">Sign Out</Link>
 
 
       </div>
