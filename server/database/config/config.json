@@ -1,13 +1,13 @@
 {
   "development": {
-    "username": "",
+    "username": "root",
     "password": null,
     "database": "interviewer_dc",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "dev-mysql": {
-    "username": "",
+    "username": "root",
     "password": null,
     "database": "interviewer_dc",
     "host": "127.0.0.1",
