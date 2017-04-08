@@ -29,6 +29,7 @@ To test the app, run the following (requires PhantomJS and CasperJS):
 ```
 npm test
 ```
+Note: the tests use the Mochawesome reporter, which saves a report in json and html format and provides the link in the terminal after the tests run. The html report is beautiful, just copy and paste that path into a browser to view.
 
 
 
