@@ -22,7 +22,7 @@ export class Home extends React.Component {
 
   logout(){
     this.props.routes[1].auth.logout()
-    console.log('ello')
+    console.log('ello')//go to other frigging page!!!!
     // return (
     //   <Redirect pushg/>
     //   )
