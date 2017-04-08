@@ -2,6 +2,7 @@ import React from 'react'
 import AuthService from '../Services/AuthService.js'
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
 
+
 //import styles from './styles.module.css'
 
 export class Home extends React.Component {
@@ -44,6 +45,7 @@ export class Home extends React.Component {
             </p>
 
             <button onClick={this.logout.bind(this)} className="btn btn-primary">Sign Out</button>
+
 
       </div>
     )

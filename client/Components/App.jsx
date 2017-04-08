@@ -1,8 +1,10 @@
 import React, { PropTypes } from 'react'
-import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
+
+import { BrowserRouter as Router, Route, Link, Redirect, withRouter} from 'react-router'
 import Login from './Login.jsx'
 import Home from './Home.jsx'
 import AuthService from '../Services/AuthService.js'
+
 
 const auth = new AuthService('bIi5wFickS2TiO4JVTmyXIsfsLEJAYor', 'sdm.auth0.com')
 var peth = '/home';
@@ -45,13 +47,21 @@ export default class App extends React.Component {
       if (!auth.loggedIn()) {
       replace({ pathname: '/login' })
      }
+    this.state = {}
   }
+
+
+// validate authentication for private routes
+  // const requireAuth = (nextState, replace) => {
+  //   if (!auth.loggedIn()) {
+  //     replace({ pathname: '/login' })
+  //   }
+  // }
 
   render() {
     return (
       <Router history={hashHistory}>
       {routes}
-
       </Router>
     )
   }

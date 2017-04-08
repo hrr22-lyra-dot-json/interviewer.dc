@@ -46,7 +46,9 @@
     "supertest": "*",
     "webpack-dev-server": "^2.4.2",
     "babel-cli": "^6.6.5",
-    "babel-watch": "^2.0.6"
-
+    "babel-watch": "^2.0.6",
+    "auth0-lock": "^10.13.0",
+    "react-dom": "^15.3.1",
+    "react-router": "^2.8.0"
   }
 }
