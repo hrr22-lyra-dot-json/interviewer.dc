@@ -1,9 +1,11 @@
 import React from 'react'
 import AuthService from '../Services/AuthService.js'
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
+import Nav from './Nav.jsx'
+import Calendar from './Calendar.jsx'
+import Timeslots from './Calendar.jsx'
 
 
-//import styles from './styles.module.css'
 
 export class Home extends React.Component {
 
@@ -12,40 +14,30 @@ export class Home extends React.Component {
     this.state = {  profile: props.routes[1].auth.getProfile() }
 
     props.routes[1].auth.on('logged_out', (bye) => {
-      console.log('hwhy')
       this.setState({profile: this.props.routes[1].auth.getProfile()})
-
-
-      //this.render();
     })
   }
 
   logout(){
     this.props.routes[1].auth.logout()
-    console.log('ello')
-    //go to other frigging page!!!!
-    // return (
-    //   <Redirect pushg/>
-    //   )
-
-
-     // return (<Redirect to='/login'/>)
   }
-
-
 
   render() {
     // const { auth } = this.props.routes[1]
 
     return (
       <div>
-        <p>Welcome to Interviewer Direct Connect! </p>
-        <p>The most advanced interviewing platform in the world.</p>
-        <p >
-              <small>Hello {this.state.profile.name}</small>
-            </p>
+      <div className="jumbotron">
+          <h1>Welcome to Interviewer Direct Connect! </h1>
+          <p>The most advanced interviewing platform in the world brought to you by Project Washington.</p>
+          <p >
+                <small>Hello {this.state.profile.name}</small>
+              </p>
 
-            <Link to='/login' onClick={this.logout.bind(this)} className="btn btn-primary">Sign Out</Link>
+              <Link to='/login' onClick={this.logout.bind(this)} className="rightimg" className="btn btn-primary">Sign Out</Link>
+      </div>
+
+      <Calendar />
 
 
       </div>
