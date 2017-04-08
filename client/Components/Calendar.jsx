@@ -18,13 +18,16 @@ class Calendar extends React.Component {
     return (
       // React Components in JSX look like HTML tags
       <BigCalendar
+      selectable={true}
         timeslots={8}
         style={{height: '420px'}}
-          events={events}
-          scrollToTime={new Date(1970, 1, 1, 6)}
-         defaultDate={new Date(2015, 3, 12)}
+        events={events}
+        scrollToTime={new Date(1970, 1, 1, 6)}
+        defaultDate={new Date(2015, 3, 12)}
         onSelectEvent={event => alert(event.title)}
-          onSelectSlot={(slotInfo) => {console.log('hello')
+        onSelectSlot={console.log('hey!')}
+
+        onSelectSlot={(slotInfo) => {console.log('hello')
           alert(
             `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
             `\nend: ${slotInfo.end.toLocaleString()}`

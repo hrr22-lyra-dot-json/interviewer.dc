@@ -1,3 +1,10 @@
+#authorize-button {
+  display: none;
+}
+#signout-button {
+  display: none;
+}
+
 .loginimg {
   max-height: 200px;
 }
