@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "nyc mocha --timeout 20000 && casperjs test-end/EndSpec.js",
-    "start": "node server/server.js"
+    "start": "node server/server.js",
     "db:create": "sequelize db:migrate",
     "db:seed": "sequelize db:seed:all",
     "db:unseed": "sequelize db:seed:undo:all",
