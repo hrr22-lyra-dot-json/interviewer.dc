@@ -11,10 +11,9 @@ npm-debug.log
 .floobit
 .flooignore
 .DS_Store
+.nyc_output
 
 # Local development
 *.env
 *.dev
 /client/dist
-
-
