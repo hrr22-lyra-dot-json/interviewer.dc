@@ -4,7 +4,7 @@
   "description": "Interviewing platform",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --timeout 20000",
+    "test": "nyc mocha --timeout 20000 && casperjs test-end/EndSpec.js",
     "start": "node server/server.js",
     "db:create": "sequelize db:migrate",
     "db:seed": "sequelize db:seed:all",
@@ -26,8 +26,12 @@
     "sequelize": "^3.30.4"
   },
   "devDependencies": {
+    "casperjs": "*",
     "chai": "*",
     "mocha": "*",
+    "nyc": "^10.2.0",
+    "phantomjs": "*",
+    "phantomjs-prebuilt": "*",
     "sequelize-cli": "^2.7.0",
     "supertest": "*"
   }

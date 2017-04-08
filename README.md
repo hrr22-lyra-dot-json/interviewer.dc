@@ -25,6 +25,13 @@ npm start
 ```
 or `npm run quick` which builds then runs.
 
+To test the app, run the following (requires PhantomJS and CasperJS):
+```
+npm test
+```
+
+
+
 ## Team
 - __Product Owner__: [Jordan Stubblefield](https://github.com/JStubb7939)
 - __Scrum Master__: [Simon de Moor](https://github.com/sdemoor)
