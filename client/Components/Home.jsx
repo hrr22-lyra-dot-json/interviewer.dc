@@ -4,6 +4,11 @@ import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} 
 import Nav from './Nav.jsx'
 import Calendar from './Calendar.jsx'
 import Timeslots from './Calendar.jsx'
+import CalendarAuth from './CalendarAuth.jsx'
+import CalendarService from '../Services/CalendarService.js'
+
+
+
 
 
 
@@ -36,6 +41,8 @@ export class Home extends React.Component {
 
               <Link to='/login' onClick={this.logout.bind(this)} className="rightimg" className="btn btn-primary">Sign Out</Link>
       </div>
+
+      <CalendarAuth />
 
       <Calendar />
 

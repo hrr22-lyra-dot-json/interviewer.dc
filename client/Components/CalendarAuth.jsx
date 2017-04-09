@@ -6,7 +6,7 @@ var CalendarAuth = () => (
 
 
 <div>
-  <button id="authorize-button" onClick={}>Authorize</button>
+  <button id="authorize-button" onClick={CalendarService.handleAuthClick}>Authorize</button>
     <button id="signout-button">Sign Out</button>
 
     <pre id="content"></pre>
