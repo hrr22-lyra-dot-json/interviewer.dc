@@ -1,5 +1,11 @@
 export default [
   {
+    'title': "Tapout 7",
+    'start': new Date("2017-04-28T06:30:00+10:00"),
+    'end': new Date("2017-04-28T12:30:00+10:00"),
+
+  },
+  {
     'title': 'All Day Event',
     'allDay': true,
     'start': new Date(2015, 3, 0),
