@@ -50,10 +50,10 @@ export default class CalendarService extends EventEmitter {
   handleAuthClick(event) {
     gapi.auth.authorize(
       {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
-      this.handleAuthResult.bind(this));  //return false;
+      this.handleAuthResult.bind(this));  //return false; .bind(this)
   }
   loadCalendarApi() {
-    gapi.client.load('calendar', 'v3', this.listUpcomingEvents);
+    gapi.client.load('calendar', 'v3', this.listUpcomingEvents.bind(this));
   }
   listUpcomingEvents() {
     var request = gapi.client.calendar.events.list({
@@ -64,10 +64,12 @@ export default class CalendarService extends EventEmitter {
       'maxResults': 15,
       'orderBy': 'startTime'
     })
+    var context = this;
     request.execute(function(resp) {
       console.log('resp', resp.items);
       var events = resp.items;
-      this.appendPre('The up comming events in your calendar are:'+ '\n'+'\n');
+      var evss = [];
+      // this.appendPre('The up comming events in your calendar are:'+ '\n'+'\n');
       if (events.length > 0) {
         for (var i = 0; i < events.length; i++) {
           var evv = {
@@ -90,13 +92,15 @@ export default class CalendarService extends EventEmitter {
           evv.start = new Date(when);
           evv.end = new Date(end);
           evv.title = event.summary;
-          this.emit('events_loaded', evv);
+          evss.push(evv);
+          //context.emit('events_loaded', evv);
           //module.exports.events.push(evv);
           console.log('evv', evv);
-          this.appendPre(i+1+' '+ event.summary + ' ('+' '+ when +' '+ ')' + '\n');
+          // this.appendPre(i+1+' '+ event.summary + ' ('+' '+ when +' '+ ')' + '\n');
         }
+        context.emit('events_loaded', evss);
       } else {
-        this.appendPre('No upcoming events found.');
+        //this.appendPre('No upcoming events found.');
       }
     })
   }
