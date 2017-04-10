@@ -90,3 +90,18 @@ exports.listUserMeetings = function(req, res) {
     res.status(500).send();
   });
 };
+
+/*
+** Expected request query: {user_id(integer): 'user id', {meeting_id(integer): 'meeting id'}}
+** Expected response: 200 OK status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.deleteUserMeeting = function(req, res) {
+  UserMeeting.destroy({where: {user_id: req.query.user_id, meeting_id: req.query.meeting_id}})
+  .then(function(affectedRows) {
+    res.status(200).send();
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send();
+  });
+};
