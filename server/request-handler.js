@@ -66,8 +66,24 @@ exports.addUserMeeting = function(req, res) {
 ** Expected response: 200 OK status, {usermeetings(array): [{user_id(integer): 'user id', meeting_id(integer): 'meeting id'}]}
 ** Expected response on database error: 500 Internal Server Error status
 */
+exports.listAllUserMeetings = function(req, res) {
+  UserMeeting.findAll()
+  .then(function(UserMeetings) {
+    res.status(200).send(UserMeetings);
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send();
+  });
+};
+
+/*
+** Expected request query: {user_id(integer): 'user id'}
+** Expected response: 200 OK status, {usermeetings(array): [{user_id(integer): 'user id', meeting_id(integer): 'meeting id'}]}
+** Expected response on database error: 500 Internal Server Error status
+*/
 exports.listUserMeetings = function(req, res) {
-  UserMeeting.findAll().then(function(UserMeetings) {
+  UserMeeting.findAll({where: {user_id: req.query.user_id}})
+  .then(function(UserMeetings) {
     res.status(200).send(UserMeetings);
   }).catch(function(err) {
     console.error(err);
