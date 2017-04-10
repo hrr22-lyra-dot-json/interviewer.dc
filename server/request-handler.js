@@ -19,6 +19,21 @@ exports.addMeeting = function(req, res) {
 };
 
 /*
+** Expected request query: {meeting_id: 'meeting id'}
+** Expected resposne: 200 OK status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.deleteMeeting = function(req, res) {
+  Meeting.destroy({where: {meeting_id: req.query.meeting_id}})
+  .then(function(affectedRows) {
+    res.status(200).send();
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send();
+  });
+};
+
+/*
 ** Expected request body: {username(string): 'username', email(string): 'user email'}
 ** Expected response if user exists: 409 Conflict status
 ** Expected response if user does not exist: 201 Created status

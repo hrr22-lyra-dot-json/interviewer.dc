@@ -1,8 +1,8 @@
 var requestHandler = require('./request-handler.js');
 
 module.exports = function(app) {
-  //app.post('/api/Meeting', requestHandler.addMeeting);
-  //app.delete('/api/Meeting', requestHandler.deleteMeeting);
+  app.post('/api/Meeting', requestHandler.addMeeting);
+  app.delete('/api/Meeting', requestHandler.deleteMeeting);
   app.post('/api/User', requestHandler.addUser);
   app.post('/api/UserMeeting', requestHandler.addUserMeeting);
   // List all rows in the UserMeeting table
