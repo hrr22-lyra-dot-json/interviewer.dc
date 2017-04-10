@@ -6,7 +6,7 @@ module.exports = function(app) {
   app.post('/api/User', requestHandler.addUser);
   app.post('/api/UserMeeting', requestHandler.addUserMeeting);
   // List all rows in the UserMeeting table
-  //app.get('/api/allUserMeeting', requestHandler.listUserMeeting);
+  app.get('/api/allUserMeetings', requestHandler.listUserMeetings);
   // List all meetings that a specific user is part of
   //app.get('/api/UserMeeting', requestHandler.listUsersMeetings);
   //app.delete('/api/UserMeeting', requestHandler.deleteUserMeeting);

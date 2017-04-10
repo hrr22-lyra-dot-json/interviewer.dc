@@ -40,7 +40,7 @@ exports.addUser = function(req, res) {
 
 /*
 ** Expected request body: {user_id(integer): 'user id', meeting_id(integer): 'meeting id'}
-** Expected resposne if usermeeting exists: 409 Conflict status
+** Expected response if usermeeting exists: 409 Conflict status
 ** Expected response if usermeeting does not exist: 201 Created status
 */
 exports.addUserMeeting = function(req, res) {
@@ -51,5 +51,14 @@ exports.addUserMeeting = function(req, res) {
     } else {
       res.status(409).send();
     }
+  });
+};
+
+/*
+** Expected response: 200 OK status, {usermeetings(array): [{user_id(integer): 'user id', meeting_id(integer): 'meeting id'}]}
+*/
+exports.listUserMeetings = function(req, res) {
+  UserMeeting.findAll().then(function(UserMeetings) {
+    res.status(200).send(UserMeetings);
   });
 };
