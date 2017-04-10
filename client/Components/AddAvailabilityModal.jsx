@@ -1,34 +1,74 @@
-import React from 'react';
+// import React from 'react';
+// import Modal from 'react-modal';
 
 
-var AddAvail = ({info}) => (
-  <div>
-  <p>Hello</p>
 
-<button type="button" className="btn btn-primary" data-toggle="modal" data-target="#myModal">
-  Our Team
-</button>
+// const customStyles = {
+//   content : {
+//     top                   : '50%',
+//     left                  : '50%',
+//     right                 : 'auto',
+//     bottom                : 'auto',
+//     marginRight           : '-50%',
+//     transform             : 'translate(-50%, -50%)'
+//   }
+// };
 
-<div className="modal fade show" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style={{display: 'none'}} >
-  <div className="modal-dialog" role="document">
-    <div className="modal-content">
-      <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLabel">AAdd Availability</h5>
-        <button  type="button" className="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true"></span>
-        </button>
-      </div>
-      <div className="modal-body">
-        <p>{info.start}</p>
 
-      </div>
-      <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-  )
+// class AvailModal extends React.Component {
+//   constructor(props) {
+//     super(props);
 
-module.exports = AddAvail;
+//     this.state = {
+//       modalIsOpen: props.modStatus
+//     };
+//     console.log(this.state.modalIsOpen)
+
+//     this.openModal = this.openModal.bind(this);
+//     this.afterOpenModal = this.afterOpenModal.bind(this);
+//     this.closeModal = this.closeModal.bind(this);
+//   }
+
+//   openModal() {
+//     this.setState({modalIsOpen: true});
+//   }
+
+//   afterOpenModal() {
+//     // references are now sync'd and can be accessed.
+//     this.refs.subtitle.style.color = '#f00';
+//   }
+
+//   closeModal() {
+//     this.setState({modalIsOpen: false});
+//   }
+
+//   render() {
+//     return (
+//       <div>
+//         <button onClick={this.openModal}>Open Modal</button>
+//         <Modal
+//           isOpen={this.state.modalIsOpen}
+//           onAfterOpen={this.afterOpenModal}
+//           onRequestClose={this.closeModal}
+//           style={customStyles}
+//           contentLabel="Example Modal"
+//         >
+
+//           <h2 ref="subtitle">Hello</h2>
+//           <button onClick={this.closeModal}>close</button>
+//           <div>I am a modal</div>
+//           <form>
+//             <input />
+//             <button>tab navigation</button>
+//             <button>stays</button>
+//             <button>inside</button>
+//             <button>the modal</button>
+//           </form>
+//         </Modal>
+//       </div>
+//     );
+//   }
+// }
+
+// module.exports = AvailModal
+

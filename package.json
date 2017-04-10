@@ -34,6 +34,8 @@
     "path": "^0.12.7",
     "randomstring": "^1.1.5",
     "react-dom": "^15.3.1",
+    "react-modal": "^1.7.3",
+    "react-popout": "^0.6.0",
     "react-popup": "^0.6.0",
     "react-router": "^2.8.0",
     "sequelize": "^3.30.4",

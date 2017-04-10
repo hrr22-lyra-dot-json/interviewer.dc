@@ -6,8 +6,8 @@ var CalendarAuth = ({calserv}) => (
 
 
 <div>
-  <button id="authorize-button" onClick={calserv.handleAuthClick.bind(calserv)}>Authorize</button>
-    <button id="signout-button">Sign Out</button>
+  <button id="authorize-button" onClick={calserv.handleAuthClick.bind(calserv)}>See Google Calendar events</button>
+    <button id="signout-button">Hide other Google calendar events</button>
 
     <pre id="content"></pre>
 </div>
