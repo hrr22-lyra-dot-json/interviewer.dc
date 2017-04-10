@@ -1,12 +1,21 @@
 var User = require('./database/models').User;
 var Meeting = require('./database/models').Meeting;
 var UserMeeting = require('./database/models').UserMeeting;
+var utils = require('../lib/server_utility.js');
 
 /*
 ** Expected request body: {user_id(integer): 'user id', time(date): 'datetime for meeting'}
 ** Expected response: 201 Created status
+** Expected response on database error: 500 Internal Server Error status
 */
 exports.addMeeting = function(req, res) {
+  Meeting.create({owner_id: req.body.owner_id, room_url: utils.generateUrl(), time: req.body.time})
+  .then(function(Meeting) {
+    res.status(201).send();
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send();
+  });
 };
 
 /*

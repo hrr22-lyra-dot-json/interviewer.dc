@@ -8,7 +8,7 @@ module.exports = function(app) {
   // List all rows in the UserMeeting table
   app.get('/api/allUserMeetings', requestHandler.listAllUserMeetings);
   // List all meetings that a specific user is part of
-  app.get('/api/UserMeetings', requestHandler.listUsersMeetings);
+  app.get('/api/UserMeetings', requestHandler.listUserMeetings);
   app.delete('/api/UserMeeting', requestHandler.deleteUserMeeting);
   // Assume link is a meeting link
   //app.get('/*', requestHandler.findMeeting);
