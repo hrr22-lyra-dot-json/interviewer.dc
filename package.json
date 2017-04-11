@@ -59,6 +59,7 @@
     "mocha": "*",
     "mochawesome": "^2.0.4",
     "moment": "^2.18.1",
+    "nodemon": "^1.11.0",
     "nyc": "^10.2.0",
     "pg": "^6.1.5",
     "phantomjs-prebuilt": "*",
