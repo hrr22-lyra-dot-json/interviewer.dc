@@ -2,8 +2,8 @@
 module.exports = function(sequelize, DataTypes) {
   var Timeslot = sequelize.define('Timeslot', {
     owner_id: DataTypes.INTEGER,
-    room_url: DataTypes.STRING,
-    time: DataTypes.DATE
+    start: DataTypes.DATE,
+    end: DataTypes.DATE
   }, {
     classMethods: {
       associate: function(models) {

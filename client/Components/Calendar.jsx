@@ -44,14 +44,15 @@ class Calendar extends React.Component {
   constructor (props) {
     super(props)
     this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:true, slotLength: 30};
+    this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
     this.calService = calServ;
     console.log(calServ);
     this.hello = {start: ''};
+    //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
 
     calServ.on('events_loaded', (evv) => {
        this.setState({events: evv})
-
-
+       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
      })
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
@@ -103,7 +104,15 @@ class Calendar extends React.Component {
       newSlot.title = 'Book Interview'
       newTimeSlots.push(newSlot)
     }
-    var prevents = this.state.events.concat(newTimeSlots)
+    //post newtime slots to database with callback GET request to get freshly added timeslots
+    this.setState({availableSlots:this.state.availableSlots.push(newTimeSlots)})
+    this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
+
+   // this.setState({availableSlots:newTimeSlots})
+
+
+
+    //var prevents = this.state.events.concat(newTimeSlots)
 
 
 
@@ -111,7 +120,7 @@ class Calendar extends React.Component {
 
 
 
-    this.setState({events: prevents, modalIsOpen: false, selectable:true});
+    this.setState({modalIsOpen: false, selectable:true});
     //post request to availability slots database
 
   }
@@ -136,7 +145,7 @@ class Calendar extends React.Component {
         timeslots={8}
         style={{height: '420px'}}
         step={15}
-        events={this.state.events}
+        events={this.state.eventsAndSlots}
         scrollToTime={new Date(1970, 1, 1, 6)}
         defaultDate={new Date()}
         onSelectEvent={event => alert(event.title)}
