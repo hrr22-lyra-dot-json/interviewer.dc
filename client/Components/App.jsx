@@ -28,7 +28,7 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <Router history={hashHistory} >
+      <Router history={hashHistory}>
         <div>
           <Route path="/"  component={Home} auth={auth} onEnter={this.requireAuth} />
           <Route name='/' path="?access_token=:accesstoken&expires_in=:expiry&id_token=:idtoken&token_type=:tokentype&state=:stater" component={Home} auth={auth} onEnter={this.requireAuth} />

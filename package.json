@@ -65,6 +65,10 @@
     "pg": "^6.1.5",
     "phantomjs-prebuilt": "*",
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    "prop-types": "^15.5.6",
+>>>>>>> 265440eeb06ca4fb9a0506bdc2453b587f395264
     "react-big-calendar": "^0.11.1",
 =======
     "prop-types": "^15.5.6",
