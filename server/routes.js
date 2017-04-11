@@ -10,6 +10,8 @@ module.exports = function(app) {
   // List all meetings that a specific user is part of
   app.get('/api/UserMeetings', requestHandler.listUserMeetings);
   app.delete('/api/UserMeeting', requestHandler.deleteUserMeeting);
+  app.post('/api/Timeslot', requestHandler.addTimeslot);
+
   // Assume link is a meeting link
   //app.get('/*', requestHandler.findMeeting);
 };

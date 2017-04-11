@@ -1,10 +1,11 @@
 const User = require('./database/models').User;
 const Meeting = require('./database/models').Meeting;
 const UserMeeting = require('./database/models').UserMeeting;
+const Timeslot = require('./database/models').Timeslot;
 const utils = require('../lib/server_utility.js');
 
 /*
-** Expected request body: {user_id(integer): 'user id', time(date): 'datetime for meeting'}
+** Expected request body: {owner_id(integer): 'user id', time(date): 'datetime for meeting'}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
@@ -19,7 +20,7 @@ exports.addMeeting = function(req, res) {
 };
 
 /*
-** Expected request query: {meeting_id: 'meeting id'}
+** Expected request query: {meeting_id(integer): 'meeting id'}
 ** Expected resposne: 200 OK status
 ** Expected response on database error: 500 Internal Server Error status
 */
@@ -128,5 +129,20 @@ exports.deleteUserMeeting = function(req, res) {
   }).catch(function(err) {
     console.error(err);
     res.status(500).send();
+  });
+};
+
+/*
+** Expected request body: {owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time'}
+** Expected response: 201 Created status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.addTimeslot = function(req, res) {
+  Timeslot.create({owner_id: req.body.owner_id, start: req.body.start, end: req.body.end})
+  .then(function(newTimeslot) {
+    res.status(201).send(newTimeslot);
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
   });
 };
