@@ -193,7 +193,7 @@ exports.listTimeslots = function(req, res) {
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.deleteTimeslot = function(req, res) {
-  Timeslot.delete({where: {id: req.query.id}})
+  Timeslot.destroy({where: {id: req.query.id}})
   .then(function(affectedRows) {
     res.status(200).send();
   }).catch(function(err) {
