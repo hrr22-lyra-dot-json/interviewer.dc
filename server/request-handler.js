@@ -1,7 +1,7 @@
-var User = require('./database/models').User;
-var Meeting = require('./database/models').Meeting;
-var UserMeeting = require('./database/models').UserMeeting;
-var utils = require('../lib/server_utility.js');
+const User = require('./database/models').User;
+const Meeting = require('./database/models').Meeting;
+const UserMeeting = require('./database/models').UserMeeting;
+const utils = require('../lib/server_utility.js');
 
 /*
 ** Expected request body: {user_id(integer): 'user id', time(date): 'datetime for meeting'}
@@ -24,7 +24,7 @@ exports.addMeeting = function(req, res) {
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.deleteMeeting = function(req, res) {
-  Meeting.destroy({where: {meeting_id: req.query.meeting_id}})
+  Meeting.destroy({where: {id: req.query.meeting_id}})
   .then(function(affectedRows) {
     res.status(200).send();
   }).catch(function(err) {
