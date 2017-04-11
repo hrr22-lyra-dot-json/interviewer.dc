@@ -159,3 +159,17 @@ exports.listAllTimeslots = function(req, res) {
     res.status(500).send(err);
   });
 };
+
+/*
+** Expected request query: {user_id(integer): 'user id'}
+** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.listTimeslots = function(req, res) {
+  Timeslot.findAll({where: {user_id: req.query.user_id}})
+  .then(function(foundTimeslots) {
+    res.status(200).send(foundTimeslots);
+  }).catch(function(err) {
+    res.status(500).send(err);
+  });
+};
