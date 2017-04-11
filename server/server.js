@@ -49,7 +49,7 @@ var httpsOptions = {
 // Main server setup
 var http = require(isUseHTTPs ? 'https' : 'http');
 var socketserver;
-var socketport = process.env.SOCKETIO_PORT || 443;
+var socketport = process.env.SOCKETIO_PORT || 1337;
 
 isUseHTTPs ? socketserver = http.createServer(httpsOptions, app) : socketserver = http.createServer(app);
 socketserver = socketserver.listen(socketport);

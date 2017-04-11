@@ -100,7 +100,6 @@ class Calendar extends React.Component {
     //post newtime slots to database with callback GET request to get freshly added timeslots
     this.setState({availableSlots:this.state.availableSlots.concat(newTimeSlots)})//this will go away as we use get request to show available slots
     this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
-
     console.log('start:', startTime )
     this.setState({modalIsOpen: false, selectable:true});
     //post request to availability slots database
