@@ -14,6 +14,13 @@ app.use(express.static(path.join(__dirname, '../')));
 // Routes
 require('./routes.js')(app);
 
+// Just to test our server is working
+app.get('/api', function(req, res) {
+  res.send({
+    version: '1.0.0'
+  });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port);
 console.log(`Listening on port: ${port}`);
@@ -73,3 +80,5 @@ require('./socket.io/Signaling-Server.js')(socketserver, function(socket) {
 });
 
 console.log('[socket.io server port]: ' + socketport);
+
+module.exports = app;

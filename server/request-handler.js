@@ -14,7 +14,7 @@ exports.addMeeting = function(req, res) {
     res.status(201).send();
   }).catch(function(err) {
     console.error(err);
-    res.status(500).send();
+    res.status(500).send(err);
   });
 };
 
@@ -29,7 +29,7 @@ exports.deleteMeeting = function(req, res) {
     res.status(200).send();
   }).catch(function(err) {
     console.error(err);
-    res.status(500).send();
+    res.status(500).send(err);
   });
 };
 
@@ -50,17 +50,17 @@ exports.addUser = function(req, res) {
     }
   }).then(function(newUser)  {
     if (newUser) {
-      res.status(409).send();
+      res.status(409).send(newUser);
     } else {
       // username and email do not exist in database so create new user
       User.create({
         username: req.body.username,
         email: req.body.email
       }).then(function(newUser) {
-        res.status(201).send();
+        res.status(201).send(newUser);
       }).catch(function(err) {
         console.error(err);
-        res.status(500).send();
+        res.status(500).send(err);
       });
     }
   });
@@ -76,13 +76,14 @@ exports.addUserMeeting = function(req, res) {
   UserMeeting.findOrCreate({where: {user_id: req.body.user_id, meeting_id: req.body.meeting_id}})
   .spread(function(newUserMeeting, created) {
     if (created) {
-      res.status(201).send();
+      console.log(newUserMeeting);
+      res.status(201).send(newUserMeeting);
     } else {
-      res.status(409).send();
+      res.status(409).send(newUserMeeting);
     }
   }).catch(function(err) {
     console.error(err);
-    res.status(500).send();
+    res.status(500).send(err);
   });
 };
 
@@ -96,7 +97,7 @@ exports.listAllUserMeetings = function(req, res) {
     res.status(200).send(foundUserMeetings);
   }).catch(function(err) {
     console.error(err);
-    res.status(500).send();
+    res.status(500).send(err);
   });
 };
 
@@ -111,7 +112,7 @@ exports.listUserMeetings = function(req, res) {
     res.status(200).send(foundUserMeetings);
   }).catch(function(err) {
     console.error(err);
-    res.status(500).send();
+    res.status(500).send(err);
   });
 };
 
