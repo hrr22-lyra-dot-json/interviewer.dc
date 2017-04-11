@@ -89,7 +89,7 @@ exports.addUserMeeting = function(req, res) {
 };
 
 /*
-** Expected response: 200 OK status, {usermeetings(array): [{user_id(integer): 'user id', meeting_id(integer): 'meeting id'}]}
+** Expected response: 200 OK status, {usermeetings(array): [{id(integer): 'id', user_id(integer): 'user id', meeting_id(integer): 'meeting id', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listAllUserMeetings = function(req, res) {
@@ -104,7 +104,7 @@ exports.listAllUserMeetings = function(req, res) {
 
 /*
 ** Expected request query: {user_id(integer): 'user id'}
-** Expected response: 200 OK status, {usermeetings(array): [{user_id(integer): 'user id', meeting_id(integer): 'meeting id'}]}
+** Expected response: 200 OK status, {usermeetings(array): [{id(integer): 'id', user_id(integer): 'user id', meeting_id(integer): 'meeting id', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listUserMeetings = function(req, res) {
@@ -143,6 +143,19 @@ exports.addTimeslot = function(req, res) {
     res.status(201).send(newTimeslot);
   }).catch(function(err) {
     console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.listAllTimeslots = function(req, res) {
+  Timeslot.findall()
+  .then(function(foundTimeslots) {
+    res.status(200).send(foundTimeslots);
+  }).catch(function(err) {
     res.status(500).send(err);
   });
 };

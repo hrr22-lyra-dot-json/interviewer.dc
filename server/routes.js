@@ -11,6 +11,7 @@ module.exports = function(app) {
   app.get('/api/UserMeetings', requestHandler.listUserMeetings);
   app.delete('/api/UserMeeting', requestHandler.deleteUserMeeting);
   app.post('/api/Timeslot', requestHandler.addTimeslot);
+  app.get('/api/allTimeslots', requestHandler.listAllTimeslots);
 
   // Assume link is a meeting link
   //app.get('/*', requestHandler.findMeeting);
