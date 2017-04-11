@@ -13,6 +13,7 @@ module.exports = function(app) {
   app.post('/api/Timeslot', requestHandler.addTimeslot);
   app.get('/api/allTimeslots', requestHandler.listAllTimeslots);
   app.get('/api/Timeslots', requestHandler.listTimeslots);
+  app.delete('/api/Timeslot', requestHandler.deleteTimeslot);
 
   // Assume link is a meeting link
   //app.get('/*', requestHandler.findMeeting);

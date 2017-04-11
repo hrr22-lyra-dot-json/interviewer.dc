@@ -20,12 +20,12 @@ exports.addMeeting = function(req, res) {
 };
 
 /*
-** Expected request query: {meeting_id(integer): 'meeting id'}
+** Expected request query: {id(integer): 'id'}
 ** Expected resposne: 200 OK status
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.deleteMeeting = function(req, res) {
-  Meeting.destroy({where: {id: req.query.meeting_id}})
+  Meeting.destroy({where: {id: req.query.id}})
   .then(function(affectedRows) {
     res.status(200).send();
   }).catch(function(err) {
@@ -118,12 +118,12 @@ exports.listUserMeetings = function(req, res) {
 };
 
 /*
-** Expected request query: {user_id(integer): 'user id', {meeting_id(integer): 'meeting id'}}
+** Expected request query: {id: 'id'}
 ** Expected response: 200 OK status
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.deleteUserMeeting = function(req, res) {
-  UserMeeting.destroy({where: {user_id: req.query.user_id, meeting_id: req.query.meeting_id}})
+  UserMeeting.destroy({where: {id: req.query.id}})
   .then(function(affectedRows) {
     res.status(200).send();
   }).catch(function(err) {
@@ -169,6 +169,20 @@ exports.listTimeslots = function(req, res) {
   Timeslot.findAll({where: {user_id: req.query.user_id}})
   .then(function(foundTimeslots) {
     res.status(200).send(foundTimeslots);
+  }).catch(function(err) {
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request query: {id: id}
+** Expected response: 200 OK status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.deleteTimeslot = function(req, res) {
+  Timeslot.delete({where: {id: req.query.id}})
+  .then(function(affectedRows) {
+    res.status(200).send();
   }).catch(function(err) {
     res.status(500).send(err);
   });
