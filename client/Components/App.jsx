@@ -5,6 +5,7 @@ import Login from './Login.jsx'
 import Home from './Home.jsx'
 import CalendarInterviewee from './IntervieweeCalendar.jsx' // this is the page interviewees come too to book availabilities
 import AuthService from '../Services/AuthService.js'
+import InterviewRoom from './InterviewRoom.jsx'
 
 const auth = new AuthService('bIi5wFickS2TiO4JVTmyXIsfsLEJAYor', 'sdm.auth0.com')
 
@@ -31,6 +32,7 @@ export default class App extends React.Component {
           <Route path='/home' component={Home} auth={auth} onEnter={this.requireAuth} />
           <Route path="/login" component={Login} auth={auth} />
           <Route path="/interviewee" component={CalendarInterviewee} auth={auth} />
+          <Route path="/interviewroom" component={InterviewRoom} auth={auth} />
         </div>
 
       </Router>
