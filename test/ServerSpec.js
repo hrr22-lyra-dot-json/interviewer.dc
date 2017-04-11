@@ -27,7 +27,7 @@ describe('GET and POST to /api/meeting', function() {
     request(app)
       .get('/api/meeting')
       .set('Accept', 'application/json')
-      .expect('Content-type', /json/)
+      .expect('Content-type', 'text/html; charset=utf-8')
       .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
@@ -40,7 +40,7 @@ describe('GET and POST to /api/meeting', function() {
     .post('/api/meeting')
     .send({owner_id: 1, room_url: 'supertest POST request', time: new Date('April 11, 2017 03:24:00')})
     .set('Accept', 'application/json')
-    .expect('Content-type', /json/)
+    .expect('Content-type', 'text/html; charset=utf-8')
     .expect(200)
     .then(function(err, res) {
       if (err) return done(err);
@@ -54,7 +54,7 @@ describe('GET and POST to /api/user', function() {
     request(app)
       .get('/api/user')
       .set('Accept', 'application/json')
-      .expect('Content-type', /json/)
+      .expect('Content-type', 'text/html; charset=utf-8')
       .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
@@ -67,7 +67,7 @@ describe('GET and POST to /api/user', function() {
     .post('/api/user')
     .send({username: 'supertestTest', email: 'ghost@gmails.com'})
     .set('Accept', 'application/json')
-    .expect('Content-type', /json/)
+    .expect('Content-type', 'text/html; charset=utf-8')
     .expect(200)
     .then(function(err, res) {
       if (err) return done(err);
