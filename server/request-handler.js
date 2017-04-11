@@ -10,7 +10,7 @@ const utils = require('../lib/server_utility.js');
 */
 exports.addMeeting = function(req, res) {
   Meeting.create({owner_id: req.body.owner_id, room_url: utils.generateUrl(), time: req.body.time})
-  .then(function(Meeting) {
+  .then(function(newMeeting) {
     res.status(201).send();
   }).catch(function(err) {
     console.error(err);
@@ -48,15 +48,15 @@ exports.addUser = function(req, res) {
         {email: req.body.email}
       ]
     }
-  }).then(function(User)  {
-    if (User) {
+  }).then(function(newUser)  {
+    if (newUser) {
       res.status(409).send();
     } else {
       // username and email do not exist in database so create new user
       User.create({
         username: req.body.username,
         email: req.body.email
-      }).then(function(User) {
+      }).then(function(newUser) {
         res.status(201).send();
       }).catch(function(err) {
         console.error(err);
@@ -74,7 +74,7 @@ exports.addUser = function(req, res) {
 */
 exports.addUserMeeting = function(req, res) {
   UserMeeting.findOrCreate({where: {user_id: req.body.user_id, meeting_id: req.body.meeting_id}})
-  .spread(function(UserMeeting, created) {
+  .spread(function(newUserMeeting, created) {
     if (created) {
       res.status(201).send();
     } else {
@@ -92,8 +92,8 @@ exports.addUserMeeting = function(req, res) {
 */
 exports.listAllUserMeetings = function(req, res) {
   UserMeeting.findAll()
-  .then(function(UserMeetings) {
-    res.status(200).send(UserMeetings);
+  .then(function(foundUserMeetings) {
+    res.status(200).send(foundUserMeetings);
   }).catch(function(err) {
     console.error(err);
     res.status(500).send();
@@ -107,8 +107,8 @@ exports.listAllUserMeetings = function(req, res) {
 */
 exports.listUserMeetings = function(req, res) {
   UserMeeting.findAll({where: {user_id: req.query.user_id}})
-  .then(function(UserMeetings) {
-    res.status(200).send(UserMeetings);
+  .then(function(foundUserMeetings) {
+    res.status(200).send(foundUserMeetings);
   }).catch(function(err) {
     console.error(err);
     res.status(500).send();
