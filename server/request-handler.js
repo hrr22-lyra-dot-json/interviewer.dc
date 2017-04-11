@@ -25,7 +25,7 @@ exports.addMeeting = function(req, res) {
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.deleteMeeting = function(req, res) {
-  Meeting.destroy({where: {id: req.query.id}})
+  Meeting.destroy({where: req.query})
   .then(function(affectedRows) {
     res.status(200).send();
   }).catch(function(err) {
@@ -106,7 +106,7 @@ exports.listAllUserMeetings = function(req, res) {
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listUserMeetings = function(req, res) {
-  UserMeeting.findAll({where: {user_id: req.query.user_id}})
+  UserMeeting.findAll({where: req.query})
   .then(function(foundUserMeetings) {
     res.status(200).send(foundUserMeetings);
   }).catch(function(err) {
@@ -121,7 +121,7 @@ exports.listUserMeetings = function(req, res) {
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.deleteUserMeeting = function(req, res) {
-  UserMeeting.destroy({where: {id: req.query.id}})
+  UserMeeting.destroy({where: req.query})
   .then(function(affectedRows) {
     res.status(200).send();
   }).catch(function(err) {
@@ -165,7 +165,7 @@ exports.addMultipleTimeslots = function(req, res) {
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listAllTimeslots = function(req, res) {
-  Timeslot.findall()
+  Timeslot.findAll()
   .then(function(foundTimeslots) {
     res.status(200).send(foundTimeslots);
   }).catch(function(err) {
@@ -174,12 +174,12 @@ exports.listAllTimeslots = function(req, res) {
 };
 
 /*
-** Expected request query: {user_id(integer): 'user id'}
+** Expected request query: {owner_id(integer): 'user id'}
 ** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listTimeslots = function(req, res) {
-  Timeslot.findAll({where: {user_id: req.query.user_id}})
+  Timeslot.findAll({where: req.query})
   .then(function(foundTimeslots) {
     res.status(200).send(foundTimeslots);
   }).catch(function(err) {
