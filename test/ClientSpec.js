@@ -1,12 +1,23 @@
-// DO NOT use arrow functions in testing
-
-const assert = require('assert');
-const app = require('../client/index.js');
-
-describe('Array', () => {
-  describe('#indexOf', () => {
-    it('should return -1 when the value is not present', () => {
-      assert.equal(-1, [1, 2, 3].indexOf(4));
-    });
-  });
-});
+// import PropTypes from 'prop-types';
+// import React from 'react';
+// import { expect } from 'chai';
+// import { mount, shallow, render } from 'enzyme';
+// import App from 'client/Components/App'
+//
+// describe('Components properly mount', function() {
+//
+//   it('App calls componentDidMount', () => {
+//     const wrapper = mount(<App />);
+//     expect(App.prototype.componentDidMount.calledOnce).to.equal(true);
+//   });
+//
+//   it('Home calls componentDidMount', () => {
+//     const wrapper = mount(<Home />);
+//     expect(Home.prototype.componentDidMount.calledOnce).to.equal(true);
+//   });
+//
+//   it('Login calls componentDidMount', () => {
+//     const wrapper = mount(<Login />);
+//     expect(Login.prototype.componentDidMount.calledOnce).to.equal(true);
+//   });
+// });
