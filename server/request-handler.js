@@ -1,10 +1,11 @@
 const User = require('./database/models').User;
 const Meeting = require('./database/models').Meeting;
 const UserMeeting = require('./database/models').UserMeeting;
+const Timeslot = require('./database/models').Timeslot;
 const utils = require('../lib/server_utility.js');
 
 /*
-** Expected request body: {user_id(integer): 'user id', time(date): 'datetime for meeting'}
+** Expected request body: {owner_id(integer): 'user id', time(date): 'datetime for meeting'}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
@@ -19,12 +20,12 @@ exports.addMeeting = function(req, res) {
 };
 
 /*
-** Expected request query: {meeting_id: 'meeting id'}
+** Expected request query: {id(integer): 'id'}
 ** Expected resposne: 200 OK status
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.deleteMeeting = function(req, res) {
-  Meeting.destroy({where: {id: req.query.meeting_id}})
+  Meeting.destroy({where: req.query})
   .then(function(affectedRows) {
     res.status(200).send();
   }).catch(function(err) {
@@ -53,10 +54,8 @@ exports.addUser = function(req, res) {
       res.status(409).send(newUser);
     } else {
       // username and email do not exist in database so create new user
-      User.create({
-        username: req.body.username,
-        email: req.body.email
-      }).then(function(newUser) {
+      User.create(req.body)
+      .then(function(newUser) {
         res.status(201).send(newUser);
       }).catch(function(err) {
         console.error(err);
@@ -73,7 +72,7 @@ exports.addUser = function(req, res) {
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.addUserMeeting = function(req, res) {
-  UserMeeting.findOrCreate({where: {user_id: req.body.user_id, meeting_id: req.body.meeting_id}})
+  UserMeeting.findOrCreate({where: req.body})
   .spread(function(newUserMeeting, created) {
     if (created) {
       console.log(newUserMeeting);
@@ -88,7 +87,7 @@ exports.addUserMeeting = function(req, res) {
 };
 
 /*
-** Expected response: 200 OK status, {usermeetings(array): [{user_id(integer): 'user id', meeting_id(integer): 'meeting id'}]}
+** Expected response: 200 OK status, {usermeetings(array): [{id(integer): 'id', user_id(integer): 'user id', meeting_id(integer): 'meeting id', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listAllUserMeetings = function(req, res) {
@@ -103,11 +102,11 @@ exports.listAllUserMeetings = function(req, res) {
 
 /*
 ** Expected request query: {user_id(integer): 'user id'}
-** Expected response: 200 OK status, {usermeetings(array): [{user_id(integer): 'user id', meeting_id(integer): 'meeting id'}]}
+** Expected response: 200 OK status, {usermeetings(array): [{id(integer): 'id', user_id(integer): 'user id', meeting_id(integer): 'meeting id', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listUserMeetings = function(req, res) {
-  UserMeeting.findAll({where: {user_id: req.query.user_id}})
+  UserMeeting.findAll({where: req.query})
   .then(function(foundUserMeetings) {
     res.status(200).send(foundUserMeetings);
   }).catch(function(err) {
@@ -117,16 +116,87 @@ exports.listUserMeetings = function(req, res) {
 };
 
 /*
-** Expected request query: {user_id(integer): 'user id', {meeting_id(integer): 'meeting id'}}
+** Expected request query: {id: 'id'}
 ** Expected response: 200 OK status
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.deleteUserMeeting = function(req, res) {
-  UserMeeting.destroy({where: {user_id: req.query.user_id, meeting_id: req.query.meeting_id}})
+  UserMeeting.destroy({where: req.query})
   .then(function(affectedRows) {
     res.status(200).send();
   }).catch(function(err) {
     console.error(err);
     res.status(500).send();
+  });
+};
+
+/*
+** Expected request body: {owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time'}
+** Expected response: 201 Created status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.addTimeslot = function(req, res) {
+  Timeslot.create(req.body)
+  .then(function(newTimeslot) {
+    res.status(201).send(newTimeslot);
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request body: {timeslots: [{owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time'}]}
+** Expected response: 201 Created status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.addMultipleTimeslots = function(req, res) {
+  Timeslot.bulkCreate(req.body.timeslots)
+  .then(function() {
+    res.status(201).send();
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.listAllTimeslots = function(req, res) {
+  Timeslot.findAll()
+  .then(function(foundTimeslots) {
+    res.status(200).send(foundTimeslots);
+  }).catch(function(err) {
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request query: {owner_id(integer): 'user id'}
+** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.listTimeslots = function(req, res) {
+  Timeslot.findAll({where: req.query})
+  .then(function(foundTimeslots) {
+    res.status(200).send(foundTimeslots);
+  }).catch(function(err) {
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request query: {id: id}
+** Expected response: 200 OK status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.deleteTimeslot = function(req, res) {
+  Timeslot.destroy({where: {id: req.query.id}})
+  .then(function(affectedRows) {
+    res.status(200).send();
+  }).catch(function(err) {
+    res.status(500).send(err);
   });
 };
