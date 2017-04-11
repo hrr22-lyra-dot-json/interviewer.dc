@@ -1,19 +1,14 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'; //This file holds the router and instantiates the authentication superpack
 import React from 'react'
-
 import { hashHistory, Router, Route, Link, Redirect, withRouter} from 'react-router'
 import Login from './Login.jsx'
 import Home from './Home.jsx'
-import CalendarInterviewee from './IntervieweeCalendar.jsx'
+import CalendarInterviewee from './IntervieweeCalendar.jsx' // this is the page interviewees come too to book availabilities
 import AuthService from '../Services/AuthService.js'
-
 
 const auth = new AuthService('bIi5wFickS2TiO4JVTmyXIsfsLEJAYor', 'sdm.auth0.com')
 
-// const calServ = new
-
 export default class App extends React.Component {
-
   constructor(props) {
     super(props);
     auth.on('logged_out', (bye) => {
@@ -23,11 +18,10 @@ export default class App extends React.Component {
   requireAuth (nextState, replace)  {
     console.log('auth', auth);
       if (!auth.loggedIn()) {
-
       replace({ pathname: '/login' })
      }
   }
-
+//still working on some of the routes but this works for now
   render() {
     return (
       <Router history={hashHistory}>

@@ -35,7 +35,7 @@ export default class CalendarService extends EventEmitter {
     }, cb); //this.handleAuthResult
   }
   handleAuthResult(authResult) {
-    console.log(authResult);
+    console.log('authresult', authResult);
     var authorizeDiv = document.getElementById('authorize-button');
     if (authResult && !authResult.error) {
       // Hide auth UI, then load client library.
