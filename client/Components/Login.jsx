@@ -1,16 +1,12 @@
 import React from 'react'
 import AuthService from '../Services/AuthService.js'
 
-
 export class Login extends React.Component {
-
-
 
   render() {
 
     console.log('props', this.props);
     const { auth } = this.props.routes[1]
-
 
     return (
       <div className="container login">

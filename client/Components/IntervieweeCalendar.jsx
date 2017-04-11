@@ -1,14 +1,10 @@
 import CalView from './CalendarView.jsx'
-import CalendarModal from './CalendarModal.jsx'
 import React from 'react'
 import moment from 'moment'
 import events from '../events'
 import BigCalendar from 'react-big-calendar'
 import CalendarService from '../Services/CalendarService.js'
 import CalendarAuth from './CalendarAuth.jsx'
-import AvailModal from './AddAvailabilityModal.jsx'
-import Popup from 'react-popup'
-import Popout from 'react-popout'
 import Modal from 'react-modal';
 import Select from 'react-select';
 
@@ -107,6 +103,9 @@ class CalendarInterviewee extends React.Component {
     return (
 
       <div>
+      <div className="jumbotron">
+        <h2>Please book a calendar with ... interviewername by clicking on one of the available timeslots. Enter yourpersonal details email to receive the details of the interview ideally gmail. Email input has to be added with ideally validation and name input. eventually we may have a prepopulated name list with people that have been invited to book an interview.</h2>
+      </div>
       <CalendarAuth calserv={this.calService}/>
       <CalView events={events} selectable={this.state.selectable} calService={this.calService} selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
       <div>

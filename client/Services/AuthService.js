@@ -1,6 +1,23 @@
 import { EventEmitter } from 'events'
 import Auth0Lock from 'auth0-lock'
+import axios from 'axios';
+
+
 //import { browserHistory } from 'react-router' //    "react-router": "^2.8.0"
+
+//addUserto db service
+var addUser = function(user) {
+  axios.post('/api/User', {
+    username: user.name,
+    email: user.email
+  })
+  .then(function (response) {
+    console.log('added user', response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
 
 
 export default class AuthService extends EventEmitter {
@@ -52,6 +69,9 @@ export default class AuthService extends EventEmitter {
   setProfile(profile){
     // Saves profile data to localStorage
     console.log('profile', profile)
+    addUser(profile);
+
+
     localStorage.setItem('profile', JSON.stringify(profile))
     // Triggers profile_updated event to update the UI
     this.emit('profile_updated', profile)
