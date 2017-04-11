@@ -5,6 +5,10 @@
   display: none;
 }*/
 
+.clbtn {
+  pointer-events: all !important;
+}
+
 .loginimg {
   max-height: 200px;
 }

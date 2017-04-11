@@ -18,6 +18,9 @@ export class Home extends React.Component {
     super(props);
     this.state = {  profile: props.routes[1].auth.getProfile() }
 
+    console.log('query', props.location.query);
+
+
     props.routes[1].auth.on('logged_out', (bye) => {
       this.setState({profile: this.props.routes[1].auth.getProfile()})
     })
