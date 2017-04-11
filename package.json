@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server/server.js",
-    "test": "nyc mocha test/.setup.js test/ClientSpec.js test/ServerSpec.js --timeout 20000 --reporter mochawesome && casperjs test/EndSpec.js",
-    "test-unit": "nyc mocha  test/.setup.js test/ClientSpec.js test/ServerSpec.js --timeout 20000",
+    "test": "nyc mocha test/ServerSpec.js --timeout 20000 --reporter mochawesome && casperjs test/EndSpec.js",
+    "test-server": "nyc mocha test/ServerSpec.js --timeout 20000",
     "db:create": "sequelize db:migrate",
     "db:seed": "sequelize db:seed:all",
     "db:unseed": "sequelize db:seed:undo:all",
