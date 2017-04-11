@@ -51,6 +51,7 @@ class InterviewRoom extends React.Component {
           <button id="close-room" disabled>Waiting for session...</button>
 
           <div id="videos-container"></div>
+
         </div>
         <div id="recordControls">
           <button id="start" onClick={this.startRecording}>Start Canvas Recording</button>
