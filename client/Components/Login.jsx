@@ -17,17 +17,19 @@ export class Login extends React.Component {
         <div className="jumbotron">
           <div className="row align-items-center justify-contents-center">
             <div className="col">
-              <h1>Interviewer.DS</h1>
+              <h1>Interviewer.DC</h1>
             </div>
             <div className="w-100"></div>
             <div className="col">
-            <h1>Brought to you by Project Washington</h1>
-              <img src="client/assets/36665960-Capitol-building-temple-icon-logo-vector-design-Stock-Vector-capitol-capital.jpg" alt="Interviewer.DS Logatron" className="loginimg" />
-
+              <p>Brought to you by Project Washington</p>
             </div>
             <div className="w-100"></div>
             <div className="col">
-              <button className="btn btn-primary" onClick={auth.login.bind(this)}>Login</button>
+              <img src="client/assets/capitol-bldg.png" alt="Interviewer.DS Logatron" />
+            </div>
+            <div className="w-100"></div>
+            <div className="col">
+              <button className="btn btn-default" onClick={auth.login.bind(this)}>Login</button>
             </div>
           </div>
         </div>

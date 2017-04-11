@@ -27,13 +27,13 @@ or `npm run quick` which builds then runs.
 
 ## Testing
 
-To test the app, run the following (requires PhantomJS and CasperJS, which I recommend installing via Homebrew - they must be installed globally):
+To test the app, run the following (requires [PhantomJS](http://phantomjs.org/) and [CasperJS](http://casperjs.org/), which I recommend installing via [Homebrew](https://brew.sh/) - they must be installed globally):
 ```
 npm test
 OR
 npm run test-unit (does not require PhantomJS/CasperJS; only runs mocha tests)
 ```
-Note: the tests use the Mochawesome reporter, which saves a report in json and html format and provides the link in the terminal after the tests run. The html report is beautiful, just copy and paste that path into a browser to view. Or navigate to the report in the mocha_reports folder of the root directory of the app.
+__Note__: the tests use the Mochawesome reporter, which saves a report in json and html format and provides the link in the terminal after the tests run. The html report is beautiful, just copy and paste that path into a browser to view. Or navigate to the report in the mocha_reports folder of the root directory of the app.
 
 
 
