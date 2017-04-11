@@ -1,3 +1,5 @@
+import CalView from './CalendarView.jsx'
+import CalendarModal from './CalendarModal.jsx'
 import React from 'react'
 import moment from 'moment'
 import events from '../events'
@@ -31,16 +33,15 @@ const options = [
 
 const calServ = new CalendarService()
 // a localizer for BigCalendar
-BigCalendar.momentLocalizer(moment)
+//BigCalendar.momentLocalizer(moment)
 
-class Calendar extends React.Component {
+class CalendarInterviewee extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:true, slotLength: 30};
+    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:false, slotLength: 30, booking:{}};
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
     this.calService = calServ;
     console.log(calServ);
-    this.hello = {start: ''};
     //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
 
     calServ.on('events_loaded', (evv) => {
@@ -53,6 +54,7 @@ class Calendar extends React.Component {
     this.addInfo = this.addInfo.bind(this)
     this.addAvailability = this.addAvailability.bind(this)
     this.logChange = this.logChange.bind(this)
+
   }
 
   addInfo(slotInfo) {
@@ -77,32 +79,12 @@ class Calendar extends React.Component {
   }
 
   closeModal() {
-    this.setState({modalIsOpen: false, selectable:true});
+    this.setState({modalIsOpen: false});
   }
-  addAvailability() {
-
-    var mainSlot = this.state.slotInfo
-    var slotSize = this.state.slotLength
-    var slotSizeMs = slotSize * 60 * 1000
-    var startTime = mainSlot.start.valueOf()
-    var endTime = mainSlot.end.valueOf()
-    var newTimeSlots = [];
-
-    while(startTime + slotSizeMs < endTime) {
-      var newSlot = {}
-      newSlot.start = new Date(startTime)
-      startTime = startTime + slotSizeMs
-      newSlot.end = new Date(startTime)
-      newSlot.user = 'simon'
-      newSlot.title = 'Book Interview'
-      newTimeSlots.push(newSlot)
-    }
-    //post newtime slots to database with callback GET request to get freshly added timeslots
-    this.setState({availableSlots:this.state.availableSlots.concat(newTimeSlots)})//this will go away as we use get request to show available slots
-    this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
-
-    console.log('start:', startTime )
-    this.setState({modalIsOpen: false, selectable:true});
+  addAvailability(slotLength, slotInfo) {
+    booking = this.state.booking
+    console.log('booking', booking)
+    this.setState({modalIsOpen: false});
     //post request to availability slots database
   }
 
@@ -110,26 +92,23 @@ class Calendar extends React.Component {
     this.calService;
   }
 
+  eventClick(event) {
+
+    if (event.title === 'Booking Interview') {
+
+    this.setState({booking:event})
+    this.openModal();
+  }
+
+    //alert(event.title)
+  }
+
   render () {
     return (
 
       <div>
       <CalendarAuth calserv={this.calService}/>
-
-
-      <BigCalendar
-      selectable={this.state.selectable}
-        timeslots={8}
-        style={{height: '420px'}}
-        step={15}
-        events={this.state.eventsAndSlots}
-        scrollToTime={new Date(1970, 1, 1, 6)}
-        defaultDate={new Date()}
-        onSelectEvent={event => alert(event.title)}
-       onSelectSlot={(slotInfo) => {this.addInfo(slotInfo);
-    }}
-
-      />
+      <CalView events={events} selectable={this.state.selectable} calService={this.calService} selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
       <div>
         <button onClick={this.openModal}>Open Modal</button>
         <Modal
@@ -141,7 +120,7 @@ class Calendar extends React.Component {
         >
 
           <h2 ref="subtitle">Add Availability</h2>
-          <p>Add availability slot for interviews from {this.state.slotInfo.start.toString()} \nto: {this.state.slotInfo.end.toString()}</p>
+          <p>Add availability slot for interviews from {this.state.booking.title} to: </p>
           <p>Select the length of each interview timeslot. (This will allow interviewees to make bookings of desired length)</p>
           <Select
             name="form-field-name"
@@ -164,51 +143,10 @@ class Calendar extends React.Component {
           </form>
         </Modal>
       </div>
-
-
-
-
       </div>
+
     )
   }
 }
 
-module.exports = Calendar
-
-// alert(
-//             `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
-//             `\nend: ${slotInfo.end.toLocaleString()}`
-//           )
-//      <AddAvail info={this.hello} />
-
-
-// Popup.alert(
-//             `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
-//             `\nend: ${slotInfo.end.toLocaleString()}`
-//           )}}
-
-
-
-///////////////////////
-// <div>
-//         <button onClick={this.openModal}>Open Modal</button>
-//         <Modal
-//           isOpen={this.state.modalIsOpen}
-//           onAfterOpen={this.afterOpenModal}
-//           onRequestClose={this.closeModal}
-//           style={customStyles}
-//           contentLabel="Example Modal"
-//         >
-
-//           <h2 ref="subtitle">Hello</h2>
-//           <button onClick={this.closeModal}>close</button>
-//           <div>I am a modal</div>
-//           <form>
-//             <input />
-//             <button>tab navigation</button>
-//             <button>stays</button>
-//             <button>inside</button>
-//             <button>the modal</button>
-//           </form>
-//         </Modal>
-     // </div>
+module.exports = CalendarInterviewee

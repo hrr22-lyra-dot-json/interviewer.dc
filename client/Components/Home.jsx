@@ -2,9 +2,9 @@ import React from 'react'
 import AuthService from '../Services/AuthService.js'
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
 import Nav from './Nav.jsx'
-import Calendar from './Calendar.jsx'
+import Calendar from './InterviewerCalendarContainer.jsx' //InterviewerCalendarContainer
 import Timeslots from './Calendar.jsx'
-// import CalendarAuth from './CalendarAuth.jsx'
+import CalendarAuth from './CalendarAuth.jsx'
 import CalendarService from '../Services/CalendarService.js'
 
 
