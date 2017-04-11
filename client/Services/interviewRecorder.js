@@ -41,7 +41,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
   });
 }).catch(function(err) {
   console.error('Media Error: ', err);
-})
+});
 
 // Constantly checks state of recording/not-recording
 var looper = function() {
@@ -101,7 +101,7 @@ document.getElementById('stop').onclick = function() {
 
       console.log('VIDEO BLOB', currentVideoBlob);
       console.log('AUDIO BLOB', currentAudioBlob);
-    })
+    });
   });
 
   looper();
