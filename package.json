@@ -4,9 +4,9 @@
   "description": "Interviewing platform",
   "main": "server.js",
   "scripts": {
-    "test": "nyc mocha --timeout 20000 --reporter mochawesome && casperjs test-end/EndSpec.js",
-    "test-unit": "nyc mocha --timeout 20000",
     "start": "nodemon server/server.js",
+    "test": "nyc mocha test/.setup.js test/ClientSpec.js test/ServerSpec.js --timeout 20000 --reporter mochawesome && casperjs test/EndSpec.js",
+    "test-unit": "nyc mocha  test/.setup.js test/ClientSpec.js test/ServerSpec.js --timeout 20000",
     "db:create": "sequelize db:migrate",
     "db:seed": "sequelize db:seed:all",
     "db:unseed": "sequelize db:seed:undo:all",
@@ -56,7 +56,6 @@
     "babel-watch": "^2.0.6",
     "casperjs": "*",
     "chai": "*",
-    "jsdom": "^9.12.0",
     "mocha": "*",
     "mochawesome": "^2.0.4",
     "moment": "^2.18.1",
@@ -65,7 +64,11 @@
     "nyc": "^10.2.0",
     "pg": "^6.1.5",
     "phantomjs-prebuilt": "*",
+<<<<<<< HEAD
     "react-big-calendar": "^0.11.1",
+=======
+    "prop-types": "^15.5.6",
+>>>>>>> Remove client tests for now, but make server tests
     "react-dom": "^15.3.1",
     "react-router": "^2.8.0",
     "sequelize-cli": "^2.7.0",
