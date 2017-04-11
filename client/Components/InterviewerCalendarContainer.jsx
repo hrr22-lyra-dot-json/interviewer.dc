@@ -4,6 +4,8 @@ import moment from 'moment'
 import events from '../events'
 import BigCalendar from 'react-big-calendar'
 import CalendarService from '../Services/CalendarService.js'
+import slotService from '../Services/TimeslotService.js'
+
 import CalendarAuth from './CalendarAuth.jsx'
 import Modal from 'react-modal';
 import Select from 'react-select';
@@ -34,7 +36,7 @@ const calServ = new CalendarService()
 class Calendar extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:true, slotLength: 30};
+    this.state = {events:[], availableSlots:slotService.getSlots(localStorage.getItem('dbUser').data.id), modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:true, slotLength: 30};
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
     this.calService = calServ;
     console.log(calServ);
@@ -85,16 +87,18 @@ class Calendar extends React.Component {
     var startTime = mainSlot.start.valueOf()
     var endTime = mainSlot.end.valueOf()
     var newTimeSlots = [];
+    var userid = localStorage.getItem('dbUser').data.id
 
     while(startTime + slotSizeMs < endTime) {
       var newSlot = {}
       newSlot.start = new Date(startTime)
       startTime = startTime + slotSizeMs
       newSlot.end = new Date(startTime)
-      newSlot.user = 'simon'
-      newSlot.title = 'Book Interview'
+      newSlot.owner_id = userid
+      newSlot.name = 'Book Interview'
       newTimeSlots.push(newSlot)
     }
+    slotService.addSlots({timeslots: newTimeSlots})
     //post newtime slots to database with callback GET request to get freshly added timeslots
     this.setState({availableSlots:this.state.availableSlots.concat(newTimeSlots)})//this will go away as we use get request to show available slots
     this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})

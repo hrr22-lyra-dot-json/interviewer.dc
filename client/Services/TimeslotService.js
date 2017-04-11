@@ -2,24 +2,22 @@ import { EventEmitter } from 'events'
 import axios from 'axios'
 
 module.exports = {
-  addSlot: function(timeslot) {
-    axios.post('/api/timeSlot', {
-      start: user.name,
-      end: user.email
-      userid:
+  addSlots: function(timeslots) {
+    axios.post('/api/Timeslots', {
+      timeslots: timeslots
     })
     .then(function (response) {
-      console.log('added timeslot', response);
+      console.log('added timeslots', response);
     })
     .catch(function (error) {
       console.log(error);
     });
   },
-  getSlots: function(useremail) {
+  getSlots: function(userid) {
 
-    axios.get('/api/timeSlot', {
+    axios.get('/api/Timeslots', {
       params: {
-        ID: useremail
+        owner_id: userid
       }
     })
     .then(function (response) {
