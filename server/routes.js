@@ -11,6 +11,7 @@ module.exports = function(app) {
   app.get('/api/UserMeetings', requestHandler.listUserMeetings);
   app.delete('/api/UserMeeting', requestHandler.deleteUserMeeting);
   app.post('/api/Timeslot', requestHandler.addTimeslot);
+  app.post('/api/Timeslots', requestHandler.addMultipleTimeslots);
   app.get('/api/allTimeslots', requestHandler.listAllTimeslots);
   app.get('/api/Timeslots', requestHandler.listTimeslots);
   app.delete('/api/Timeslot', requestHandler.deleteTimeslot);

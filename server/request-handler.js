@@ -54,10 +54,8 @@ exports.addUser = function(req, res) {
       res.status(409).send(newUser);
     } else {
       // username and email do not exist in database so create new user
-      User.create({
-        username: req.body.username,
-        email: req.body.email
-      }).then(function(newUser) {
+      User.create(req.body)
+      .then(function(newUser) {
         res.status(201).send(newUser);
       }).catch(function(err) {
         console.error(err);
@@ -74,7 +72,7 @@ exports.addUser = function(req, res) {
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.addUserMeeting = function(req, res) {
-  UserMeeting.findOrCreate({where: {user_id: req.body.user_id, meeting_id: req.body.meeting_id}})
+  UserMeeting.findOrCreate({where: req.body})
   .spread(function(newUserMeeting, created) {
     if (created) {
       console.log(newUserMeeting);
@@ -138,9 +136,24 @@ exports.deleteUserMeeting = function(req, res) {
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.addTimeslot = function(req, res) {
-  Timeslot.create({owner_id: req.body.owner_id, start: req.body.start, end: req.body.end})
+  Timeslot.create(req.body)
   .then(function(newTimeslot) {
     res.status(201).send(newTimeslot);
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request body: {timeslots: [{owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time'}]}
+** Expected response: 201 Created status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.addMultipleTimeslots = function(req, res) {
+  Timeslot.bulkCreate(req.body.timeslots)
+  .then(function() {
+    res.status(201).send();
   }).catch(function(err) {
     console.error(err);
     res.status(500).send(err);
