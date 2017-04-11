@@ -18,12 +18,27 @@ Fill out the form entirely and then submit, the lists will automatically update 
 Fork and clone the respository to your local machine.
 Use `npm install` to install the required dependencies.
 
+Before you can run the app you will have to setup the database. Login to your preferred database between PostgreSQL and MySQL and create a database called `interviewer_dc`.
+If this is a fresh install use `npm run db:setup` to create and seed tables.
+
+If you need more database assistance please view the Database section.
+
+## Usage
 To start the app you can use:
 ```
 npm run build
 npm start
 ```
 or `npm run quick` which builds then runs.
+
+## Database
+Interviewer.DC supports a list of actions to be preformed on the database from the command prompt:
+
+`npm run db:create` will create the tables in the database if they have not been created yet.
+`npm run db:seed` will seed the tables if they have not been seeded yet.
+`npm run db:unseed` will remove the seed data if the tables have been seeded.
+`npm run db:reseed` will run db:unseed and then db:seed.
+`npm run db:drop` will drop the tables from the database if they exist.
 
 ## Testing
 
