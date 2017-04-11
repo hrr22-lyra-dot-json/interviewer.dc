@@ -13,7 +13,8 @@
     "db:reseed": "npm run db:unseed && npm run db:seed",
     "db:setup": "npm run db:create && npm run db:unseed && npm run db:seed",
     "db:drop": "sequelize db:migrate:undo:all",
-    "build": "node_modules/.bin/webpack --config webpack.config.js"
+    "build": "node_modules/.bin/webpack --config webpack.config.js",
+    "quick": "npm run build && npm start"
   },
   "repository": {
     "type": "git",
@@ -22,19 +23,20 @@
   "author": "hrr22-lyra-dot-json",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.17.1",
-    "express": "^4.15.2",
-    "morgan": "^1.8.1",
-    "sequelize": "^3.30.4",
     "auth0-lock": "^10.13.0",
-    "react-dom": "^15.3.1",
-    "react-router": "^2.8.0",
-    "webpack": "^2.2.1",
-    "path": "^0.12.7",
     "babel-core": "^6.23.1",
     "babel-loader": "^6.4.1",
     "babel-preset-es2015": "^6.6.0",
-    "babel-preset-react": "^6.5.0"
+    "babel-preset-react": "^6.5.0",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "morgan": "^1.8.1",
+    "path": "^0.12.7",
+    "randomstring": "^1.1.5",
+    "react-dom": "^15.3.1",
+    "react-router": "^2.8.0",
+    "sequelize": "^3.30.4",
+    "webpack": "^2.2.1"
   },
   "devDependencies": {
     "auth0-lock": "^10.13.0",
@@ -50,8 +52,6 @@
     "phantomjs-prebuilt": "*",
     "sequelize-cli": "^2.7.0",
     "supertest": "*",
-    "webpack-dev-server": "^2.4.2",
-    "babel-cli": "^6.6.5",
-    "babel-watch": "^2.0.6"
+    "webpack-dev-server": "^2.4.2"
   }
 }
