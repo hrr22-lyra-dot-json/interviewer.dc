@@ -1,7 +1,7 @@
 import React from 'react';
 import * as recorder from '../Services/interviewRecorder.js';
-import * as rtc from '../Services/interviewRtcHandler.js';
-// import * as lobby from '../Services/interviewLobby.js';
+import { initializeConnection } from '../Services/interviewRtcHandler.js';
+import * as lobby from '../Services/interviewLobby.js';
 
 class InterviewRoom extends React.Component {
   constructor (props) {
@@ -15,6 +15,9 @@ class InterviewRoom extends React.Component {
     this.start = recorder.start;
     this.stop = recorder.stop;
     this.save = recorder.save;
+    this.openRoom = lobby.openRoom;
+    this.joinRoom = lobby.joinRoom;
+    this.closeRoom = lobby.closeRoom;
   }
 
   componentWillMount() {
@@ -23,13 +26,17 @@ class InterviewRoom extends React.Component {
 
   componentDidMount() {
     console.log('did mount (post-render)');
+
+    // Set initial button states
     document.getElementById('start').disabled = false;
     document.getElementById('stop').disabled = true;
     document.getElementById('save').disabled = true;
     document.getElementById('close-room').disabled = true;
 
+    // Initialize Recorder functionality and Socket.io connection server
     recorder.initializeRecorder();
-    rtc.initializeConnection();
+    initializeConnection();
+    lobby.initializeLobby();
   }
 
   render() {
@@ -43,10 +50,10 @@ class InterviewRoom extends React.Component {
           </header>
 
           <input type="text" id="room-id"></input>
-          <button id="open-room">Open Room</button>
-          <button id="join-room">Join Room</button>
+          <button id="open-room" onClick={this.openRoom}>Open Room</button>
+          <button id="join-room" onClick={this.joinRoom}>Join Room</button>
           <br /><br />
-          <button id="close-room">Waiting for session...</button>
+          <button id="close-room" onClick={this.closeRoom}>Waiting for session...</button>
 
           <div id="videos-container"></div>
 

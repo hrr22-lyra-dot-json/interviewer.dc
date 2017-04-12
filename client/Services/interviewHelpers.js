@@ -1,4 +1,3 @@
-console.log('3 initialized helpers');
 //////////////////////////////////////////////////////////////
 /////////////////////  HELPER FUNCTIONS  /////////////////////
 //////////////////////////////////////////////////////////////
@@ -12,7 +11,7 @@ exports.showRoomURL = function(roomid) {
   var fullURL = window.location.href + roomQueryStringURL;
 
   var html = '<br /><strong>Room URL:</strong>';
-  html += '<a href="' + roomQueryStringURL + '" target="_blank">' + fullURL + '</a>';
+  html += '<a href="' + fullURL + '" target="_blank">' + fullURL + '</a>';
 
   document.getElementById('room-urls').innerHTML = html;
   document.getElementById('room-urls').style.display = 'block';
@@ -39,7 +38,7 @@ exports.enableInputButtons = function() {
 };
 
 // Helper function to change text of leave/close room based on role
-exports.updateCloseLeaveButton = function(state){
+exports.updateCloseLeaveButton = function(connection, state){
   document.getElementById('close-room').disabled = state;
 
   if (connection.isInitiator) {

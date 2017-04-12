@@ -1,4 +1,5 @@
-console.log('2 initialized rtc');
+import * as helpers from './interviewHelpers.js';
+
 /////////////////////////////////////////////////////////////////////////
 //////////////////////   RTCMultiConnection Code   //////////////////////
 /////////////////////////////////////////////////////////////////////////
@@ -6,7 +7,7 @@ var connection = new RTCMultiConnection();
 
 exports.getConnection = function() {
   return connection;
-}
+};
 
 exports.initializeConnection = function() {
   // connection.socketURL = '/';
@@ -57,8 +58,8 @@ exports.initializeConnection = function() {
     if (!connection.isInitiator) {
       document.getElementById('recordControls').style.display = 'none';
     }
-    updateCloseLeaveButton(false);
-    setRoomStatusText('You are connected to: ' + connection.getAllParticipants().join(', '));
+    helpers.updateCloseLeaveButton(connection, false);
+    helpers.setRoomStatusText('You are connected to: ' + connection.getAllParticipants().join(', '));
   };
 
   connection.onclose = function() {
@@ -68,15 +69,15 @@ exports.initializeConnection = function() {
     // Events are delayed "1 person"
     // If same person leaves and joins the room, there will be 2 unique instances (one expired, one new)
     if (connection.getAllParticipants().length) {
-      setRoomStatusText('You are still connected to: ' + connection.getAllParticipants().join(', '));
+      helpers.setRoomStatusText('You are still connected to: ' + connection.getAllParticipants().join(', '));
     } else {
-      setRoomStatusText('Seems session has been closed or all participants left.');
+      helpers.setRoomStatusText('Seems session has been closed or all participants left.');
     }
   };
 
   connection.onEntireSessionClosed = function(event) {
-    updateCloseLeaveButton(true);
-    connection.isInitiator ? enableInputButtons() : disableInputButtons();
+    helpers.updateCloseLeaveButton(connection, true);
+    connection.isInitiator ? helpers.enableInputButtons() : helpers.disableInputButtons();
 
     connection.attachStreams.forEach(function(stream) {
       stream.stop();
@@ -87,8 +88,8 @@ exports.initializeConnection = function() {
       return;
     }
 
-    setRoomStatusText('Entire session has been closed by moderator: ' + event.userid);
-    setUserRoleText('');
+    helpers.setRoomStatusText('Entire session has been closed by moderator: ' + event.userid);
+    helpers.setUserRoleText('');
   };
 
   // If room already exist
