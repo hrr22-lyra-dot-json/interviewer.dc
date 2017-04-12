@@ -1,14 +1,12 @@
 //////////////////////////////////////////////////////////////
 /////////////////////  HELPER FUNCTIONS  /////////////////////
 //////////////////////////////////////////////////////////////
-var socketPort = 1337;
-
-var getRoomId = function() {
+exports.getRoomId = function() {
   return document.getElementById('room-id').value;
 };
 
 // Display/hide URL link for current room (for admins)
-var showRoomURL = function(roomid) {
+exports.showRoomURL = function(roomid) {
   var roomQueryStringURL = '?roomid=' + roomid;
   var fullURL = window.location.href + roomQueryStringURL;
 
@@ -19,7 +17,7 @@ var showRoomURL = function(roomid) {
   document.getElementById('room-urls').style.display = 'block';
 };
 
-var hideRoomURL = function() {
+exports.hideRoomURL = function() {
   document.getElementById('roomStatusText').innerHTML = 'Entire session has been closed.';
   document.getElementById('userRoleText').innerHTML = '';
   document.getElementById('room-urls').innerHTML = '';
@@ -27,20 +25,20 @@ var hideRoomURL = function() {
 };
 
 // helper functions to disable/enable all buttons
-var disableInputButtons = function() {
+exports.disableInputButtons = function() {
   document.getElementById('open-room').disabled = true;
   document.getElementById('join-room').disabled = true;
   document.getElementById('room-id').disabled = true;
 };
 
-var enableInputButtons = function() {
+exports.enableInputButtons = function() {
   document.getElementById('open-room').disabled = false;
   document.getElementById('join-room').disabled = false;
   document.getElementById('room-id').disabled = false;
 };
 
 // Helper function to change text of leave/close room based on role
-var updateCloseLeaveButton = function(state){
+exports.updateCloseLeaveButton = function(state){
   document.getElementById('close-room').disabled = state;
 
   if (connection.isInitiator) {
@@ -51,10 +49,10 @@ var updateCloseLeaveButton = function(state){
 };
 
 // Change text on screen
-var setRoomStatusText = function(str) {
+exports.setRoomStatusText = function(str) {
   document.querySelector('#roomStatusText').innerHTML = str;
 };
 
-var setUserRoleText = function(str) {
+exports.setUserRoleText = function(str) {
   document.querySelector('#userRoleText').innerHTML = str;
 };

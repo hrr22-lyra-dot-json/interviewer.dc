@@ -4,7 +4,7 @@
 var connection = new RTCMultiConnection();
 // connection.socketURL = '/';
 // connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-connection.socketURL = 'http://localhost:' + socketPort + '/';
+connection.socketURL = 'http://localhost:1337/';
 
 // Initial connection setup
 connection.socketMessageEvent = 'interviewer.dc-room';
