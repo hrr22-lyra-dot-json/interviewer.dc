@@ -105,7 +105,7 @@ class Calendar extends React.Component {
       startTime = startTime + slotSizeMs
       newSlot.end = new Date(startTime)
       newSlot.owner_id = userid
-      newSlot.name = 'Book Interview'
+      newSlot.title = 'Book Interview'
       newTimeSlots.push(newSlot)
     }
     slotServ.addThem(newTimeSlots)
