@@ -37,21 +37,15 @@ exports.deleteMeeting = function(req, res) {
 /*
 ** Expected request body: {username(string): 'username', email(string): 'user email'}
 ** Expected response if user exists: 409 Conflict status
-** Expected response if user does not exist: 201 Created status
+** Expected response if user does not exist: 201 Created status, {username(string): 'username', email(string): 'user email'}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.addUser = function(req, res) {
-  // See if username or email already exists in database
-  User.findOne({
-    where: {
-      $or: [
-        {username: req.body.username},
-        {email: req.body.email}
-      ]
-    }
-  }).then(function(newUser)  {
-    if (newUser) {
-      res.status(202).send(newUser);
+  // See if email already exists in database
+  User.findOne({where: {email: req.body.email}})
+  .then(function(foundUser)  {
+    if (foundUser) {
+      res.status(409).send(foundUser);
     } else {
       // username and email do not exist in database so create new user
       User.create(req.body)
@@ -62,6 +56,35 @@ exports.addUser = function(req, res) {
         res.status(500).send(err);
       });
     }
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request body: {email(string): 'user email'}
+** Expected response if user exists: 200 OK status, {username(string): 'username', email(string): 'user email'}
+** Expected response if user does not exist: 201 Created status, {username(string): 'username', email(string): 'user email'}
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.checkGmailUser = function(req, res) {
+  User.findOne({where: {email: req.body.email}})
+  .then(function(foundUser) {
+    if (foundUser) {
+      res.status(200).send(newUser);
+    } else {
+      User.create(req.body)
+      .then(function(newUser) {
+        res.status(201).send(newUser);
+      }).catch(function(err) {
+        console.error(err);
+        res.status(500).send(err);
+      });
+    }
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
   });
 };
 
