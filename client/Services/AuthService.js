@@ -14,7 +14,8 @@ var addUser = function(user) {
   })
   .then(function (response) {
     console.log('added user', response);
-    localStorage.setItem('dbUser', response);
+    //localStorage.setItem('profile', JSON.stringify(profile))
+    localStorage.setItem('dbUser', JSON.stringify(response.data));
   })
   .catch(function (error) {
     console.log(error);

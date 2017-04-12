@@ -4,7 +4,7 @@ import moment from 'moment'
 import events from '../events'
 import BigCalendar from 'react-big-calendar'
 import CalendarService from '../Services/CalendarService.js'
-import slotService from '../Services/TimeslotService.js'
+import TimeslotService from '../Services/TimeslotService.js'
 
 import CalendarAuth from './CalendarAuth.jsx'
 import Modal from 'react-modal';
@@ -32,12 +32,21 @@ const options = [
 const calServ = new CalendarService()
 // a localizer for BigCalendar
 //BigCalendar.momentLocalizer(moment)
+var slotServ = new TimeslotService();
 
 class Calendar extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {events:[], availableSlots:slotService.getSlots(localStorage.getItem('dbUser').data.id), modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:true, slotLength: 30};
+    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:new Date(), end:new Date()}, selectable:true, slotLength: 30};
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
+    //var slotServ = new TimeslotService();
+   // slotServ.getSlots(localStorage.getItem('dbUser').id).bind(slotServ)
+    slotServ.on('got_slots', (slots) => {
+      console.log('slots',typeof slots.data[0].start)
+      this.setState({availableSlots: slots.data})
+      this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
+    })
+
     this.calService = calServ;
     console.log(calServ);
     //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
@@ -87,7 +96,7 @@ class Calendar extends React.Component {
     var startTime = mainSlot.start.valueOf()
     var endTime = mainSlot.end.valueOf()
     var newTimeSlots = [];
-    var userid = localStorage.getItem('dbUser').data.id
+    var userid = JSON.parse(localStorage.getItem('dbUser')).id
 
     while(startTime + slotSizeMs < endTime) {
       var newSlot = {}
@@ -98,10 +107,9 @@ class Calendar extends React.Component {
       newSlot.name = 'Book Interview'
       newTimeSlots.push(newSlot)
     }
-    slotService.addSlots({timeslots: newTimeSlots})
+    slotServ.addThem(newTimeSlots)
     //post newtime slots to database with callback GET request to get freshly added timeslots
-    this.setState({availableSlots:this.state.availableSlots.concat(newTimeSlots)})//this will go away as we use get request to show available slots
-    this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
+    //this will go away as we use get request to show available slots
     //this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
     console.log('start:', startTime )
     this.setState({modalIsOpen: false, selectable:true});
