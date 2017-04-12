@@ -1,7 +1,6 @@
 import React from 'react';
-import * as helpers from '../Services/interviewHelpers.js';
 import * as recorder from '../Services/interviewRecorder.js';
-// import * as rtc from '../Services/interviewRtcHandler.js';
+import * as rtc from '../Services/interviewRtcHandler.js';
 // import * as lobby from '../Services/interviewLobby.js';
 
 class InterviewRoom extends React.Component {
@@ -12,27 +11,11 @@ class InterviewRoom extends React.Component {
         // lobby name
         // elements to render (white board, codeshare, etc)
         // admin?
-    this.disableDefaultButtons.bind(this);
-    this.start = recorder.start.bind(this);
-    this.stop = recorder.stop.bind(this);
-    this.save = recorder.save.bind(this);
+
+    this.start = recorder.start;
+    this.stop = recorder.stop;
+    this.save = recorder.save;
   }
-
-  /*
-    helpers.getRoomId();
-    helpers.showRoomURL();
-    helpers.hideRoomURL();
-    helpers.disableInputButtons();
-    helpers.enableInputButtons();
-    helpers.updateCloseLeaveButton(state);
-    helpers.setRoomStatusText(str);
-    helpers.setUserRoleText(str);
-
-    recorder.initializeRecorder();
-    recorder.start();
-    recorder.stop();
-    recorder.save();
-  */
 
   componentWillMount() {
     console.log('will mount (pre-render)');
@@ -40,15 +23,13 @@ class InterviewRoom extends React.Component {
 
   componentDidMount() {
     console.log('did mount (post-render)');
-    this.disableDefaultButtons();
-    recorder.initializeRecorder();
-  }
-
-  disableDefaultButtons() {
     document.getElementById('start').disabled = false;
     document.getElementById('stop').disabled = true;
     document.getElementById('save').disabled = true;
     document.getElementById('close-room').disabled = true;
+
+    recorder.initializeRecorder();
+    rtc.initializeConnection();
   }
 
   render() {

@@ -1,3 +1,17 @@
+import * as helpers from './interviewHelpers.js';
+import getConnection from './interviewRtcHandler.js';
+console.log('4 initialized recorder');
+  /*
+    helpers.getRoomId();
+    helpers.showRoomURL();
+    helpers.hideRoomURL();
+    helpers.disableInputButtons();
+    helpers.enableInputButtons();
+    helpers.updateCloseLeaveButton(state);
+    helpers.setRoomStatusText(str);
+    helpers.setUserRoleText(str);
+  */
+
 /////////////////////////////////////////////////////////////////
 //////////////////////   BUTTON HANDLERS   //////////////////////
 /////////////////////////////////////////////////////////////////
@@ -29,7 +43,8 @@ document.getElementById('join-room').onclick = function() {
 };
 
 document.getElementById('close-room').onclick = function() {
-  this.disabled = true;
+  updateCloseLeaveButton(true);
+
   if (connection.isInitiator) {
     connection.closeEntireSession(function() {
       hideRoomURL();
