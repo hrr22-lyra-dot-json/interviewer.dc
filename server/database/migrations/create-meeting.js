@@ -11,10 +11,7 @@ module.exports = {
       owner_id: {
         type: Sequelize.STRING
       },
-      room_url: {
-        type: Sequelize.STRING
-      },
-      time: {
+      job_position: {
         type: Sequelize.STRING
       },
       createdAt: {

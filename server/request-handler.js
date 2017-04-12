@@ -2,15 +2,15 @@ const User = require('./database/models').User;
 const Meeting = require('./database/models').Meeting;
 const UserMeeting = require('./database/models').UserMeeting;
 const Timeslot = require('./database/models').Timeslot;
-const utils = require('../lib/server_utility.js');
+// const utils = require('../lib/server_utility.js');
 
 /*
-** Expected request body: {owner_id(integer): 'user id', time(date): 'datetime for meeting'}
+** Expected request body: {owner_id(integer): 'user id', job_position(date): 'position for the job'}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.addMeeting = function(req, res) {
-  Meeting.create({owner_id: req.body.owner_id, room_url: utils.generateUrl(), time: req.body.time})
+  Meeting.create(req.body)
   .then(function(newMeeting) {
     res.status(201).send();
   }).catch(function(err) {
@@ -37,21 +37,15 @@ exports.deleteMeeting = function(req, res) {
 /*
 ** Expected request body: {username(string): 'username', email(string): 'user email'}
 ** Expected response if user exists: 409 Conflict status
-** Expected response if user does not exist: 201 Created status
+** Expected response if user does not exist: 201 Created status, {username(string): 'username', email(string): 'user email'}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.addUser = function(req, res) {
-  // See if username or email already exists in database
-  User.findOne({
-    where: {
-      $or: [
-        {username: req.body.username},
-        {email: req.body.email}
-      ]
-    }
-  }).then(function(newUser)  {
-    if (newUser) {
-      res.status(202).send(newUser);
+  // See if email already exists in database
+  User.findOne({where: {email: req.body.email}})
+  .then(function(foundUser)  {
+    if (foundUser) {
+      res.status(409).send(foundUser);
     } else {
       // username and email do not exist in database so create new user
       User.create(req.body)
@@ -62,6 +56,29 @@ exports.addUser = function(req, res) {
         res.status(500).send(err);
       });
     }
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request body: {username(string): 'username', email(string): 'user email'}
+** Expected response if user exists: 200 OK status, {username(string): 'username', email(string): 'user email'}
+** Expected response if user does not exist: 201 Created status, {username(string): 'username', email(string): 'user email'}
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.checkGmailUser = function(req, res) {
+  User.findOrCreate({where: {email: req.body.email}, defaults: {username: req.body.username}})
+  .spread(function(newUser, created) {
+    if (created) {
+      res.status(201).send(newUser);
+    } else {
+      res.status(200).send(newUser);
+    }
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
   });
 };
 
@@ -131,7 +148,7 @@ exports.deleteUserMeeting = function(req, res) {
 };
 
 /*
-** Expected request body: {owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time'}
+** Expected request body: {owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title'}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
@@ -146,7 +163,7 @@ exports.addTimeslot = function(req, res) {
 };
 
 /*
-** Expected request body: {timeslots: [{owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time'}]}
+** Expected request body: {timeslots: [{owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title'}]}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
@@ -161,7 +178,7 @@ exports.addMultipleTimeslots = function(req, res) {
 };
 
 /*
-** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
+** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listAllTimeslots = function(req, res) {
@@ -175,7 +192,7 @@ exports.listAllTimeslots = function(req, res) {
 
 /*
 ** Expected request query: {owner_id(integer): 'user id'}
-** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
+** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listTimeslots = function(req, res) {

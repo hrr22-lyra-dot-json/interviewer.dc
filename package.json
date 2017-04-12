@@ -4,7 +4,7 @@
   "description": "Interviewing platform",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server/server.js",
+    "start": "node server/server.js",
     "test": "nyc mocha test/ServerSpec.js --reporter mochawesome && casperjs test/EndSpec.js",
     "test-server": "nyc mocha test/ServerSpec.js --reporter mochawesome",
     "db:create": "sequelize db:migrate",
@@ -14,8 +14,7 @@
     "db:setup": "npm run db:create && npm run db:unseed && npm run db:seed",
     "db:drop": "sequelize db:migrate:undo:all",
     "build": "node_modules/.bin/webpack --config webpack.config.js",
-    "quick": "npm run build && npm start",
-    "start:socket": "nodemon server/socket.io/socket-server.js"
+    "quick": "npm run build && npm start"
   },
   "repository": {
     "type": "git",
@@ -38,7 +37,6 @@
     "moment": "^2.18.1",
     "morgan": "^1.8.1",
     "path": "^0.12.7",
-    "randomstring": "^1.1.5",
     "react": "^15.5.4",
     "react-big-calendar": "^0.11.1",
     "react-dom": "^15.5.2",
@@ -55,18 +53,13 @@
     "babel-watch": "^2.0.6",
     "casperjs": "*",
     "chai": "*",
-    "css-loader": "^0.26.1",
     "mocha": "*",
     "mochawesome": "^2.0.4",
-    "moment": "^2.18.1",
-    "nodemon": "^1.11.0",
     "nyc": "^10.2.0",
     "pg": "^6.1.5",
     "phantomjs-prebuilt": "*",
     "prop-types": "^15.5.6",
-    "react-big-calendar": "^0.11.1",
     "sequelize-cli": "^2.7.0",
-    "socket.io": "^1.7.3",
     "supertest": "*",
     "webpack-dev-server": "^2.4.2"
   }

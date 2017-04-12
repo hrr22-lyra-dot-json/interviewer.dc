@@ -34,11 +34,12 @@ or `npm run quick` which builds then runs.
 ## Database
 Interviewer.DC supports a list of actions to be preformed on the database from the command prompt:
 
-`npm run db:create` will create the tables in the database if they have not been created yet.
-`npm run db:seed` will seed the tables if they have not been seeded yet.
-`npm run db:unseed` will remove the seed data if the tables have been seeded.
-`npm run db:reseed` will run db:unseed and then db:seed.
-`npm run db:drop` will drop the tables from the database if they exist.
+`npm run db:create` will create the tables in the database if they have not been created yet.<br />
+`npm run db:seed` will seed the tables if they have not been seeded yet.<br />
+`npm run db:unseed` will remove the seed data if the tables have been seeded.<br />
+`npm run db:reseed` will run db:unseed and then db:seed.<br />
+`npm run db:setup` run db:create -> db:unseed -> db:seed<br />
+`npm run db:drop` will drop the tables from the database if they exist.<br />
 
 ## Testing
 

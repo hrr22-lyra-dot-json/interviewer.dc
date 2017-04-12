@@ -17,8 +17,7 @@ export default class RoomService extends EventEmitter {
   createRoom(interviewer, roomid, callback) {
     axios.post('/api/Meeting', {
         owner_id: interviewer,
-        room_url:,
-        time:
+        job_position: 'janitor'
     })
     .then(function (response) {
       console.log(response)
