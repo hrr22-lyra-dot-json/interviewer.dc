@@ -5,6 +5,31 @@
   display: none;
 }*/
 
+.splash-nav {
+  background-color: #EF4C2D;
+}
+
+.splash-icons {
+  color: #EF4C2D;
+}
+
+.splash-logo {
+  width: 15rem;
+  margin: 1rem;
+}
+
+.splash-header-row {
+  background-color: #DDDDDD;
+  max-height: 35rem;
+  padding: 0 0 -1.5rem 0;
+  margin-bottom: 4rem;
+}
+
+.splash-header {
+  margin-bottom: -5px;
+  max-height: 35rem;
+}
+
 #recordControls {
     position: fixed;
     left: 60%;
