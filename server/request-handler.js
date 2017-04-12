@@ -51,7 +51,7 @@ exports.addUser = function(req, res) {
     }
   }).then(function(newUser)  {
     if (newUser) {
-      res.status(409).send(newUser);
+      res.status(202).send(newUser);
     } else {
       // username and email do not exist in database so create new user
       User.create(req.body)

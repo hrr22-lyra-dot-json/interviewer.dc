@@ -7,12 +7,15 @@ import axios from 'axios';
 
 //addUserto db service
 var addUser = function(user) {
+  console.log('sending user', user)
   axios.post('/api/User', {
     username: user.name,
     email: user.email
   })
   .then(function (response) {
     console.log('added user', response);
+    //localStorage.setItem('profile', JSON.stringify(profile))
+    localStorage.setItem('dbUser', JSON.stringify(response.data));
   })
   .catch(function (error) {
     console.log(error);
