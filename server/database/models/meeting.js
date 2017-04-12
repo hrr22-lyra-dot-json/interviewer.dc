@@ -2,7 +2,7 @@
 module.exports = function(sequelize, DataTypes) {
   var Meeting = sequelize.define('Meeting', {
     owner_id: DataTypes.INTEGER,
-    time: DataTypes.DATE
+    job_position: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {
