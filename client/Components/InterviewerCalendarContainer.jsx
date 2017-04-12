@@ -5,6 +5,7 @@ import events from '../events'
 import BigCalendar from 'react-big-calendar'
 import CalendarService from '../Services/CalendarService.js'
 import TimeslotService from '../Services/TimeslotService.js'
+import RoomService from '../Services/RoomService.js'
 
 import CalendarAuth from './CalendarAuth.jsx'
 import Modal from 'react-modal';
@@ -32,7 +33,8 @@ const options = [
 const calServ = new CalendarService()
 // a localizer for BigCalendar
 //BigCalendar.momentLocalizer(moment)
-var slotServ = new TimeslotService();
+var slotServ = new TimeslotService()
+var roomServ = new RoomService()
 
 class Calendar extends React.Component {
   constructor (props) {
@@ -105,7 +107,7 @@ class Calendar extends React.Component {
       startTime = startTime + slotSizeMs
       newSlot.end = new Date(startTime)
       newSlot.owner_id = userid
-      newSlot.name = 'Book Interview'
+      newSlot.title = 'Book Interview'
       newTimeSlots.push(newSlot)
     }
     slotServ.addThem(newTimeSlots)
@@ -158,10 +160,6 @@ class Calendar extends React.Component {
           <div>I am a modal</div>
           <form>
             <input />
-            <button>tab navigation</button>
-            <button>stays</button>
-            <button>inside</button>
-            <button>the modal</button>
           </form>
         </Modal>
       </div>

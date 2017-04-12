@@ -5,11 +5,13 @@ export default class TimeslotService extends EventEmitter {
   constructor() {
     super()
     //this.user = localStorage.getItem('dbUser');
+
   }
 
   addThem(timeslots) {
     this.addSlots(timeslots, this.hasBeenAdded.bind(this), this.getThem.bind(this))
   }
+
   getThem(userid) {
     this.getSlots(userid, this.gotthem.bind(this))
   }

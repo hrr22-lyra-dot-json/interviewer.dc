@@ -17,7 +17,7 @@ module.exports = {
       end: {
         type: Sequelize.DATE
       },
-      name: {
+      title: {
         type: Sequelize.STRING
       },
       createdAt: {

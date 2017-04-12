@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'; //This file holds the router and instantiates the authentication superpack
+//import PropTypes from 'prop-types'; //This file holds the router and instantiates the authentication superpack
 import React from 'react'
 import { hashHistory, Router, Route, Link, Redirect, withRouter} from 'react-router'
 import Login from './Login.jsx'
