@@ -2,6 +2,7 @@ var requestHandler = require('./request-handler.js');
 
 module.exports = function(app) {
   app.post('/api/Meeting', requestHandler.addMeeting);
+  app.get('/api/Meetings', requestHandler.listMeetings);
   app.delete('/api/Meeting', requestHandler.deleteMeeting);
   app.post('/api/User', requestHandler.addUser);
   app.post('/api/gmailUser', requestHandler.checkGmailUser);

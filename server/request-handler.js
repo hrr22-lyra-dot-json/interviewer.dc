@@ -5,7 +5,7 @@ const Timeslot = require('./database/models').Timeslot;
 // const utils = require('../lib/server_utility.js');
 
 /*
-** Expected request body: {owner_id(integer): 'user id', job_position(date): 'position for the job'}
+** Expected request body: {owner_id(integer): 'user id', job_position(string): 'job position'}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
@@ -13,6 +13,21 @@ exports.addMeeting = function(req, res) {
   Meeting.create(req.body)
   .then(function(newMeeting) {
     res.status(201).send();
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request query: {owner_id(integer): 'owner id'}
+** Expected response: 200 OK status, [{id(integer): 'id', owner_id(integer): 'user id', job_position(string): 'job position'}]
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.listMeetings = function(req, res) {
+  Meeting.findAll({where: req.body})
+  .then(function(foundMeetings) {
+    res.status(200).send(foundMeetings);
   }).catch(function(err) {
     console.error(err);
     res.status(500).send(err);
@@ -104,7 +119,7 @@ exports.addUserMeeting = function(req, res) {
 };
 
 /*
-** Expected response: 200 OK status, {usermeetings(array): [{id(integer): 'id', user_id(integer): 'user id', meeting_id(integer): 'meeting id', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]}
+** Expected response: 200 OK status, [{id(integer): 'id', user_id(integer): 'user id', meeting_id(integer): 'meeting id', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listAllUserMeetings = function(req, res) {
@@ -119,7 +134,7 @@ exports.listAllUserMeetings = function(req, res) {
 
 /*
 ** Expected request query: {user_id(integer): 'user id'}
-** Expected response: 200 OK status, {usermeetings(array): [{id(integer): 'id', user_id(integer): 'user id', meeting_id(integer): 'meeting id', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]}
+** Expected response: 200 OK status, [{id(integer): 'id', user_id(integer): 'user id', meeting_id(integer): 'meeting id', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listUserMeetings = function(req, res) {
@@ -178,7 +193,7 @@ exports.addMultipleTimeslots = function(req, res) {
 };
 
 /*
-** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
+** Expected response: 200 OK status, [{id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listAllTimeslots = function(req, res) {
@@ -192,7 +207,7 @@ exports.listAllTimeslots = function(req, res) {
 
 /*
 ** Expected request query: {owner_id(integer): 'user id'}
-** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
+** Expected response: 200 OK status, [{id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listTimeslots = function(req, res) {
