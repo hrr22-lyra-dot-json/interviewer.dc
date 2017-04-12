@@ -8,6 +8,7 @@ import TimeslotService from '../Services/TimeslotService.js'
 import RoomService from '../Services/RoomService.js'
 
 import CalendarAuth from './CalendarAuth.jsx'
+import RoomList from './RoomList.jsx'
 import Modal from 'react-modal';
 import Select from 'react-select';
 
@@ -163,6 +164,8 @@ class Calendar extends React.Component {
           </form>
         </Modal>
       </div>
+
+      <RoomList />
       </div>
 
     )
