@@ -21,13 +21,13 @@ import TimeslotService from '../Services/TimeslotService.js'
   }
 };
 
-const options = [
-  { value: 15, label: '15 minutes' },
-  { value: 20, label: '20 minutes' },
-  { value: 30, label: '30 minutes' },
-  { value: 45, label: '45 minutes' },
-  { value: 60, label: '60 minutes' }
-];
+// const options = [
+//   { value: 15, label: '15 minutes' },
+//   { value: 20, label: '20 minutes' },
+//   { value: 30, label: '30 minutes' },
+//   { value: 45, label: '45 minutes' },
+//   { value: 60, label: '60 minutes' }
+// ];
 
 const calServ = new CalendarService()
 var slotServ = new TimeslotService();
@@ -133,15 +133,7 @@ class CalendarInterviewee extends React.Component {
 
           <h2 ref="subtitle">Book interview</h2>
           <p>confirm interview? {this.state.booking.title} to: </p>
-          <p>Select the job position you are applying for </p>
-          <Select
-            name="form-field-name"
-            value={this.state.slotLength}
-            options={options}
-            onChange={this.logChange}
-            searchable={false}
-            clearable={false}
-          />
+
           <button className="clbtn" onClick={this.addAvailability}>Confirm</button>
 
           <button className="clbtn" onClick={this.closeModal}>close</button>
