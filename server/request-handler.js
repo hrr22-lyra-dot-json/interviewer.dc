@@ -5,7 +5,7 @@ const Timeslot = require('./database/models').Timeslot;
 // const utils = require('../lib/server_utility.js');
 
 /*
-** Expected request body: {owner_id(integer): 'user id', time(date): 'datetime for meeting'}
+** Expected request body: {owner_id(integer): 'user id', job_position(date): 'position for the job'}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
