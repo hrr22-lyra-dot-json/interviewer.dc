@@ -2,7 +2,6 @@
 module.exports = function(sequelize, DataTypes) {
   var Meeting = sequelize.define('Meeting', {
     owner_id: DataTypes.INTEGER,
-    room_url: DataTypes.STRING,
     time: DataTypes.DATE
   }, {
     classMethods: {
