@@ -148,7 +148,7 @@ exports.deleteUserMeeting = function(req, res) {
 };
 
 /*
-** Expected request body: {owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time'}
+** Expected request body: {owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title'}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
@@ -163,7 +163,7 @@ exports.addTimeslot = function(req, res) {
 };
 
 /*
-** Expected request body: {timeslots: [{owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time'}]}
+** Expected request body: {timeslots: [{owner_id(integer): 'user id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title'}]}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
@@ -178,7 +178,7 @@ exports.addMultipleTimeslots = function(req, res) {
 };
 
 /*
-** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
+** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listAllTimeslots = function(req, res) {
@@ -192,7 +192,7 @@ exports.listAllTimeslots = function(req, res) {
 
 /*
 ** Expected request query: {owner_id(integer): 'user id'}
-** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
+** Expected response: 200 OK status, {id(integer): 'id', owner_id(integer): 'owner id', start(date): 'start time', end(date): 'end time', title(string): 'timeslot title', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listTimeslots = function(req, res) {
