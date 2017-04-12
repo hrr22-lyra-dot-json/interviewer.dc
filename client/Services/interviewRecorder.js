@@ -31,7 +31,8 @@ var looper = function() {
         return;
       }
 
-      setTimeout(looper, 1);
+      // setTimeout(looper, 1);
+      looper();
     }
   });
 };
@@ -49,7 +50,9 @@ exports.initializeRecorder = function() {
 
   // videoRecorder
   canvasRecorder = new CanvasRecorder(canvas2d, {
-    disableLogs: true
+    disableLogs: false,
+    // frameInterval: 20,
+    initCallback: looper
   });
 
   // audioRecorder
@@ -62,9 +65,6 @@ exports.initializeRecorder = function() {
   }).catch(function(err) {
     console.error('Media Error: ', err);
   });
-
-  // If not recording, constantly check to see if recording started yet before running html2canvas
-  looper();
 };
 
 // Button action for "START"
