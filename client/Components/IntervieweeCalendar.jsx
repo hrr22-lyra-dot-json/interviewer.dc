@@ -90,7 +90,7 @@ class CalendarInterviewee extends React.Component {
     this.setState({modalIsOpen: false});
   }
   addAvailability(slotLength, slotInfo) {
-    booking = this.state.booking
+    var booking = this.state.booking
     console.log('booking', booking)
     this.setState({modalIsOpen: false});
     //post request to availability slots database
@@ -116,6 +116,7 @@ class CalendarInterviewee extends React.Component {
 
       <div>
       <div className="jumbotron">
+      <h1>Book your interview with ...interviewername</h1>
         <p>Please book a calendar with ... interviewername by clicking on one of the available timeslots. Enter yourpersonal details email to receive the details of the interview ideally gmail. Email input has to be added with ideally validation and name input. eventually we may have a prepopulated name list with people that have been invited to book an interview.</p>
       </div>
       <CalendarAuth calserv={this.calService}/>
@@ -131,8 +132,8 @@ class CalendarInterviewee extends React.Component {
         >
 
           <h2 ref="subtitle">Book interview</h2>
-          <p>Add availability slot for interviews from {this.state.booking.title} to: </p>
-          <p>Select the length of each interview timeslot. (This will allow interviewees to make bookings of desired length)</p>
+          <p>confirm interview? {this.state.booking.title} to: </p>
+          <p>Select the job position you are applying for </p>
           <Select
             name="form-field-name"
             value={this.state.slotLength}
@@ -144,13 +145,10 @@ class CalendarInterviewee extends React.Component {
           <button className="clbtn" onClick={this.addAvailability}>Confirm</button>
 
           <button className="clbtn" onClick={this.closeModal}>close</button>
-          <div>I am a modal</div>
+          <div>Good luck!</div>
           <form>
             <input />
-            <button>tab navigation</button>
-            <button>stays</button>
-            <button>inside</button>
-            <button>the modal</button>
+
           </form>
         </Modal>
       </div>
