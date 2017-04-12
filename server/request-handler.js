@@ -63,24 +63,18 @@ exports.addUser = function(req, res) {
 };
 
 /*
-** Expected request body: {email(string): 'user email'}
+** Expected request body: {username(string): 'username', email(string): 'user email'}
 ** Expected response if user exists: 200 OK status, {username(string): 'username', email(string): 'user email'}
 ** Expected response if user does not exist: 201 Created status, {username(string): 'username', email(string): 'user email'}
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.checkGmailUser = function(req, res) {
-  User.findOne({where: {email: req.body.email}})
-  .then(function(foundUser) {
-    if (foundUser) {
-      res.status(200).send(newUser);
+  User.findOrCreate({where: {email: req.body.email}, defaults: {username: req.body.username}})
+  .spread(function(newUser, created) {
+    if (created) {
+      res.status(201).send(newUser);
     } else {
-      User.create(req.body)
-      .then(function(newUser) {
-        res.status(201).send(newUser);
-      }).catch(function(err) {
-        console.error(err);
-        res.status(500).send(err);
-      });
+      res.status(200).send(newUser);
     }
   }).catch(function(err) {
     console.error(err);
