@@ -2,7 +2,7 @@ const User = require('./database/models').User;
 const Meeting = require('./database/models').Meeting;
 const UserMeeting = require('./database/models').UserMeeting;
 const Timeslot = require('./database/models').Timeslot;
-const utils = require('../lib/server_utility.js');
+// const utils = require('../lib/server_utility.js');
 
 /*
 ** Expected request body: {owner_id(integer): 'user id', time(date): 'datetime for meeting'}
@@ -10,7 +10,7 @@ const utils = require('../lib/server_utility.js');
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.addMeeting = function(req, res) {
-  Meeting.create({owner_id: req.body.owner_id, room_url: utils.generateUrl(), time: req.body.time})
+  Meeting.create(req.body)
   .then(function(newMeeting) {
     res.status(201).send();
   }).catch(function(err) {
