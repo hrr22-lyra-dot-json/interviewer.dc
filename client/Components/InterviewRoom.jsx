@@ -1,6 +1,6 @@
 import React from 'react';
 import * as recorder from '../Services/interviewRecorder.js';
-import { initializeConnection } from '../Services/interviewRtcHandler.js';
+import * as rtc from '../Services/interviewRtcHandler.js';
 import * as lobby from '../Services/interviewLobby.js';
 
 class InterviewRoom extends React.Component {
@@ -8,7 +8,7 @@ class InterviewRoom extends React.Component {
     super(props);
 
     // We will receive from props:
-        // lobby name
+        // lobby name --> paste into room-id input box and automatically start
         // elements to render (white board, codeshare, etc)
         // admin?
 
@@ -35,7 +35,7 @@ class InterviewRoom extends React.Component {
 
     // Initialize Recorder functionality and Socket.io connection server
     recorder.initializeRecorder();
-    initializeConnection();
+    rtc.initializeConnection();
     lobby.initializeLobby();
   }
 
