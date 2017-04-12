@@ -1,47 +1,20 @@
 ///////////////////////////////////////////////////////////////
 //////////////////////   RECORDER Code   //////////////////////
 ///////////////////////////////////////////////////////////////
-// Initial setup
-window.onbeforeunload = function() {
-  document.getElementById('start').disabled = false;
-  document.getElementById('stop').disabled = true;
-  document.getElementById('save').disabled = true;
-};
-
-// Get main recording element
-var elementToShare = document.getElementById('elementToShare');
-// Create canvas
-var canvas2d = document.createElement('canvas');
-var context = canvas2d.getContext('2d');
-canvas2d.width = elementToShare.clientWidth;
-canvas2d.height = elementToShare.clientHeight;
-canvas2d.style.top = 0;
-canvas2d.style.left = 0;
-canvas2d.style.zIndex = -1;
-(document.body || document.documentElement).appendChild(canvas2d);
-
 // State variables
 var isRecordingStarted = false;
 var isStoppedRecording = false;
 
 // Defining the videoRecorder instance and data storage variable
+var elementToShare;
+var canvas2d;
+var context;
 var currentVideoBlob;
-var canvasRecorder = new CanvasRecorder(canvas2d, {
-  disableLogs: true
-});
+var canvasRecorder;
 
-// Defining the audioRecorder instance
+// Defining the audioRecorder instance and data storage variable
 var audioRecorder;
 var currentAudioBlob;
-navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
-  audioRecorder = new MediaStreamRecorder(stream, {
-    mimeType: 'audio/webm', // audio/webm or audio/ogg or audio/wav
-    bitsPerSecond: 16 * 8 * 1000,
-    getNativeBlob: true   // default is false
-  });
-}).catch(function(err) {
-  console.error('Media Error: ', err);
-});
 
 // Constantly checks state of recording/not-recording
 var looper = function() {
@@ -62,11 +35,41 @@ var looper = function() {
     }
   });
 };
-looper();
+
+exports.initializeRecorder = function() {
+  elementToShare = document.getElementById('elementToShare');
+  canvas2d = document.createElement('canvas');
+  context = canvas2d.getContext('2d');
+  canvas2d.width = elementToShare.clientWidth;
+  canvas2d.height = elementToShare.clientHeight;
+  canvas2d.style.top = 0;
+  canvas2d.style.left = 0;
+  canvas2d.style.zIndex = -1;
+  (document.body || document.documentElement).appendChild(canvas2d);
+
+  // videoRecorder
+  canvasRecorder = new CanvasRecorder(canvas2d, {
+    disableLogs: true
+  });
+
+  // audioRecorder
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+    audioRecorder = new MediaStreamRecorder(stream, {
+      mimeType: 'audio/webm', // audio/webm or audio/ogg or audio/wav
+      bitsPerSecond: 16 * 8 * 1000,
+      getNativeBlob: true   // default is false
+    });
+  }).catch(function(err) {
+    console.error('Media Error: ', err);
+  });
+
+  // If not recording, constantly check to see if recording started yet before running html2canvas
+  looper();
+};
 
 // Button action for "START"
-document.getElementById('start').onclick = function() {
-  this.disabled = true;
+exports.start = function() {
+  document.getElementById('start').disabled = true;
   document.getElementById('save').disabled = true;
 
   // Set states
@@ -86,8 +89,8 @@ document.getElementById('start').onclick = function() {
 };
 
 // Button action "STOP"
-document.getElementById('stop').onclick = function() {
-  this.disabled = true;
+exports.stop = function() {
+  document.getElementById('stop').disabled = true;
   document.getElementById('start').disabled = false;
 
   isStoppedRecording = true;
@@ -108,11 +111,7 @@ document.getElementById('stop').onclick = function() {
 };
 
 // Button action for "SAVE"
-document.getElementById('save').onclick = function() {
-  convertStreams();
-};
-
-var convertStreams = function() {
+exports.save = function() {
   var date = new Date();
   var formatted = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} (${date.getTime()})`;
 

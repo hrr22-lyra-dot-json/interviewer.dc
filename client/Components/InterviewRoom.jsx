@@ -1,4 +1,7 @@
 import React from 'react';
+import * as recorder from '../Services/interviewRecorder.js';
+import { initializeConnection } from '../Services/interviewRtcHandler.js';
+import * as lobby from '../Services/interviewLobby.js';
 
 class InterviewRoom extends React.Component {
   constructor (props) {
@@ -9,9 +12,12 @@ class InterviewRoom extends React.Component {
         // elements to render (white board, codeshare, etc)
         // admin?
 
-    this.startRecording.bind(this);
-    this.stopRecording.bind(this);
-    this.saveRecording.bind(this);
+    this.start = recorder.start;
+    this.stop = recorder.stop;
+    this.save = recorder.save;
+    this.openRoom = lobby.openRoom;
+    this.joinRoom = lobby.joinRoom;
+    this.closeRoom = lobby.closeRoom;
   }
 
   componentWillMount() {
@@ -20,18 +26,17 @@ class InterviewRoom extends React.Component {
 
   componentDidMount() {
     console.log('did mount (post-render)');
-  }
 
-  startRecording() {
-    console.log('started');
-  }
+    // Set initial button states
+    document.getElementById('start').disabled = false;
+    document.getElementById('stop').disabled = true;
+    document.getElementById('save').disabled = true;
+    document.getElementById('close-room').disabled = true;
 
-  stopRecording() {
-    console.log('stopped');
-  }
-
-  saveRecording() {
-    console.log('saved');
+    // Initialize Recorder functionality and Socket.io connection server
+    recorder.initializeRecorder();
+    initializeConnection();
+    lobby.initializeLobby();
   }
 
   render() {
@@ -45,25 +50,20 @@ class InterviewRoom extends React.Component {
           </header>
 
           <input type="text" id="room-id"></input>
-          <button id="open-room">Open Room</button>
-          <button id="join-room">Join Room</button>
+          <button id="open-room" onClick={this.openRoom}>Open Room</button>
+          <button id="join-room" onClick={this.joinRoom}>Join Room</button>
           <br /><br />
-          <button id="close-room" disabled>Waiting for session...</button>
+          <button id="close-room" onClick={this.closeRoom}>Waiting for session...</button>
 
           <div id="videos-container"></div>
 
         </div>
         <div id="recordControls">
-          <button id="start" onClick={this.startRecording}>Start Canvas Recording</button>
-          <button id="stop" disabled>Stop</button>
-          <button id="save" disabled>Processes &amp; Save</button>
+          <button id="start" onClick={this.start}>Start Canvas Recording</button>
+          <button id="stop" onClick={this.stop}>Stop</button>
+          <button id="save" onClick={this.save}>Save</button>
           <div id="room-urls"></div>
         </div>
-
-        <script src="../Services/interviewHelpers.js"></script>
-        <script src="../Services/interviewRecorder.js"></script>
-        <script src="../Services/interviewRtcHandler.js"></script>
-        <script src="../Services/interviewLobby.js"></script>
       </div>
     );
   }

@@ -1,38 +1,44 @@
+import * as helpers from './interviewHelpers.js';
+import { getConnection } from './interviewRtcHandler.js';
+
 /////////////////////////////////////////////////////////////////
 //////////////////////   BUTTON HANDLERS   //////////////////////
 /////////////////////////////////////////////////////////////////
-document.getElementById('open-room').onclick = function() {
-  connection.open(getRoomId(), function() {
-    disableInputButtons();
-    updateCloseLeaveButton(false);
-    showRoomURL(connection.sessionid);
+var connection = getConnection();
 
-    setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
-    setRoomStatusText('<h2>Waiting for participant(s) to join</h2>');
+exports.openRoom = function() {
+  connection.open(helpers.getRoomId(), function() {
+    helpers.disableInputButtons();
+    helpers.updateCloseLeaveButton(connection, false);
+    helpers.showRoomURL(connection.sessionid);
+
+    helpers.setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
+    helpers.setRoomStatusText('<h2>Waiting for participant(s) to join</h2>');
   });
 };
 
-document.getElementById('join-room').onclick = function() {
-  connection.checkPresence(getRoomId(), function(isRoomExist, roomid) {
-    disableInputButtons();
-    updateCloseLeaveButton(true);
+exports.joinRoom = function() {
+  connection.checkPresence(helpers.getRoomId(), function(isRoomExist, roomid) {
+    helpers.disableInputButtons();
+    helpers.updateCloseLeaveButton(connection, true);
 
     if (isRoomExist) {
       connection.join(roomid, function() {
-        setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
+        helpers.setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
       });
     } else {
-      enableInputButtons();
-      setRoomStatusText('Room does not exist!');
+      helpers.enableInputButtons();
+      helpers.setRoomStatusText('Room does not exist!');
     }
   });
 };
 
-document.getElementById('close-room').onclick = function() {
-  this.disabled = true;
+exports.closeRoom = function() {
+  helpers.updateCloseLeaveButton(connection, true);
+
   if (connection.isInitiator) {
     connection.closeEntireSession(function() {
-      hideRoomURL();
+      helpers.hideRoomURL();
     });
   } else {
     connection.leave();
@@ -40,60 +46,65 @@ document.getElementById('close-room').onclick = function() {
   }
 };
 
-
 //////////////////////////////////////////////////////////////
 /////////////////////  HANDLING ROOM ID  /////////////////////
 //////////////////////////////////////////////////////////////
-var roomParams = function() {
+(function roomParams() {
   var params = {};
-  var r = /([^&=]+)=?([^&]*)/g;
-  var d = function(s) {
-    return decodeURIComponent(s.replace(/\+/g, ' '));
-  };
-  var match;
-  var search = window.location.search;
-  while (match = r.exec(search.substring(1))) {
-    params[d(match[1])] = d(match[2]);
+
+  // LEGACY REGEX CODE
+  // var r = /([^&=]+)=?([^&]*)/g;
+  // var d = function(s) {
+  //   return decodeURIComponent(s.replace(/\+/g, ' '));
+  // };
+  // var match;
+  // var search = window.location.search;   // this SHOULD be showing: "?roomid=xxxxxxx"
+  // while (match = r.exec(search.substring(1))) {
+  //   params[d(match[1])] = d(match[2]);
+  // }
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/Location
+  // New workaround code
+  var href = window.location.href;
+  if (href.indexOf('?roomid=') !== -1) {
+    var split = href.split('?roomid=');
+    params['roomid'] = split[split.length - 1];
   }
   window.params = params;
-};
-roomParams();
+})();
 
 var roomid = '';
-if (localStorage.getItem(connection.socketMessageEvent)) {
-  roomid = localStorage.getItem(connection.socketMessageEvent);
-} else {
-  roomid = connection.token();
-}
 
-document.getElementById('room-id').value = roomid;
-document.getElementById('room-id').onkeyup = function() {
-  localStorage.setItem(connection.socketMessageEvent, this.value);
+exports.initializeLobby = function() {
+  if (localStorage.getItem(connection.socketMessageEvent)) {
+    // roomid = localStorage.getItem(connection.socketMessageEvent);
+    roomid = 'default-room-name';
+  } else {
+    roomid = connection.token();
+  }
+
+  var roomidElement = document.getElementById('room-id');
+  roomidElement.value = roomid;
+  roomidElement.onkeyup = function() {
+    localStorage.setItem(connection.socketMessageEvent, roomidElement.value);
+  };
+
+  roomid = params.roomid;
+
+  if (roomid && roomid.length) {
+    document.getElementById('room-id').value = roomid;
+    localStorage.setItem(connection.socketMessageEvent, roomid);
+  // auto-join-room
+    (function reCheckRoomPresence() {
+      connection.checkPresence(roomid, function(isRoomExists) {
+        if (isRoomExists) {
+          connection.join(roomid);
+          return;
+        }
+        setTimeout(reCheckRoomPresence, 5000);
+      });
+    })();
+
+    helpers.disableInputButtons();
+  }
 };
-
-var hashString = location.hash.replace('#', '');
-if (hashString.length && hashString.indexOf('comment-') === 0) {
-  hashString = '';
-}
-
-var roomid = params.roomid;
-if (!roomid && hashString.length) {
-  roomid = hashString;
-}
-
-if (roomid && roomid.length) {
-  document.getElementById('room-id').value = roomid;
-  localStorage.setItem(connection.socketMessageEvent, roomid);
-// auto-join-room
-  (function reCheckRoomPresence() {
-    connection.checkPresence(roomid, function(isRoomExists) {
-      if (isRoomExists) {
-        connection.join(roomid);
-        return;
-      }
-      setTimeout(reCheckRoomPresence, 5000);
-    });
-  })();
-
-  disableInputButtons();
-}
