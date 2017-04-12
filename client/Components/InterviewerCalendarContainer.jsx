@@ -41,6 +41,7 @@ class Calendar extends React.Component {
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
     //var slotServ = new TimeslotService();
    // slotServ.getSlots(localStorage.getItem('dbUser').id).bind(slotServ)
+   slotServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
     slotServ.on('got_slots', (slots) => {
       console.log('slots',typeof slots.data[0].start)
       this.setState({availableSlots: slots.data})
@@ -131,7 +132,7 @@ class Calendar extends React.Component {
       <CalendarAuth calserv={this.calService}/>
       <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable} calService={this.calService} selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
       <div>
-        <button onClick={this.openModal}>Open Modal</button>
+
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
