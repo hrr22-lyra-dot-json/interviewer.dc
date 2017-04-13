@@ -1,6 +1,6 @@
 //import PropTypes from 'prop-types'; //This file holds the router and instantiates the authentication superpack
 import React from 'react'
-import { hashHistory, Router, Route, Link, Redirect, withRouter} from 'react-router'
+import { browserHistory, hashHistory, Router, Route, Link, Redirect, withRouter} from 'react-router'
 import Login from './Login.jsx'
 import Home from './Home.jsx'
 import CalendarInterviewee from './IntervieweeCalendar.jsx' // this is the page interviewees come too to book availabilities
@@ -30,7 +30,7 @@ export default class App extends React.Component {
           <Route path="/"  component={Home} auth={auth} onEnter={this.requireAuth} />
           <Route name='/' path="?access_token=:accesstoken&expires_in=:expiry&id_token=:idtoken&token_type=:tokentype&state=:stater" component={Home} auth={auth} onEnter={this.requireAuth} />
           <Route path='/home' component={Home} auth={auth} onEnter={this.requireAuth} />
-          <Route path="/login" component={Login} auth={auth} />
+          <Route path="/login" component={Login} myObj='' auth={auth} />
           <Route path="/interviewee" component={CalendarInterviewee} auth={auth} />
           <Route path="/interviewroom" component={InterviewRoom} auth={auth} />
         </div>

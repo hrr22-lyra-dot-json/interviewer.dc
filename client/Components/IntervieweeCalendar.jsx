@@ -44,6 +44,8 @@ class CalendarInterviewee extends React.Component {
     console.log(calServ);
     console.log('query', props.location.query);
     this.interviewer = Number(props.location.query.interviewer)
+    this.job_position = Number(props.location.query.job_position)
+
     slotServ.getThem(this.interviewer)
     //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
 
@@ -94,6 +96,15 @@ class CalendarInterviewee extends React.Component {
     console.log('booking', booking)
     this.setState({modalIsOpen: false});
     //post request to availability slots database
+
+    var eventor = {interviewer_id: this.interviewer,
+      job_position: this.job_position,
+      interviewee_name: 'simon',
+      roomid: this.job_position + this.owner_id,
+      start: new Date(booking.start),
+      end: new Date(booking.end)
+    }
+    slotServ.createEvent(eventor)
   }
 
   handleAuthClicker () {

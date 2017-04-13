@@ -6,7 +6,7 @@ export default class RoomService extends EventEmitter {
     super()
   }
 
-  addRoom(timeslots) {
+  addRoom(room) {
     this.createRoom(room, this.hasBeenAdded.bind(this), this.getThem.bind(this))
   }
 
@@ -14,14 +14,15 @@ export default class RoomService extends EventEmitter {
     this.getRooms(userid, this.gotthem.bind(this))
   }
 
-  createRoom(interviewer, roomid, callback) {
+  createRoom(room, callback, callback2) {
     axios.post('/api/Meeting', {
-        owner_id: interviewer,
-        job_position: 'janitor'
+        owner_id: room.userid,
+        job_position: room.position
     })
     .then(function (response) {
       console.log(response)
-      callback()
+      callback(response)
+      callback2(JSON.parse(localStorage.getItem('dbUser')).id)
 
     })
     .catch(function (error) {
@@ -30,33 +31,26 @@ export default class RoomService extends EventEmitter {
   }
 
   getRooms(userid, callback) {
-    axios.get('/api/Meeting', {
+    axios.get('/api/Meetings', {
       params: {
         owner_id: userid
       }
     })
     .then(function (response) {
-      response.data.forEach(function(slot) {
-        slot.start = new Date(slot.start)
-        slot.end = new Date(slot.end)
-      })
-
       callback(response)
       //this.gotthem(reponse).bind(this)
-      console.log('got slots', response);
-      console.log('got slots', response.data);
-
-
+      console.log('got rooms', response);
+      console.log('got rooms', response.data);
     })
     .catch(function (error) {
       console.log(error);
     });
   }
-  hasBeenAdded(slots) {
-    this.emit('rooms_added', slots)
+  hasBeenAdded(rooms) {
+    this.emit('rooms_added', rooms)
   }
-  gotthem(slots) {
-    this.emit('got_rooms', slots)
+  gotthem(rooms) {
+    this.emit('got_rooms', rooms)
   }
 
 }

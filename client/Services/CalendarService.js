@@ -1,4 +1,19 @@
 import { EventEmitter } from 'events'
+import axios from 'axios'
+
+var addToken = function (userid, token) {
+  axios.post('/api/Token', {
+    'owner_id': userid,
+    'token': JSON.stringify(token)
+  })
+  .then(function (response) {
+    console.log('added token', response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
 //import Auth0Lock from 'auth0-lock'
 // Your Client ID can be retrieved from your project in the Google
       // Developer Console, https://console.developers.google.com
@@ -35,7 +50,8 @@ export default class CalendarService extends EventEmitter {
     }, cb); //this.handleAuthResult
   }
   handleAuthResult(authResult) {
-    console.log('authresult', authResult);
+    addToken(JSON.parse(localStorage.getItem('dbUser')).id, authResult)
+    console.log('authresult',  authResult);
     var authorizeDiv = document.getElementById('authorize-button');
     if (authResult && !authResult.error) {
       // Hide auth UI, then load client library.
@@ -48,11 +64,14 @@ export default class CalendarService extends EventEmitter {
     }
   }
   handleAuthClick(event) {
+    console.log('gapi', gapi)
     gapi.auth.authorize(
       {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
       this.handleAuthResult.bind(this));  //return false; .bind(this)
   }
   loadCalendarApi() {
+        console.log('gapi', gapi)
+
     gapi.client.load('calendar', 'v3', this.listUpcomingEvents.bind(this));
   }
   listUpcomingEvents() {

@@ -8,6 +8,7 @@ import TimeslotService from '../Services/TimeslotService.js'
 import RoomService from '../Services/RoomService.js'
 
 import CalendarAuth from './CalendarAuth.jsx'
+import RoomList from './RoomList.jsx'
 import Modal from 'react-modal';
 import Select from 'react-select';
 
@@ -51,7 +52,7 @@ class Calendar extends React.Component {
     })
 
     this.calService = calServ;
-    console.log(calServ);
+    console.log('this is the cserv', calServ);
     //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
 
     calServ.on('events_loaded', (evv) => {
@@ -163,6 +164,8 @@ class Calendar extends React.Component {
           </form>
         </Modal>
       </div>
+
+      <RoomList />
       </div>
 
     )
