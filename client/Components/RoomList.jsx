@@ -94,7 +94,7 @@ class RoomList extends React.Component {
 
         <ul>
         {this.state.rooms.map(function(room) {
-          return <li>{room.position}</li>
+          return <li>{room.job_position}</li>
         })}
         </ul>
 

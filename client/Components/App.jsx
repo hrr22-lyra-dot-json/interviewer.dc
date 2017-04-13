@@ -1,6 +1,6 @@
 //import PropTypes from 'prop-types'; //This file holds the router and instantiates the authentication superpack
 import React from 'react'
-import { hashHistory, Router, Route, Link, Redirect, withRouter} from 'react-router'
+import { browserHistory, hashHistory, Router, Route, Link, Redirect, withRouter} from 'react-router'
 import Login from './Login.jsx'
 import Home from './Home.jsx'
 import CalendarInterviewee from './IntervieweeCalendar.jsx' // this is the page interviewees come too to book availabilities

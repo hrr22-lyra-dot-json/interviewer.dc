@@ -31,7 +31,7 @@ export default class RoomService extends EventEmitter {
   }
 
   getRooms(userid, callback) {
-    axios.get('/api/Meeting', {
+    axios.get('/api/Meetings', {
       params: {
         owner_id: userid
       }
