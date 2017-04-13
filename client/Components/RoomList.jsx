@@ -76,10 +76,12 @@ class RoomList extends React.Component {
           {this.state.rooms.map(function(room) {
             return (
               <div>
-                <li className="collection-item"><div>{room.job_position}
-              <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">Calendar link</Link>
-
-              <Link to={{ pathname: '/interviewroom', state: room.job_position + room.owner_id/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content"><i className="material-icons enter-room-icon">input</i></Link></div></li>
+                <li className="collection-item">
+                  <div>{room.job_position}
+                <Link to={{ pathname: '/interviewroom', state: room.job_position + room.owner_id/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content"><i className="material-icons enter-room-icon">input</i></Link>
+                <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content"><i className="material-icons view-calendar-icon">today</i></Link>
+                  </div>
+                </li>
               </div>
             )
           })}
@@ -103,7 +105,6 @@ class RoomList extends React.Component {
           <button className="clbtn" onClick={this.addAvailability}>Confirm</button>
 
           <button className="clbtn" onClick={this.closeModal}>close</button>
-          <div>I am a modal</div>
 
         </Modal>
 
