@@ -9,8 +9,9 @@ exports.getRoomId = function() {
 exports.showRoomURL = function(roomid) {
   var roomQueryStringURL = '?roomid=' + roomid;
   var fullURL = window.location.href + roomQueryStringURL;
-
   var html = '<u><a href="' + fullURL + '" target="_blank">' + roomid + '</a></u>';
+  // var html = '<u><a href="' + window.location.href + '" target="_blank">' + roomid + '</a></u>';
+  // var html = '<u><a href="' + window.location.href.split('&_k=').shift() + '" target="_blank">' + roomid + '</a></u>';
 
   document.getElementById('room-urls').innerHTML = html;
 };

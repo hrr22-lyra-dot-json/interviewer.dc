@@ -9,11 +9,10 @@ class InterviewRoom extends React.Component {
   constructor (props) {
     super(props);
 
-    // We will receive from props:
-        // lobby name --> paste into room-id input box and automatically start
-        // elements to render (white board, codeshare, etc)
-        // admin?
-        console.log('this', this)
+    console.log('this', this)
+    console.log('props', props.location);
+    // this.roomid = props.location.search.replace('?roomid=', '');
+    this.roomid = props.location.state;
 
     this.start = recorder.start;
     this.stop = recorder.stop;
@@ -40,6 +39,12 @@ class InterviewRoom extends React.Component {
     recorder.initializeRecorder();
     rtc.initializeConnection();
     lobby.initializeLobby();
+
+    // Auto-fill room name
+    document.getElementById('room-id').value = this.roomid;
+
+    // Load link
+    // this.openRoom(this.roomid);
   }
 
   render() {

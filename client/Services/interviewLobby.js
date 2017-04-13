@@ -6,10 +6,13 @@ import { getConnection } from './interviewRtcHandler.js';
 /////////////////////////////////////////////////////////////////
 var connection = getConnection();
 
-exports.openRoom = function() {
-  // document.getElementById('room-id') = PARAMS.ROOMID;
-  // connection.open(PARAMS.ROOMID, function() {
-  connection.open(helpers.getRoomId(), function() {
+exports.openRoom = function(roomid) {
+  if (typeof roomid === 'string') {
+    document.getElementById('room-id').value = roomid;
+  } else {
+    roomid = helpers.getRoomId();
+  }
+  connection.open(roomid, function() {
     helpers.disableInputButtons();
     helpers.updateCloseLeaveButton(connection, false);
     helpers.showRoomURL(connection.sessionid);
@@ -51,13 +54,13 @@ exports.closeRoom = function() {
 //////////////////////////////////////////////////////////////
 /////////////////////  HANDLING ROOM ID  /////////////////////
 //////////////////////////////////////////////////////////////
-(function roomParams() {
+var roomParams = function() {
   var params = {};
 
   // LEGACY REGEX CODE
   // var r = /([^&=]+)=?([^&]*)/g;
   // var d = function(s) {
-  //   return decodeURIComponent(s.replace(/\+/g, ' '));
+    // return decodeURIComponent(s.replace(/\+/g, ' '));
   // };
   // var match;
   // var search = window.location.search;   // this SHOULD be showing: "?roomid=xxxxxxx"
@@ -72,18 +75,34 @@ exports.closeRoom = function() {
     var split = href.split('?roomid=');
     params['roomid'] = split[split.length - 1];
   }
+
+  // Workaround code v3
+  // var href = window.location.href.split('&_k=').shift().split('?roomid=').pop();
+  // console.log('new href', href);
+  // params['roomid'] = href;
+
   window.params = params;
-})();
+};
+roomParams();
 
 var roomid = '';
 
 exports.initializeLobby = function() {
+  // if (params.roomid.indexOf('http://') !== -1) {
+  //   params.roomid = '';
+  // }
+  // console.log('connection phase 0', connection);
+  // console.log('roomid phase 0', roomid);
+  // console.log('window.params phase 0', params);
+
   if (localStorage.getItem(connection.socketMessageEvent)) {
     // roomid = localStorage.getItem(connection.socketMessageEvent);
     roomid = 'default-room-name';
   } else {
     roomid = connection.token();
   }
+
+  // console.log('roomid phase 1', roomid);
 
   var roomidElement = document.getElementById('room-id');
   roomidElement.value = roomid;
@@ -92,6 +111,8 @@ exports.initializeLobby = function() {
   };
 
   roomid = params.roomid;
+
+  // console.log('roomid phase 2', roomid);
 
   if (roomid && roomid.length) {
     document.getElementById('room-id').value = roomid;
