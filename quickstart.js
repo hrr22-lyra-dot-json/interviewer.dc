@@ -40,7 +40,7 @@ function authorize(credentials, callback) {
     if (err) {
       getNewToken(oauth2Client, callback);
     } else {
-      oauth2Client.credentials = JSON.parse(token);
+      oauth2Client.credentials = JSON.parse('{"state":"","access_token":"ya29.GlwsBB_txDUm_gtOWfVvIP9cb82ApSKtOf3HPjNH4SN6A6Sw4083RxS8OrSz3QG5Ui3VdWDJoz4jbyRK6yNMr0EOwfphbodE33L48NEjUYRXXyZRcXa8SZMZaq7QbA","token_type":"Bearer","expires_in":"3600","scope":"https://www.googleapis.com/auth/calendar","client_id":"561574047233-oopf3ll9q5o303cmfdv240cc040coj69.apps.googleusercontent.com","response_type":"token","issued_at":"1492051945","expires_at":"1492055545","g-oauth-window":{"window":null,"self":null,"location":{},"closed":true,"frames":null,"length":0,"top":null,"opener":null,"parent":null},"status":{"google_logged_in":false,"signed_in":true,"method":"PROMPT"}}');
       callback(oauth2Client);
     }
   });
@@ -100,17 +100,44 @@ function authorize(credentials, callback) {
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-calendar.events.insert({
-  auth: auth,
-  calendarId: 'primary',
-  resource: event,
-}, function(err, event) {
-  if (err) {
-    console.log('There was an error contacting the Calendar service: ' + err);
-    return;
+// calendar.events.insert({
+//   auth: auth,
+//   calendarId: 'primary',
+//   resource: event,
+// }, function(err, event) {
+//   if (err) {
+//     console.log('There was an error contacting the Calendar service: ' + err);
+//     return;
+//   }
+//   console.log('Event created: %s', event.htmlLink);
+// });
+var event = {
+  'summary': 'Google I/O 2015',
+  'location': '800 Howard St., San Francisco, CA 94103',
+  'description': 'A chance to hear more about Google\'s developer products.',
+  'start': {
+    'dateTime': '2017-04-28T09:00:00-07:00',
+    'timeZone': 'America/Los_Angeles'
+  },
+  'end': {
+    'dateTime': '2017-05-28T17:00:00-07:00',
+    'timeZone': 'America/Los_Angeles'
+  },
+  'recurrence': [
+    'RRULE:FREQ=DAILY;COUNT=2'
+  ],
+  'attendees': [
+    {'email': 'simondemoor0@gmail.com'},
+    {'email': 'sbrin@example.com'}
+  ],
+  'reminders': {
+    'useDefault': false,
+    'overrides': [
+      {'method': 'email', 'minutes': 24 * 60},
+      {'method': 'popup', 'minutes': 10}
+    ]
   }
-  console.log('Event created: %s', event.htmlLink);
-});
+};
 
 function listEvents(auth) {
   var calendar = google.calendar('v3');
