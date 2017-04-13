@@ -128,10 +128,10 @@ class CalendarInterviewee extends React.Component {
 
         <nav className="splash-nav blue darken-3">
           <div className="nav-wrapper">
-            <a href="/#" className="brand-logo center">Interviewer.DC</a>
+            <a href="/#/login" className="brand-logo center">Interviewer.DC</a>
           </div>
         </nav>
-        
+
         <div className="container calendar-section">
 
           <div className="row">
