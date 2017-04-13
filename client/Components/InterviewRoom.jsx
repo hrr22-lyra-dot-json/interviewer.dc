@@ -44,7 +44,7 @@ class InterviewRoom extends React.Component {
       <div>
         <nav className="splash-nav">
           <div className="nav-wrapper">
-            <div id="room-urls" className="brand-logo"></div>
+            <div id="room-urls" className="brand-logo center"></div>
             <ul id="recordControls" className="right">
               <li><button id="start" className="btn btn-default z-depth-2 red" onClick={this.start}>Start Recording</button></li>
               <li><button id="stop" className="btn btn-default z-depth-2" onClick={this.stop}>Stop</button></li>

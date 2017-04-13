@@ -10,7 +10,7 @@ exports.showRoomURL = function(roomid) {
   var roomQueryStringURL = '?roomid=' + roomid;
   var fullURL = window.location.href + roomQueryStringURL;
 
-  var html = '<strong>Room Name: </strong><a href="' + fullURL + '" target="_blank">' + roomid + '</a>';
+  var html = '<u><a href="' + fullURL + '" target="_blank">' + roomid + '</a></u>';
 
   document.getElementById('room-urls').innerHTML = html;
 };
@@ -19,7 +19,6 @@ exports.hideRoomURL = function() {
   document.getElementById('roomStatusText').innerHTML = 'Entire session has been closed.';
   document.getElementById('userRoleText').innerHTML = '';
   document.getElementById('room-urls').innerHTML = '';
-  document.getElementById('room-urls').style.display = 'none';
 };
 
 // helper functions to disable/enable all buttons
