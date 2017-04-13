@@ -46,14 +46,24 @@ export default class AuthService extends EventEmitter {
     // navigate to the home route
    // browserHistory.replace('/home')
 
-   this.lock.getProfile(authResult.idToken, (error, profile) => {
-      if (error) {
+   this.lock.getUserInfo(authResult.accessToken, (error, profile) => {
+    if (error) {
         console.log('Error loading the Profile', error)
-      } else {
+    } else {
         this.setProfile(profile)
-      }
-    })
-  }
+    }
+
+  })
+ }
+
+  //  this.lock.getProfile(authResult.idToken, (error, profile) => {
+  //     if (error) {
+  //       console.log('Error loading the Profile', error)
+  //     } else {
+  //       this.setProfile(profile)
+  //     }
+  //   })
+  // }
   _authorizationError(error){
     // Unexpected authentication error
     console.log('Authentication Error', error)

@@ -9,10 +9,13 @@ import Nav from './Nav.jsx'
 export class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {  profile: props.routes[1].auth.getProfile() }
+    this.state = {  profile: {name: 'not yet loaded'} }
 
     console.log('query', props.location.query);//this allows you to access any queries in the url get request
 
+    props.routes[1].auth.on('profile_updated', (profile) => {
+      this.setState({profile: this.props.routes[1].auth.getProfile()})
+    })
     props.routes[1].auth.on('logged_out', (bye) => {
       this.setState({profile: this.props.routes[1].auth.getProfile()})
     })

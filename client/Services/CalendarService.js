@@ -25,7 +25,9 @@ var checkAuth = function(cb) {
   gapi.auth.authorize({
     'client_id': CLIENT_ID,
     'scope': SCOPES.join(' '),
-    'immediate': true
+    'immediate': true,
+    "expires_in": 999999999999999999999999999999999999999999999999999
+
   }, cb) //this.handleAuthResult
 }
 
@@ -46,7 +48,8 @@ export default class CalendarService extends EventEmitter {
     gapi.auth.authorize({
       'client_id': this.CLIENT_ID,
       'scope': SCOPES.join(' '),
-      'immediate': true
+      'immediate': true,
+      "expires_in": 999999999999999999999999999999999999999999999999999
     }, cb); //this.handleAuthResult
   }
   handleAuthResult(authResult) {
