@@ -22,7 +22,7 @@ var looper = function() {
     return setTimeout(looper, 500);
   }
   html2canvas(elementToShare, {
-    // grabMouse: true,
+    grabMouse: false,
     onrendered: function(canvas) {
       context.clearRect(0, 0, canvas2d.width, canvas2d.height);
       context.drawImage(canvas, 0, 0, canvas2d.width, canvas2d.height);
