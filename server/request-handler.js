@@ -242,10 +242,10 @@ exports.deleteTimeslot = function(req, res) {
 ** This will create a user token if the user does not have one and update a previous token if the user does
 */
 exports.updateToken = function(req, res) {
-  Tokens.findOrCreate({where: {owner_id: req.body.owner_id}, defaults: {token: req.body.token}})
-  .then(function(newUser, created) {
+  Token.findOrCreate({where: {owner_id: req.body.owner_id}, defaults: {token: req.body.token}})
+  .spread(function(newToken, created) {
     if (!created) {
-      return newUser.update({token: req.body.token});
+      return newToken.update({token: req.body.token});
     }
   }).then(function() {
     res.status(201).send();
