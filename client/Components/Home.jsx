@@ -28,7 +28,6 @@ export class Home extends React.Component {
       <div>
         <Nav name={this.state.profile.name} logout={this.logout.bind(this)} />
 
-
         <Calendar />
       </div>
     )

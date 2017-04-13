@@ -70,7 +70,17 @@ class RoomList extends React.Component {
   render() {
     return (
       <div>
-        <button className="btn btn-default z-depth-2" onClick={this.openModal}>Create Room</button>
+
+        <ul className="collection with-header">
+          <li className="collection-header"><h4>Rooms<button className="btn-floating waves-effect waves-light blue darken-3 z-depth-2 secondary-content" onClick={this.openModal}><i className="material-icons">add</i></button></h4></li>
+          {this.state.rooms.map(function(room) {
+            return (
+              <div>
+                <li className="collection-item"><div>{room.job_position}<Link to={{ pathname: '/interviewroom', query: {roomname: room.job_position + room.owner_id} }} className="secondary-content"><i className="material-icons enter-room-icon">input</i></Link></div></li>
+              </div>
+            )
+          })}
+        </ul>
 
         <Modal
           isOpen={this.state.modalIsOpen}
@@ -94,14 +104,14 @@ class RoomList extends React.Component {
 
         </Modal>
 
-        <ul>
-        {this.state.rooms.map(function(room) {
-          return <div>
-          <li>{room.job_position}</li>
-          <Link to={{ pathname: '/interviewroom', query: {roomname: room.job_position + room.owner_id} }} className="btn btn-primary">Go to room</Link>
-          </div>
-        })}
-        </ul>
+        {/* <ul>
+          {this.state.rooms.map(function(room) {
+            return <div>
+            <li>{room.job_position}</li>
+            <Link to={{ pathname: '/interviewroom', query: {roomname: room.job_position + room.owner_id} }} className="btn btn-primary">Go to room</Link>
+            </div>
+          })}
+        </ul> */}
 
       </div>
 

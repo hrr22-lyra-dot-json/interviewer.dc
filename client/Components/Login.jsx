@@ -38,8 +38,8 @@ export class Login extends React.Component {
             </div>
             <div className="col s6 m4">
               <i className="large material-icons splash-icons">email</i>
-              <h5>Email Notifcation</h5>
-              <p>Send email notifications when meetings are created, updated, or deleted. Email integration allows for complete oversight of meetings for both the interviewer and the interviewee, reducing no-shows and miscommunication at the root.</p>
+              <h5>Email Notifcation System</h5>
+              <p>Send email notifications when meetings are created, updated, or deleted. Email integration allows for complete oversight of meetings for both the interviewer and the interviewee, reducing no-shows and miscommunication.</p>
             </div>
 
           </div>
