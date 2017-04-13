@@ -1,6 +1,8 @@
 import React from 'react'
 import RoomService from '../Services/RoomService.js'
 import Modal from 'react-modal';
+import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
+
 
   const customStyles = {
   content : {
@@ -94,7 +96,10 @@ class RoomList extends React.Component {
 
         <ul>
         {this.state.rooms.map(function(room) {
-          return <li>{room.job_position}</li>
+          return <div>
+          <li>{room.job_position}</li>
+          <Link to={{ pathname: '/interviewroom', query: {roomname: room.job_position + room.owner_id} }} className="btn btn-primary">Go to room</Link>
+          </div>
         })}
         </ul>
 

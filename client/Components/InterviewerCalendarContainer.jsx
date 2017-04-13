@@ -52,7 +52,7 @@ class Calendar extends React.Component {
     })
 
     this.calService = calServ;
-    console.log(calServ);
+    console.log('this is the cserv', calServ);
     //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
 
     calServ.on('events_loaded', (evv) => {

@@ -30,7 +30,7 @@ export default class App extends React.Component {
           <Route path="/"  component={Home} auth={auth} onEnter={this.requireAuth} />
           <Route name='/' path="?access_token=:accesstoken&expires_in=:expiry&id_token=:idtoken&token_type=:tokentype&state=:stater" component={Home} auth={auth} onEnter={this.requireAuth} />
           <Route path='/home' component={Home} auth={auth} onEnter={this.requireAuth} />
-          <Route path="/login" component={Login} auth={auth} />
+          <Route path="/login" component={Login} myObj='' auth={auth} />
           <Route path="/interviewee" component={CalendarInterviewee} auth={auth} />
           <Route path="/interviewroom" component={InterviewRoom} auth={auth} />
         </div>

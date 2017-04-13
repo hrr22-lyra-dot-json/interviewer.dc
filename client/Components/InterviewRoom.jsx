@@ -2,6 +2,8 @@ import React from 'react';
 import * as recorder from '../Services/interviewRecorder.js';
 import * as rtc from '../Services/interviewRtcHandler.js';
 import * as lobby from '../Services/interviewLobby.js';
+import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
+
 
 class InterviewRoom extends React.Component {
   constructor (props) {
@@ -11,6 +13,7 @@ class InterviewRoom extends React.Component {
         // lobby name --> paste into room-id input box and automatically start
         // elements to render (white board, codeshare, etc)
         // admin?
+        console.log('this', this)
 
     this.start = recorder.start;
     this.stop = recorder.stop;

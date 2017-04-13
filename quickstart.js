@@ -54,76 +54,76 @@ function authorize(credentials, callback) {
  * @param {getEventsCallback} callback The callback to call with the authorized
  *     client.
  */
-function getNewToken(oauth2Client, callback) {
-  var authUrl = oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: SCOPES
-  });
-  console.log('Authorize this app by visiting this url: ', authUrl);
-  var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  rl.question('Enter the code from that page here: ', function(code) {
-    rl.close();
-    oauth2Client.getToken(code, function(err, token) {
-      if (err) {
-        console.log('Error while trying to retrieve access token', err);
-        return;
-      }
-      oauth2Client.credentials = token;
-      storeToken(token);
-      callback(oauth2Client);
-    });
-  });
-}
+// function getNewToken(oauth2Client, callback) {
+//   var authUrl = oauth2Client.generateAuthUrl({
+//     access_type: 'offline',
+//     scope: SCOPES
+//   });
+//   console.log('Authorize this app by visiting this url: ', authUrl);
+//   var rl = readline.createInterface({
+//     input: process.stdin,
+//     output: process.stdout
+//   });
+//   rl.question('Enter the code from that page here: ', function(code) {
+//     rl.close();
+//     oauth2Client.getToken(code, function(err, token) {
+//       if (err) {
+//         console.log('Error while trying to retrieve access token', err);
+//         return;
+//       }
+//       oauth2Client.credentials = token;
+//       storeToken(token);
+//       callback(oauth2Client);
+//     });
+//   });
+// }
 
 /**
  * Store token to disk be used in later program executions.
  *
  * @param {Object} token The token to store to disk.
  */
-function storeToken(token) {
-  try {
-    fs.mkdirSync(TOKEN_DIR);
-  } catch (err) {
-    if (err.code != 'EEXIST') {
-      throw err;
-    }
-  }
-  fs.writeFile(TOKEN_PATH, JSON.stringify(token));
-  console.log('Token stored to ' + TOKEN_PATH);
-}
+// function storeToken(token) {
+//   try {
+//     fs.mkdirSync(TOKEN_DIR);
+//   } catch (err) {
+//     if (err.code != 'EEXIST') {
+//       throw err;
+//     }
+//   }
+//   fs.writeFile(TOKEN_PATH, JSON.stringify(token));
+//   console.log('Token stored to ' + TOKEN_PATH);
+// }
 
 /**
  * Lists the next 10 events on the user's primary calendar.
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
+calendar.events.insert({
+  auth: auth,
+  calendarId: 'primary',
+  resource: event,
+}, function(err, event) {
+  if (err) {
+    console.log('There was an error contacting the Calendar service: ' + err);
+    return;
+  }
+  console.log('Event created: %s', event.htmlLink);
+});
+
 function listEvents(auth) {
   var calendar = google.calendar('v3');
-  calendar.events.list({
+  calendar.events.insert({
     auth: auth,
     calendarId: 'primary',
-    timeMin: (new Date()).toISOString(),
-    maxResults: 10,
-    singleEvents: true,
-    orderBy: 'startTime'
-  }, function(err, response) {
+    resource: event,
+  }, function(err, event) {
     if (err) {
-      console.log('The API returned an error: ' + err);
+      console.log('The API failed to create event; error: ' + err);
       return;
     }
-    var events = response.items;
-    if (events.length == 0) {
-      console.log('No upcoming events found.');
-    } else {
-      console.log('Upcoming 10 events:');
-      for (var i = 0; i < events.length; i++) {
-        var event = events[i];
-        var start = event.start.dateTime || event.start.date;
-        console.log('%s - %s', start, event.summary);
-      }
-    }
-  });
+    console.log('Event created: %s', event.htmlLink);
+  })
 }
+
