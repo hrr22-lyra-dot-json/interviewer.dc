@@ -7,7 +7,7 @@ import CalendarInterviewee from './IntervieweeCalendar.jsx' // this is the page 
 import AuthService from '../Services/AuthService.js'
 import InterviewRoom from './InterviewRoom.jsx'
 
-const auth = new AuthService('bIi5wFickS2TiO4JVTmyXIsfsLEJAYor', 'sdm.auth0.com')
+const auth = new AuthService('R6x0iX25zFBEm6qY7QoJ2Dth5Tn2SBeE', 'sdm.auth0.com')
 
 export default class App extends React.Component {
   constructor(props) {
@@ -28,9 +28,9 @@ export default class App extends React.Component {
       <Router history={hashHistory}>
         <div>
           <Route path="/"  component={Home} auth={auth} onEnter={this.requireAuth} />
-          <Route name='/' path="?access_token=:accesstoken&expires_in=:expiry&id_token=:idtoken&token_type=:tokentype&state=:stater" component={Home} auth={auth} onEnter={this.requireAuth} />
+
           <Route path='/home' component={Home} auth={auth} onEnter={this.requireAuth} />
-          <Route path="/login" component={Login} myObj='' auth={auth} />
+          <Route path="/login" component={Login} auth={auth} />
           <Route path="/interviewee" component={CalendarInterviewee} auth={auth} />
           <Route path="/interviewroom" component={InterviewRoom} auth={auth} />
         </div>
@@ -39,3 +39,4 @@ export default class App extends React.Component {
     )
   }
 }
+//<Route name='/' path="?access_token=:accesstoken&expires_in=:expiry&id_token=:idtoken&token_type=:tokentype&state=:stater" component={Home} auth={auth} onEnter={this.requireAuth} />
