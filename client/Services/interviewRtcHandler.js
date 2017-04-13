@@ -30,10 +30,11 @@ exports.initializeConnection = function() {
   // handling video sources
   connection.videosContainer = document.getElementById('videos-container');
   connection.onstream = function(event) {
-    var width = parseInt(connection.videosContainer.clientWidth / 2) - 20;
+    // var width = parseInt(connection.videosContainer.clientWidth / 2) - 20;
+    var width = 250;
     var mediaElement = getMediaElement(event.mediaElement, {
       title: event.userid,
-      buttons: ['full-screen'],
+      buttons: [],
       width: width,
       showOnMouseEnter: false
     });

@@ -10,11 +10,9 @@ exports.showRoomURL = function(roomid) {
   var roomQueryStringURL = '?roomid=' + roomid;
   var fullURL = window.location.href + roomQueryStringURL;
 
-  var html = '<br /><strong>Room URL:</strong>';
-  html += '<a href="' + fullURL + '" target="_blank">' + fullURL + '</a>';
+  var html = '<strong>Room Name: </strong><a href="' + fullURL + '" target="_blank">' + roomid + '</a>';
 
   document.getElementById('room-urls').innerHTML = html;
-  document.getElementById('room-urls').style.display = 'block';
 };
 
 exports.hideRoomURL = function() {
@@ -50,9 +48,9 @@ exports.updateCloseLeaveButton = function(connection, state){
 
 // Change text on screen
 exports.setRoomStatusText = function(str) {
-  document.querySelector('#roomStatusText').innerHTML = str;
+  document.getElementById('roomStatusText').innerHTML = str;
 };
 
 exports.setUserRoleText = function(str) {
-  document.querySelector('#userRoleText').innerHTML = str;
+  document.getElementById('userRoleText').innerHTML = str;
 };

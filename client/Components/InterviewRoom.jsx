@@ -42,28 +42,35 @@ class InterviewRoom extends React.Component {
   render() {
     return (
       <div>
-        <div id="elementToShare">
-          <header>
-            <h2>DEE SEE LOBBEE V3</h2>
-            <div id="roomStatusText"></div>
-            <div id="userRoleText"></div>
-          </header>
+        <nav className="splash-nav">
+          <div className="nav-wrapper">
+            <div id="room-urls" className="brand-logo"></div>
+            <ul id="recordControls" className="right">
+              <li><button id="start" className="btn btn-default z-depth-2 red" onClick={this.start}>Start Recording</button></li>
+              <li><button id="stop" className="btn btn-default z-depth-2" onClick={this.stop}>Stop</button></li>
+              <li><button id="save" className="btn btn-default z-depth-2" onClick={this.save}>Save</button></li>
+            </ul>
+          </div>
+        </nav>
 
-          <input type="text" id="room-id"></input>
-          <button id="open-room" onClick={this.openRoom}>Open Room</button>
-          <button id="join-room" onClick={this.joinRoom}>Join Room</button>
-          <br /><br />
-          <button id="close-room" onClick={this.closeRoom}>Waiting for session...</button>
-
-          <div id="videos-container"></div>
-
+        <div className="container">
+          <div className="row">
+            <input type="text" id="room-id"></input>
+            <button id="open-room" className="btn btn-default z-depth-2" onClick={this.openRoom}>Open Room</button>
+            <button id="join-room" className="btn btn-default z-depth-2" onClick={this.joinRoom}>Join Room</button>
+            <button id="close-room" className="btn btn-default z-depth-2" onClick={this.closeRoom}>Waiting for session...</button>
+            <div id="elementToShare" className="col s12">
+              <div id="videos-container" className="video-container"></div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col s12 m12">
+              <div id="roomStatusText"></div>
+              <div id="userRoleText"></div>
+            </div>
+          </div>
         </div>
-        <div id="recordControls">
-          <button id="start" onClick={this.start}>Start Canvas Recording</button>
-          <button id="stop" onClick={this.stop}>Stop</button>
-          <button id="save" onClick={this.save}>Save</button>
-          <div id="room-urls"></div>
-        </div>
+
       </div>
     );
   }
