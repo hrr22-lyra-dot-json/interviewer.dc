@@ -13,8 +13,11 @@ import Modal from 'react-modal';
 import Select from 'react-select';
 
   const customStyles = {
+  overlay: {
+    zIndex: 10
+  },
   content : {
-    top                   : '75%',
+    top                   : '30%',
     left                  : '50%',
     right                 : 'auto',
     bottom                : 'auto',
@@ -155,10 +158,8 @@ class Calendar extends React.Component {
             searchable={false}
             clearable={false}
           />
-          <button className="clbtn" onClick={this.addAvailability}>Confirm</button>
-
-          <button className="clbtn" onClick={this.closeModal}>close</button>
-          <div>I am a modal</div>
+          <button className="btn btn-default blue darken-3" onClick={this.addAvailability}>Confirm</button>
+          <button className="btn btn-default red" onClick={this.closeModal}>close</button>
           <form>
             <input />
           </form>
