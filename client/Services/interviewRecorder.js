@@ -22,7 +22,7 @@ var looper = function() {
     return setTimeout(looper, 500);
   }
   html2canvas(elementToShare, {
-    grabMouse: true,
+    // grabMouse: true,
     onrendered: function(canvas) {
       context.clearRect(0, 0, canvas2d.width, canvas2d.height);
       context.drawImage(canvas, 0, 0, canvas2d.width, canvas2d.height);
@@ -46,6 +46,7 @@ exports.initializeRecorder = function() {
   canvas2d.style.top = 0;
   canvas2d.style.left = 0;
   canvas2d.style.zIndex = -1;
+  canvas2d.style.display = 'none';
   (document.body || document.documentElement).appendChild(canvas2d);
 
   // videoRecorder

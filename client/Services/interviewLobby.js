@@ -7,13 +7,15 @@ import { getConnection } from './interviewRtcHandler.js';
 var connection = getConnection();
 
 exports.openRoom = function() {
+  // document.getElementById('room-id') = PARAMS.ROOMID;
+  // connection.open(PARAMS.ROOMID, function() {
   connection.open(helpers.getRoomId(), function() {
     helpers.disableInputButtons();
     helpers.updateCloseLeaveButton(connection, false);
     helpers.showRoomURL(connection.sessionid);
 
     helpers.setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
-    helpers.setRoomStatusText('<h2>Waiting for participant(s) to join</h2>');
+    helpers.setRoomStatusText('Waiting for participant(s) to join');
   });
 };
 
