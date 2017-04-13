@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: function(queryInterface, Sequelize) {
-    return queryInterface.createTable('Meetings', {
+    return queryInterface.createTable('Tokens', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,8 +11,8 @@ module.exports = {
       owner_id: {
         type: Sequelize.INTEGER
       },
-      job_position: {
-        type: Sequelize.STRING
+      token: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
@@ -27,6 +27,6 @@ module.exports = {
     });
   },
   down: function(queryInterface, Sequelize) {
-    return queryInterface.dropTable('Meetings');
+    return queryInterface.dropTable('Tokens');
   }
 };
