@@ -36,7 +36,7 @@ exports.createEvent = function(req, res) {
     },
     'attendees': [
       {'email': 'simondemoor0@gmail.com'},
-      {'email': 'kyle.anson7@gmail.com'}
+      {'email': 'kasonjim@gmail.com'}
       ]
     }
 
