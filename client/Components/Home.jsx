@@ -4,6 +4,7 @@ import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} 
 import Calendar from './InterviewerCalendarContainer.jsx' //InterviewerCalendarContainer
 import CalendarAuth from './CalendarAuth.jsx'
 import CalendarService from '../Services/CalendarService.js'
+import Nav from './Nav.jsx'
 
 export class Home extends React.Component {
   constructor(props) {
@@ -25,15 +26,7 @@ export class Home extends React.Component {
 
     return (
       <div>
-        <div className="jumbotron">
-            <h1>Welcome to Interviewer Direct Connect! </h1>
-            <p>The most advanced interviewing platform in the world brought to you by Project Washington.</p>
-            <p>
-              <small>Hello {this.state.profile.name}</small>
-            </p>
-
-            <Link to='/login' onClick={this.logout.bind(this)} className="rightimg" className="btn btn-primary">Sign Out</Link>
-        </div>
+        <Nav name={this.state.profile.name} logout={this.logout.bind(this)} />
 
         <Calendar />
       </div>

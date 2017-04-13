@@ -130,7 +130,7 @@ class Calendar extends React.Component {
   render () {
     return (
 
-      <div>
+      <div className="container">
       <CalendarAuth calserv={this.calService}/>
       <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable} calService={this.calService} selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
       <div>
