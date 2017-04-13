@@ -139,7 +139,12 @@ class CalendarInterviewee extends React.Component {
               <div className="card">
                 <div className="card-content">
                   <span className="card-title">Book your interview with ...interviewername</span>
-                  <p>Please book a calendar with ... interviewername by clicking on one of the available timeslots. Enter your personal details email to receive the details of the interview ideally gmail. Email input has to be added with ideally validation and name input. eventually we may have a prepopulated name list with people that have been invited to book an interview.</p>
+                  <div className="divider"></div><br />
+                  <p>
+                    Please book a calendar with ... interviewername by clicking on one of the available timeslots.
+                    <br />
+                    Enter your email -- ideally GMail -- to receive the details of the interview.
+                  </p>
                 </div>
               </div>
             </div>
