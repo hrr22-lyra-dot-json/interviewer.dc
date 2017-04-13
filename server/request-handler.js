@@ -2,6 +2,7 @@ const User = require('./database/models').User;
 const Meeting = require('./database/models').Meeting;
 const UserMeeting = require('./database/models').UserMeeting;
 const Timeslot = require('./database/models').Timeslot;
+const Token = require('./database/models').Token;
 // const utils = require('../lib/server_utility.js');
 
 /*
@@ -148,7 +149,7 @@ exports.listUserMeetings = function(req, res) {
 };
 
 /*
-** Expected request query: {id: 'id'}
+** Expected request query: {id(integer): 'id'}
 ** Expected response: 200 OK status
 ** Expected response on database error: 500 Internal Server Error status
 */
@@ -220,7 +221,7 @@ exports.listTimeslots = function(req, res) {
 };
 
 /*
-** Expected request query: {id: id}
+** Expected request query: {id: 'id'}
 ** Expected response: 200 OK status
 ** Expected response on database error: 500 Internal Server Error status
 */
@@ -229,6 +230,25 @@ exports.deleteTimeslot = function(req, res) {
   .then(function(affectedRows) {
     res.status(200).send();
   }).catch(function(err) {
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request body: {owner_id(integer): 'id', token(string): 'stringified token'}
+** Expected response: 201 Created status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.updateToken = function(req, res) {
+  Tokens.findOrCreate({where: {owner_id: req.body.owner_id}, defaults: {token: req.body.token}})
+  .then(function(newUser, created) {
+    if (!created)
+      return newUser.update({token: req.body.token});
+    }
+  }).then(function() {
+    res.status(201).send();
+  }).catch(function(err) {
+    console.error(err);
     res.status(500).send(err);
   });
 };
