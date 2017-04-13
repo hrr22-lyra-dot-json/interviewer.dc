@@ -124,37 +124,53 @@ class CalendarInterviewee extends React.Component {
 
   render () {
     return (
-
       <div>
-      <div className="jumbotron">
-      <h1>Book your interview with ...interviewername</h1>
-        <p>Please book a calendar with ... interviewername by clicking on one of the available timeslots. Enter yourpersonal details email to receive the details of the interview ideally gmail. Email input has to be added with ideally validation and name input. eventually we may have a prepopulated name list with people that have been invited to book an interview.</p>
-      </div>
-      <CalendarAuth calserv={this.calService}/>
-      <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable} calService={this.calService} selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
-      <div>
-        <button onClick={this.openModal}>Open Modal</button>
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Book interview"
-        >
 
-          <h2 ref="subtitle">Book interview</h2>
-          <p>confirm interview? {this.state.booking.title} to: </p>
+        <nav className="splash-nav blue darken-3">
+          <div className="nav-wrapper">
+            <a href="/#" className="brand-logo center">Interviewer.DC</a>
+          </div>
+        </nav>
+        
+        <div className="container calendar-section">
 
-          <button className="clbtn" onClick={this.addAvailability}>Confirm</button>
+          <div className="row">
+            <div className="col s12">
+              <div className="card">
+                <div className="card-content">
+                  <span className="card-title">Book your interview with ...interviewername</span>
+                  <p>Please book a calendar with ... interviewername by clicking on one of the available timeslots. Enter your personal details email to receive the details of the interview ideally gmail. Email input has to be added with ideally validation and name input. eventually we may have a prepopulated name list with people that have been invited to book an interview.</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <button className="clbtn" onClick={this.closeModal}>close</button>
-          <div>Good luck!</div>
-          <form>
-            <input />
+          <CalendarAuth calserv={this.calService}/>
+          <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable} calService={this.calService} selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
+          <div>
+            <Modal
+              isOpen={this.state.modalIsOpen}
+              onAfterOpen={this.afterOpenModal}
+              onRequestClose={this.closeModal}
+              style={customStyles}
+              contentLabel="Book interview"
+              >
 
-          </form>
-        </Modal>
-      </div>
+                <h2 ref="subtitle">Book interview</h2>
+                <p>confirm interview? {this.state.booking.title} to: </p>
+
+                <button className="clbtn" onClick={this.addAvailability}>Confirm</button>
+
+                <button className="clbtn" onClick={this.closeModal}>close</button>
+                <div>Good luck!</div>
+                <form>
+                  <input />
+
+                </form>
+              </Modal>
+            </div>
+          </div>
+
       </div>
 
     )
