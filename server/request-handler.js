@@ -243,9 +243,11 @@ exports.deleteTimeslot = function(req, res) {
 */
 exports.updateToken = function(req, res) {
   Token.findOrCreate({where: {owner_id: req.body.owner_id}, defaults: {token: req.body.token}})
-  .then(function(newUser, created) {
+
+  .spread(function(newToken, created) {
+
     if (!created) {
-      return newUser.update({token: req.body.token});
+      return newToken.update({token: req.body.token});
     }
   }).then(function() {
     res.status(201).send();
