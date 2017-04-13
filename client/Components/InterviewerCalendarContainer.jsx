@@ -14,7 +14,7 @@ import Select from 'react-select';
 
   const customStyles = {
   content : {
-    top                   : '20%',
+    top                   : '75%',
     left                  : '50%',
     right                 : 'auto',
     bottom                : 'auto',

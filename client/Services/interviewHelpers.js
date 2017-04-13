@@ -8,10 +8,11 @@ exports.getRoomId = function() {
 // Display/hide URL link for current room (for admins)
 exports.showRoomURL = function(roomid) {
   var roomQueryStringURL = '?roomid=' + roomid;
-  var fullURL = window.location.href + roomQueryStringURL;
+  // var fullURL = window.location.href + roomQueryStringURL;
+  var fullURL = window.location.href.split('?_k=').shift() + roomQueryStringURL;
   var html = '<u><a href="' + fullURL + '" target="_blank">' + roomid + '</a></u>';
   // var html = '<u><a href="' + window.location.href + '" target="_blank">' + roomid + '</a></u>';
-  // var html = '<u><a href="' + window.location.href.split('&_k=').shift() + '" target="_blank">' + roomid + '</a></u>';
+  // var html = '<u><a href="' + window.location.href.split('?_k=').shift() + '" target="_blank">' + roomid + '</a></u>';
 
   document.getElementById('room-urls').innerHTML = html;
 };

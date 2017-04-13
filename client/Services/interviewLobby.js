@@ -22,20 +22,25 @@ exports.openRoom = function(roomid) {
   });
 };
 
-exports.joinRoom = function() {
-  connection.checkPresence(helpers.getRoomId(), function(isRoomExist, roomid) {
+exports.joinRoom = function(roomid) {
+  connection.join(roomid, function() {
     helpers.disableInputButtons();
-    helpers.updateCloseLeaveButton(connection, true);
-
-    if (isRoomExist) {
-      connection.join(roomid, function() {
-        helpers.setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
-      });
-    } else {
-      helpers.enableInputButtons();
-      helpers.setRoomStatusText('Room does not exist!');
-    }
+    helpers.updateCloseLeaveButton(connection, false);
+    helpers.setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
   });
+  // connection.checkPresence(roomid, function(isRoomExist, roomid) {
+    // helpers.disableInputButtons();
+    // helpers.updateCloseLeaveButton(connection, true);
+    // console.log('isRoomExist', isRoomExist);
+    // if (isRoomExist) {
+      // connection.join(roomid, function() {
+      //   helpers.setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
+      // });
+    // } else {
+      // helpers.enableInputButtons();
+      // helpers.setRoomStatusText('Room does not exist!');
+    // }
+  // });
 };
 
 exports.closeRoom = function() {
@@ -70,16 +75,16 @@ var roomParams = function() {
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Location
   // New workaround code
-  var href = window.location.href;
-  if (href.indexOf('?roomid=') !== -1) {
-    var split = href.split('?roomid=');
-    params['roomid'] = split[split.length - 1];
-  }
+  // var href = window.location.href;
+  // if (href.indexOf('?roomid=') !== -1) {
+  //   var split = href.split('?roomid=');
+  //   params['roomid'] = split[split.length - 1];
+  // }
 
   // Workaround code v3
-  // var href = window.location.href.split('&_k=').shift().split('?roomid=').pop();
-  // console.log('new href', href);
-  // params['roomid'] = href;
+  var href = window.location.href.split('&_k=').shift().split('?roomid=').pop();
+  console.log('new href', href);
+  params['roomid'] = href;
 
   window.params = params;
 };

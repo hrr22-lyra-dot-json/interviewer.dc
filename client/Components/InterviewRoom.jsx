@@ -12,6 +12,7 @@ class InterviewRoom extends React.Component {
     console.log('this', this)
     console.log('props', props.location);
     // this.roomid = props.location.search.replace('?roomid=', '');
+    this.search = props.location.search;
     this.roomid = props.location.state;
 
     this.start = recorder.start;
@@ -44,7 +45,11 @@ class InterviewRoom extends React.Component {
     document.getElementById('room-id').value = this.roomid;
 
     // Load link
-    // this.openRoom(this.roomid);
+    if (this.search) {
+      this.joinRoom(this.roomid);
+    } else {
+      this.openRoom(this.roomid);
+    }
   }
 
   render() {
