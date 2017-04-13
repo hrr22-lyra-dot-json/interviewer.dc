@@ -25,7 +25,7 @@ exports.addMeeting = function(req, res) {
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.listMeetings = function(req, res) {
-  Meeting.findAll({where: req.body})
+  Meeting.findAll({where: req.query})
   .then(function(foundMeetings) {
     res.status(200).send(foundMeetings);
   }).catch(function(err) {
