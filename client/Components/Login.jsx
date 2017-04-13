@@ -9,14 +9,15 @@ export class Login extends React.Component {
     const { auth } = this.props.routes[1]
 
     return (
-      <div>
-        <nav className="splash-nav">
+      <div className="splash">
+        <nav className="splash-nav blue darken-3">
           <div className="nav-wrapper">
-            <a href="#" className="brand-logo center">Interviewer.DC</a>
+            <a href="#" className="brand-logo center">Interviewer Direct Connect</a>
+            <ul className="right"><li><button onClick={auth.login.bind(this)} className="right" className="btn waves-effect waves-light indigo darken-4">Sign In</button></li></ul>
           </div>
         </nav>
 
-        <div className="row splash-header-row center-align">
+        <div className="row splash-header-row center-align grey lighten-2">
 
           <img src="client/assets/splash-header.jpg" className="responsive-img splash-header" alt="Interviewer.DS Logatron" />
 
@@ -43,9 +44,6 @@ export class Login extends React.Component {
 
           </div>
 
-          <div className="row">
-            <button className="btn btn-default z-depth-2" onClick={auth.login.bind(this)}>Login</button>
-          </div>
         </div>
       </div>
     )

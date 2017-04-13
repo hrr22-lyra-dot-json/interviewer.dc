@@ -1,16 +1,17 @@
-/*#authorize-button {
-  display: none;
-}
-#signout-button {
-  display: none;
-}*/
+/*******************************
+*            GLOBALS           *
+********************************/
 
-.splash-nav {
-  background-color: #EF4C2D;
+nav {
+  padding: 0 1rem;
 }
+
+/*******************************
+*       LOGIN SPLASH PAGE      *
+********************************/
 
 .splash-icons {
-  color: #EF4C2D;
+  color: #1565c0;
 }
 
 .splash-logo {
@@ -19,16 +20,25 @@
 }
 
 .splash-header-row {
-  background-color: #DDDDDD;
   max-height: 35rem;
   padding: 0 0 -1.5rem 0;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
 .splash-header {
   margin-bottom: -5px;
   max-height: 35rem;
 }
+
+/*******************************
+*              HOME            *
+********************************/
+
+
+/*******************************
+*                              *
+********************************/
+
 
 #elementToShare {
     background: rgb(250, 250, 250);
