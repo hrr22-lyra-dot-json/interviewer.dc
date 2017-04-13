@@ -44,7 +44,7 @@ class CalendarInterviewee extends React.Component {
     console.log(calServ);
     console.log('query', props.location.query);
     this.interviewer = Number(props.location.query.interviewer)
-    this.job_position = Number(props.location.query.job_position)
+    this.job_position = props.location.query.job_position
 
     slotServ.getThem(this.interviewer)
     //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
