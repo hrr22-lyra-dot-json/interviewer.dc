@@ -76,7 +76,7 @@ class RoomList extends React.Component {
           {this.state.rooms.map(function(room) {
             return (
               <div>
-                <li className="collection-item"><div>{room.job_position}<Link to={{ pathname: '/interviewroom', query: {roomname: room.job_position + room.owner_id} }} className="secondary-content"><i className="material-icons enter-room-icon">input</i></Link></div></li>
+                <li className="collection-item"><div>{room.job_position}<Link to={{ pathname: '/interviewroom', state: room.job_position + room.owner_id/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content"><i className="material-icons enter-room-icon">input</i></Link></div></li>
               </div>
             )
           })}
