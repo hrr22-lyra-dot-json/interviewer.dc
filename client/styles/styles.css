@@ -11,7 +11,7 @@ nav {
 ********************************/
 
 .splash-icons {
-  color: #1565c0;
+  color: #EF4C2D;
 }
 
 .splash-logo {
@@ -34,6 +34,9 @@ nav {
 *              HOME            *
 ********************************/
 
+.calendar-section {
+  margin-top: 3rem;
+}
 
 /*******************************
 *                              *
