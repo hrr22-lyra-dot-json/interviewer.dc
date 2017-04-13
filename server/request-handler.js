@@ -238,6 +238,8 @@ exports.deleteTimeslot = function(req, res) {
 ** Expected request body: {owner_id(integer): 'id', token(string): 'stringified token'}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
+**
+** This will create a user token if the user does not have one and update a previous token if the user does
 */
 exports.updateToken = function(req, res) {
   Tokens.findOrCreate({where: {owner_id: req.body.owner_id}, defaults: {token: req.body.token}})
