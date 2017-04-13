@@ -4,7 +4,10 @@ import Modal from 'react-modal';
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
 
 
-  const customStyles = {
+const customStyles = {
+  overlay: {
+    zIndex: 10
+  },
   content : {
     top                   : '20%',
     left                  : '50%',
