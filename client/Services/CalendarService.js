@@ -13,6 +13,7 @@ var addToken = function (userid, token) {
     console.log(error);
   });
 }
+
 //import Auth0Lock from 'auth0-lock'
 // Your Client ID can be retrieved from your project in the Google
       // Developer Console, https://console.developers.google.com

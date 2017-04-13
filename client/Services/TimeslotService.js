@@ -60,6 +60,15 @@ export default class TimeslotService extends EventEmitter {
   gotthem(slots) {
     this.emit('got_slots', slots)
   }
+  createEvent (event) {
+    axios.post('/api/Event', event)
+    .then(function (response) {
+      console.log('added event', response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
 
 }
 
