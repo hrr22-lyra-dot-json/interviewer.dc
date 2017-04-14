@@ -62,6 +62,7 @@ class RoomList extends React.Component {
     room.position = this.state.position
     roomServ.addRoom(room)
     this.setState({modalIsOpen: false});
+    Materialize.toast(`Room "${this.state.position}" created!`, 4000)
   }
 
   handleChange(event) {
