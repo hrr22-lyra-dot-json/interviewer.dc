@@ -12,7 +12,8 @@ exports.getConnection = function() {
 exports.initializeConnection = function() {
   // connection.socketURL = '/';
   // connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-  connection.socketURL = 'http://localhost:1337/';
+  console.log(window.location);
+  connection.socketURL = window.location.hostname + ':1337/';
 
   // Initial connection setup
   connection.socketMessageEvent = 'interviewer.dc-room';
