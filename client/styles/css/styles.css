@@ -10,9 +10,8 @@ nav {
 *       LOGIN SPLASH PAGE      *
 ********************************/
 
-.splash-icons {
+.splash-icons:before {
   color: #EF4C2D;
-  font-size: 5rem;
 }
 
 .splash-logo {
@@ -23,7 +22,7 @@ nav {
 .splash-header-row {
   max-height: 35rem;
   padding: 0 0 -1.5rem 0;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .splash-header {
@@ -35,18 +34,30 @@ nav {
 *              HOME            *
 ********************************/
 
+#authorize-button {
+  margin-top: -12px;
+}
+
 .calendar-section {
   margin-top: 2rem;
 }
 
-.rooms-section-icons {
-  color: #1565C0;
-  margin-left: 1rem;
-  pointer: cursor;
+.rooms-section-icons:before {
+  font-size: 1.5rem;
 }
 
-.materialize-button-inner-icon {
-  font-weight: 300;
+.add-room-button:before {
+  font-size: 2rem;
+  color: white;
+}
+
+.rooms-section-icons:before {
+  color: #1565C0;
+}
+
+.rooms-section-icons:hover:before {
+  color: #3787E3;
+  cursor: pointer;
 }
 
 /*******************************
