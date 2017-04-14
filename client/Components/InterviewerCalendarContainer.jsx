@@ -47,7 +47,10 @@ class Calendar extends React.Component {
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
     this.auth = props.auth
     //var slotServ = new TimeslotService();
-   // slotServ.getSlots(localStorage.getItem('dbUser').id).bind(slotServ)
+    if (localStorage.getItem('dbUser')) {
+      slotServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
+    }
+   //slotServ.getSlots(localStorage.getItem('dbUser').id).bind(slotServ)
    //slotServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
    this.auth.on('added_user', (user) => {
     slotServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
@@ -133,7 +136,11 @@ class Calendar extends React.Component {
   }
 
   eventClick(event) {
-    alert(event.title)
+    console.log('this is the event', event)
+    if (event.title === 'Book Interview') {
+      alert(event.title + ' from ' + event.start + ' to ' + event.end + 'is now deleted')
+      slotServ.deleteSlot(event.id, slotServ.getThem.bind(slotServ))
+    }
   }
 
   render () {

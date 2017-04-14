@@ -25,7 +25,11 @@ class RoomList extends React.Component {
   constructor (props) {
     super(props)
     this.state = {rooms:[{position: 'janitor'}], modalIsOpen: false}
+
     this.auth = props.auth
+    if (localStorage.getItem('dbUser')) {
+      roomServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
+    }
     this.auth.on('added_user', (user) => {
     roomServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
    })
