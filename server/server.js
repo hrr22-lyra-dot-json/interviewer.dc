@@ -1,3 +1,6 @@
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// EXPRESS + ROUTES ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
@@ -21,22 +24,20 @@ app.get('/api', function(req, res) {
   });
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port);
-console.log(`Listening on port: ${port}`);
 
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// SOCKET IO SERVER ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 // socket.io server configuration based on Muaz Khan's server for WebRTC
+
 /*
  * Environment variables
- *   SOCKETIO_PORT (default: 443)
+ *   PORT (default: 3000)
  *   USE_HTTPS (default: false)
 */
 
 // HTTPS Check
-var isUseHTTPs = false;
+var isUseHTTPs = process.env.USE_HTTPS || false;
 var fs = require('fs');
 var path = require('path');
 
@@ -55,11 +56,10 @@ var httpsOptions = {
 
 // Main server setup
 var http = require(isUseHTTPs ? 'https' : 'http');
+const port = process.env.PORT || 3000;
 var socketserver;
-var socketport = process.env.SOCKETIO_PORT || 1337;
-
 isUseHTTPs ? socketserver = http.createServer(httpsOptions, app) : socketserver = http.createServer(app);
-socketserver = socketserver.listen(socketport);
+socketserver = socketserver.listen(port);
 
 // Socket config
 require('./socket.io/Signaling-Server.js')(socketserver, function(socket) {
@@ -79,6 +79,9 @@ require('./socket.io/Signaling-Server.js')(socketserver, function(socket) {
   } catch (e) {}
 });
 
-console.log('[socket.io server port]: ' + socketport);
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////// MISC ////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 
+console.log('[Server + socket.io server port]: ' + port);
 module.exports = app;
