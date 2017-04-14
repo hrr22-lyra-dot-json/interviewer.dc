@@ -15,11 +15,17 @@ export default class TimeslotService extends EventEmitter {
   getThem(userid) {
     this.getSlots(userid, this.gotthem.bind(this))
   }
-  removeOne(slotId) {
 
+  createEvent(eventor, slot) {
+    this.createAnEvent(eventor, this.deleteSlot.bind(this), slot, this.getThem.bind(this))
   }
 
-  deleteSlot(slotId) {
+  deleteSlot(slotId, callback) {
+    axios.delete('/api/Timeslot?id=' + slotId)
+    .then(function(response) {
+      console.log('slot removed')
+      callback(JSON.parse(localStorage.getItem('dbUser')).id)
+    });
 
   }
 
@@ -67,10 +73,11 @@ export default class TimeslotService extends EventEmitter {
   gotthem(slots) {
     this.emit('got_slots', slots)
   }
-  createEvent (event, slot) {
+  createAnEvent (event, callback, slot, callback2) {
     axios.post('/api/Event', event)
     .then(function (response) {
       console.log('added event', response);
+      callback(slot.id, callback2)
     })
     .catch(function (error) {
       console.log(error);
