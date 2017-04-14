@@ -285,3 +285,17 @@ exports.addMultipleQuestions = function(req, res) {
     res.status(500).send(err);
   });
 };
+
+/*
+** Expected request query: {meeting_id(integer): 'meeting id'}
+** Expected response: 200 OK status, [{meeting_id: 'meeting id', question: 'THE question'}]
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.listQuestions = function(req, res) {
+  Question.findAll({where: req.query})
+  .then(function(foundQuestions) {
+    res.status(200).send(foundQuestions);
+  }).catch(function(err) {
+    res.status(500).send(err);
+  });
+};
