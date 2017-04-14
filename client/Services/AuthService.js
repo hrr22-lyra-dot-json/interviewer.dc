@@ -6,21 +6,7 @@ import axios from 'axios';
 //import { browserHistory } from 'react-router' //    "react-router": "^2.8.0"
 
 //addUserto db service
-var addUser = function(user) {
-  console.log('sending user', user)
-  axios.post('/api/gmailUser', {
-    username: user.name,
-    email: user.email
-  })
-  .then(function (response) {
-    console.log('added user', response);
-    //localStorage.setItem('profile', JSON.stringify(profile))
-    localStorage.setItem('dbUser', JSON.stringify(response.data));
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-}
+
 
 
 export default class AuthService extends EventEmitter {
@@ -50,7 +36,8 @@ export default class AuthService extends EventEmitter {
     if (error) {
         console.log('Error loading the Profile', error)
     } else {
-        this.setProfile(profile)
+      this.addUser(profile)
+      this.setProfile(profile)
     }
 
   })
@@ -82,13 +69,38 @@ export default class AuthService extends EventEmitter {
   setProfile(profile){
     // Saves profile data to localStorage
     console.log('profile', profile)
-    addUser(profile);
+    //addUser(profile);
 
 
     localStorage.setItem('profile', JSON.stringify(profile))
     // Triggers profile_updated event to update the UI
     this.emit('profile_updated', profile)
   }
+  addUser(user) {
+    this.addaUser(user, this.useradded.bind(this))
+  }
+
+  addaUser (user, callback) {
+    console.log('sending user', user)
+    axios.post('/api/gmailUser', {
+      username: user.name,
+      email: user.email
+    })
+    .then(function (response) {
+      console.log('added user', response);
+      //localStorage.setItem('profile', JSON.stringify(profile))
+      localStorage.setItem('dbUser', JSON.stringify(response.data));
+      callback(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+  useradded(user) {
+    this.emit('added_user', user)
+  }
+
+
 
   getProfile(){
     // Retrieves the profile data from localStorage
@@ -110,6 +122,7 @@ export default class AuthService extends EventEmitter {
     // Clear user token and profile data from local storage
     localStorage.removeItem('id_token');
         localStorage.removeItem('profile');
+        localStorage.removeItem('dbUser');
             //localStorage.removeItem('projects');
             console.log('loggedout')
 
