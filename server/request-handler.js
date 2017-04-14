@@ -3,6 +3,7 @@ const Meeting = require('./database/models').Meeting;
 const UserMeeting = require('./database/models').UserMeeting;
 const Timeslot = require('./database/models').Timeslot;
 const Token = require('./database/models').Token;
+const Question = require('./database/models').Question;
 // const utils = require('../lib/server_utility.js');
 
 /*
@@ -235,7 +236,7 @@ exports.deleteTimeslot = function(req, res) {
 };
 
 /*
-** Expected request body: {owner_id(integer): 'id', token(string): 'stringified token'}
+** Expected request body: {owner_id(integer): 'user id', token(string): 'stringified token'}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 **
@@ -243,9 +244,7 @@ exports.deleteTimeslot = function(req, res) {
 */
 exports.updateToken = function(req, res) {
   Token.findOrCreate({where: {owner_id: req.body.owner_id}, defaults: {token: req.body.token}})
-
   .spread(function(newToken, created) {
-
     if (!created) {
       return newToken.update({token: req.body.token});
     }
@@ -253,6 +252,64 @@ exports.updateToken = function(req, res) {
     res.status(201).send();
   }).catch(function(err) {
     console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request body: {meeting_id(integer): 'meeting id', question(string): 'THE question'}
+** Expected response: 201 Created status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.addQuestion = function(req, res) {
+  Question.create(req.body)
+  .then(function(newQuestion) {
+    res.status(201).send(newQuestion);
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request body: {questions: [{meeting_id(integer): 'meeting id', question(string): 'THE question'}]}
+** Expected response: 201 Created status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.addMultipleQuestions = function(req, res) {
+  Question.bulkCreate(req.body.questions)
+  .then(function() {
+    res.status(201).send();
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request query: {meeting_id(integer): 'meeting id'}
+** Expected response: 200 OK status, [{meeting_id: 'meeting id', question: 'THE question'}]
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.listQuestions = function(req, res) {
+  Question.findAll({where: req.query})
+  .then(function(foundQuestions) {
+    res.status(200).send(foundQuestions);
+  }).catch(function(err) {
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request query: {id(integer): 'id'}
+** Expected response: 200 OK status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.deleteQuestion = function(req, res) {
+  Question.destroy({where: {id: req.query.id}})
+  .then(function(affectedRows) {
+    res.status(200).send();
+  }).catch(function(err) {
     res.status(500).send(err);
   });
 };
