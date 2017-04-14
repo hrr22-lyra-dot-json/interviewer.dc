@@ -12,7 +12,7 @@ export class Login extends React.Component {
       <div className="splash">
         <nav className="splash-nav blue darken-3">
           <div className="nav-wrapper">
-            <a href="#" className="brand-logo center">Interviewer Direct Connect</a>
+            <a href="#" className="brand-logo center">Interviewer Direct Connection</a>
             <ul className="right"><li><button onClick={auth.login.bind(this)} className="right" className="btn waves-effect waves-light indigo darken-4">Sign In</button></li></ul>
           </div>
         </nav>
@@ -38,7 +38,7 @@ export class Login extends React.Component {
             </div>
             <div className="col s6 m4">
               <i className="large material-icons splash-icons">email</i>
-              <h5>Email Notifcation System</h5>
+              <h5>Email Notification System</h5>
               <p>Send email notifications when meetings are created, updated, or deleted. Email integration allows for complete oversight of meetings for both the interviewer and the interviewee, reducing no-shows and miscommunication.</p>
             </div>
 
