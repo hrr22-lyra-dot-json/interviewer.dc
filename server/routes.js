@@ -25,6 +25,7 @@ module.exports = function(app) {
   app.post('/api/Token', requestHandler.updateToken);
 
   app.post('/api/Question', requestHandler.addQuestion);
+  app.post('/api/Questions', requestHandler.addMultipleQuestions);
 
   app.post('/api/Event', eventCreator.createEvent);
 };

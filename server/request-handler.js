@@ -244,9 +244,7 @@ exports.deleteTimeslot = function(req, res) {
 */
 exports.updateToken = function(req, res) {
   Token.findOrCreate({where: {owner_id: req.body.owner_id}, defaults: {token: req.body.token}})
-
   .spread(function(newToken, created) {
-
     if (!created) {
       return newToken.update({token: req.body.token});
     }
@@ -267,6 +265,21 @@ exports.addQuestion = function(req, res) {
   Question.create(req.body)
   .then(function(newQuestion) {
     res.status(201).send(newQuestion);
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request body: {questions: [{meeting_id(integer): 'meeting id', question(string): 'THE question'}]}
+** Expected response: 201 Created status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.addMultipleQuestions = function(req, res) {
+  Question.bulkCreate(req.body.questions)
+  .then(function() {
+    res.status(201).send();
   }).catch(function(err) {
     console.error(err);
     res.status(500).send(err);
