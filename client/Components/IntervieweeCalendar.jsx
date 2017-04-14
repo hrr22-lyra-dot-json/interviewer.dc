@@ -100,7 +100,7 @@ class CalendarInterviewee extends React.Component {
     var eventor = {interviewer_id: this.interviewer,
       job_position: this.job_position,
       interviewee_name: 'simon',
-      roomid: this.job_position + this.owner_id,
+      roomid: this.job_position + this.interviewer,
       start: new Date(booking.start),
       end: new Date(booking.end)
     }
