@@ -12,6 +12,7 @@ nav {
 
 .splash-icons {
   color: #EF4C2D;
+  font-size: 5rem;
 }
 
 .splash-logo {
@@ -38,9 +39,14 @@ nav {
   margin-top: 2rem;
 }
 
-.enter-room-icon, .view-calendar-icon {
+.rooms-section-icons {
   color: #1565C0;
   margin-left: 1rem;
+  pointer: cursor;
+}
+
+.materialize-button-inner-icon {
+  font-weight: 300;
 }
 
 /*******************************

@@ -104,7 +104,8 @@ class CalendarInterviewee extends React.Component {
       start: new Date(booking.start),
       end: new Date(booking.end)
     }
-    slotServ.createEvent(eventor, booking)
+    slotServ.createEvent(eventor, booking);
+    Materialize.toast(`Appointment booked for ${eventor.job_position} on ${eventor.start.toDateString()} at ${eventor.start.toTimeString()}!`, 4000);
   }
 
   handleAuthClicker () {
