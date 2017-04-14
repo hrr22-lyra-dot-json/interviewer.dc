@@ -299,3 +299,17 @@ exports.listQuestions = function(req, res) {
     res.status(500).send(err);
   });
 };
+
+/*
+** Expected request query: {id(integer): 'id'}
+** Expected response: 200 OK status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.deleteQuestion = function(req, res) {
+  Question.destroy({where: {id: req.query.id}})
+  .then(function(affectedRows) {
+    res.status(200).send();
+  }).catch(function(err) {
+    res.status(500).send(err);
+  });
+};

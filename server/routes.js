@@ -27,6 +27,7 @@ module.exports = function(app) {
   app.post('/api/Question', requestHandler.addQuestion);
   app.post('/api/Questions', requestHandler.addMultipleQuestions);
   app.get('/api/Questions', requestHandler.listQuestions);
+  app.delete('/api/Question', requestHandler.deleteQuestion);
 
   app.post('/api/Event', eventCreator.createEvent);
 };
