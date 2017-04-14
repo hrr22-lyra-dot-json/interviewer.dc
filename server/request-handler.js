@@ -3,6 +3,7 @@ const Meeting = require('./database/models').Meeting;
 const UserMeeting = require('./database/models').UserMeeting;
 const Timeslot = require('./database/models').Timeslot;
 const Token = require('./database/models').Token;
+const Question = require('./database/models').Question;
 // const utils = require('../lib/server_utility.js');
 
 /*
@@ -235,7 +236,7 @@ exports.deleteTimeslot = function(req, res) {
 };
 
 /*
-** Expected request body: {owner_id(integer): 'id', token(string): 'stringified token'}
+** Expected request body: {owner_id(integer): 'user id', token(string): 'stringified token'}
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 **
@@ -251,6 +252,21 @@ exports.updateToken = function(req, res) {
     }
   }).then(function() {
     res.status(201).send();
+  }).catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
+  });
+};
+
+/*
+** Expected request body: {meeting_id(integer): 'meeting id', question(string): 'THE question'}
+** Expected response: 201 Created status
+** Expected response on database error: 500 Internal Server Error status
+*/
+exports.addQuestion = function(req, res) {
+  Question.create(req.body)
+  .then(function(newQuestion) {
+    res.status(201).send(newQuestion);
   }).catch(function(err) {
     console.error(err);
     res.status(500).send(err);
