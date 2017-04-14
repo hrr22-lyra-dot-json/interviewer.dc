@@ -121,6 +121,7 @@ class Calendar extends React.Component {
     console.log('start:', startTime )
     this.setState({modalIsOpen: false, selectable:true});
     //post request to availability slots database
+    Materialize.toast(`Availability added!`, 4000)
   }
 
   handleAuthClicker () {
