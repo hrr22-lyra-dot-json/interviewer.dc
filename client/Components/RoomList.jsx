@@ -84,7 +84,7 @@ class RoomList extends React.Component {
       <div>
 
         <ul className="collection with-header">
-          <li className="collection-header"><div><h4>Rooms<a id="authorize-button" onClick={this.openModal} className="btn-floating btn-large waves-effect waves-light blue darken-3 secondary-content"><i className="glyphicons glyphicons-plus"></i></a></h4></div></li>
+          <li className="collection-header"><div><h4>Rooms<button id="authorize-button" onClick={this.openModal} className="btn-floating btn-large waves-effect waves-light blue darken-3 secondary-content"><i className="glyphicons glyphicons-plus"></i></button></h4></div></li>
 
           {this.state.rooms.map(function(room) {
             return (
