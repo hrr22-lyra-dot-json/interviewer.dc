@@ -69,7 +69,7 @@ export default class CalendarService extends EventEmitter {
   handleAuthClick(event) {
     console.log('gapi', gapi)
     gapi.auth.authorize(
-      {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+      {client_id: CLIENT_ID, scope: SCOPES, immediate: true, expires_at:2492133301},
       this.handleAuthResult.bind(this));  //return false; .bind(this)
   }
   loadCalendarApi() {

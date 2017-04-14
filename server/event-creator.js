@@ -23,8 +23,12 @@ function authorize(credentials, callback, token, event) {
 //roomname/jobposition room.job_position + room.owner_id
 exports.createEvent = function(req, res) {
   var event = {
-    'summary': req.body.job_position + ' interview for ' ,
-    'location': 'localhost:3000/#/interviewroom?roomid=' + req.body.roomid,
+    'summary': req.body.job_position + ' interview for Jason ',
+    'location': 'Washington',
+    "source": {
+      "url": 'http://127.0.0.1:3000/#/interviewroom?roomid=' + req.body.roomid,
+      "title": 'Link to Interviewroom'
+    },
     'description': 'Your first inner-view',
     'start': {
       'dateTime': new Date(req.body.start),
@@ -39,6 +43,7 @@ exports.createEvent = function(req, res) {
       {'email': 'kasonjim@gmail.com'}
       ]
     }
+    event.location = event.source;
 
   Token.find({where: {owner_id: req.body.interviewer_id}})
   .then(function(token) {
