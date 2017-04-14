@@ -15,6 +15,13 @@ export default class TimeslotService extends EventEmitter {
   getThem(userid) {
     this.getSlots(userid, this.gotthem.bind(this))
   }
+  removeOne(slotId) {
+
+  }
+
+  deleteSlot(slotId) {
+
+  }
 
   addSlots (timeslots, callback, callback2) {
     axios.post('/api/Timeslots', {
@@ -60,7 +67,7 @@ export default class TimeslotService extends EventEmitter {
   gotthem(slots) {
     this.emit('got_slots', slots)
   }
-  createEvent (event) {
+  createEvent (event, slot) {
     axios.post('/api/Event', event)
     .then(function (response) {
       console.log('added event', response);

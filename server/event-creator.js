@@ -83,6 +83,8 @@ function createEvento(auth, event) {
     }, function(err, event) {
         if (err) {
           console.log('The API failed to create event; error: ' + err);
+          res.status(403).send(err)
+
           return;
         }
         console.log('Event created: %s', event.htmlLink);

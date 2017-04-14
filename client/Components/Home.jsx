@@ -10,6 +10,7 @@ export class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {  profile: this.props.routes[1].auth.getProfile() }
+    this.auth = this.props.routes[1].auth
 
     console.log('query', props.location.query);//this allows you to access any queries in the url get request
 
@@ -31,7 +32,7 @@ export class Home extends React.Component {
       <div>
         <Nav name={this.state.profile.name} logout={this.logout.bind(this)} />
 
-        <Calendar />
+        <Calendar auth={this.auth}/>
       </div>
     )
   }
