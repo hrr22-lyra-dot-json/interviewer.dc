@@ -10,7 +10,7 @@ var CalendarAuth = ({calserv}) => (
   <button id="signout-button">Hide other Google calendar events</button> */}
 
   <button id="authorize-button" className="btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button" onClick={calserv.handleAuthClick.bind(calserv)}>
-    <i className="glyphicons glyphicons-eye-open"></i>
+    <i className="glyphicons glyphicons-important-day"></i>
   </button>
 
   <pre id="content"></pre>
