@@ -47,18 +47,32 @@ export default class App extends React.Component {
   render() {
     return (
       <Router history={hashHistory}>
-        <div>
-          <Route path="/"  component={Home} auth={auth} onEnter={this.requireAuth} />
-          <Route path='/home' component={Home} auth={auth} onEnter={this.requireAuth} />
-          <Route path="/login" component={Login} auth={auth} />
-          <Route path="/interviewee" component={CalendarInterviewee} auth={auth} />
-          <Route path="/interviewroom" component={InterviewRoom} auth={auth} />
-        </div>
 
+         <div>
+         <Route path="/"  component={Home} auth={auth}  />
+           <Route path='/home' component={Home} auth={auth} />
+           <Route path="/interviewee" component={CalendarInterviewee} auth={auth} />
+           <Route path="/interviewroom" component={InterviewRoom} auth={auth} />
+         </div>
 
       </Router>
     )
   }
 }
+
+
 //onEnter={this.requireAuth}
 
+
+// (<Router history={hashHistory}>//<Route path="/login" component={Login} auth={auth} />
+//         <div>
+//           <Route path="/"  component={Home} auth={auth} onEnter={this.requireAuth} />
+
+//           <Route path='/home' component={Home} auth={auth} onEnter={this.requireAuth} />
+//           <Route path="/login" component={Login} auth={auth} />
+//           <Route path="/interviewee" component={CalendarInterviewee} auth={auth} />
+//           <Route path="/interviewroom" component={InterviewRoom} auth={auth} />
+//         </div>
+
+//       </Router>)
+//<Route name='/' path="?access_token=:accesstoken&expires_in=:expiry&id_token=:idtoken&token_type=:tokentype&state=:stater" component={Home} auth={auth} onEnter={this.requireAuth} />

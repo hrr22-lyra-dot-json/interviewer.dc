@@ -5,12 +5,24 @@ import Calendar from './InterviewerCalendarContainer.jsx' //InterviewerCalendarC
 import CalendarAuth from './CalendarAuth.jsx'
 import CalendarService from '../Services/CalendarService.js'
 import Nav from './Nav.jsx'
+import newAuth from '../Services/newAuthenticationService.js'
+import Login from './Login.jsx'
+
+
+const hell = new newAuth()
+
 
 document.title = `Dashboard | Interviewer Direct Connection`;
 
 export class Home extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {isIn: false}
+    hell.isIn()
+    hell.on('log_result', (result) => {
+      this.setState({isIn: result})
+    }
+    )
 
     this.state = {  profile: {name: 'simon'} }
 
@@ -32,10 +44,17 @@ export class Home extends React.Component {
   }
 
   render() {
+    if (!this.state.isIn) {
+      return (
+        <Login />
+        )
+    } else {
+
 
     return (
       <div>
         <Nav name={this.state.profile.name} logout={this.logout.bind(this)} />
+        <button onClick={hell.logout.bind(hell)} className="right" className="btn waves-effect waves-light indigo darken-4">getout</button>
 
         <a href="/logout">Log Out</a>
 
@@ -43,6 +62,7 @@ export class Home extends React.Component {
       </div>
     )
   }
+}
 }
 
 export default Home;

@@ -8,8 +8,15 @@ export default class newAuth extends EventEmitter {
 
   }
 
+
+
   loginner() {
-    return axios.get('/auth/google')
+    //axios('/auth/google').then(console.log)
+    axios({
+      method: 'get',
+      url: '/auth/google',
+      headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS', 'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'}
+    })
     .then(function (response) {
       console.log('res',reponse);
     })
@@ -19,6 +26,18 @@ export default class newAuth extends EventEmitter {
   }
   isIn() {
     this.isLoggedIn(this.logmit.bind(this))
+  }
+
+  logout() {
+    axios.get('/logout')
+    .then(function(response) {
+      localStorage.removeItem('googleUser');
+        // localStorage.removeItem('profile');
+        // localStorage.removeItem('dbUser');
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   isLoggedIn(callback) {

@@ -61,7 +61,7 @@ passport.use(new Strategy({
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    console.log('theprofile', profile)
+    console.log('refresher', refreshToken)
     process.nextTick(function () {
 
       // To keep the example simple, the user's Google profile is returned to
@@ -184,7 +184,7 @@ app.use(express.static(path.join(__dirname, '../')));
 //     res.render('login');
 //   });
 
-app.get('/auth/google', passport.authenticate('google', { scope: [
+app.get('/auth/google', passport.authenticate('google', { access_type: 'offline', scope: [
        'https://www.googleapis.com/auth/plus.login',
        'https://www.googleapis.com/auth/plus.profile.emails.read',
        "https://www.googleapis.com/auth/calendar"]
@@ -205,10 +205,14 @@ app.get('/logged-in',
     console.log('dbuser', req.user)
     res.json({user: req.user});
   });
-
 app.get('/logout', function(req, res){
   req.logout();
-  res.redirect('/#/login');
+  res.redirect('/');
+});
+
+app.get('/', ensureAuthenticated, function(req, res){
+  res.redirect('/');
+  res.json({user: req.user})
 });
 
 app.listen(3000);
@@ -217,5 +221,5 @@ function ensureAuthenticated(req, res, next) {
   console.log('isauthed', req.user)
   if (req.isAuthenticated()) { console.log('isauthed', req.user);
   return next(); }
-  res.redirect('/');
+  res.redirect('/#/login');
 }
