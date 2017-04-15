@@ -84,14 +84,19 @@ class RoomList extends React.Component {
       <div>
 
         <ul className="collection with-header">
-          <li className="collection-header"><h4>Rooms<button className="btn-floating waves-effect waves-light blue darken-3 z-depth-2 secondary-content" onClick={this.openModal}><i className="material-icons">add</i></button></h4></li>
+          <li className="collection-header"><div><h4>Rooms<button id="add-room-button" onClick={this.openModal} className="btn-floating btn-large waves-effect waves-light blue darken-3 secondary-content"><i className="glyphicons glyphicons-plus"></i></button></h4></div></li>
+
           {this.state.rooms.map(function(room) {
             return (
               <div>
                 <li className="collection-item">
                   <div>{room.job_position}
-                <Link to={{ pathname: '/interviewroom', state: room.job_position + room.owner_id/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content"><i className="material-icons enter-room-icon">input</i></Link>
-                <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content"><i className="material-icons view-calendar-icon">today</i></Link>
+                    <Link to={{ pathname: '/interviewroom', state: room.job_position + room.owner_id/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
+                      <span className="glyphicons glyphicons-door rooms-section-icons"></span>
+                    </Link>
+                    <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
+                      <span className="glyphicons glyphicons-calendar rooms-section-icons"></span>
+                    </Link>
                   </div>
                 </li>
               </div>
