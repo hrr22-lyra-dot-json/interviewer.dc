@@ -5,6 +5,15 @@ exports.getRoomId = function() {
   return document.getElementById('room-id').value;
 };
 
+exports.validateRoomid = function(roomid) {
+  if (typeof roomid === 'string') {
+    document.getElementById('room-id').value = roomid;
+    return roomid;
+  } else {
+    return exports.getRoomId();
+  }
+};
+
 // Display/hide URL link for current room (for admins)
 exports.showRoomURL = function(roomid) {
   var roomQueryStringURL = '?roomid=' + roomid;
@@ -18,32 +27,50 @@ exports.showRoomURL = function(roomid) {
 };
 
 exports.hideRoomURL = function() {
-  document.getElementById('roomStatusText').innerHTML = 'Entire session has been closed.';
-  document.getElementById('userRoleText').innerHTML = '';
+  exports.setRoomStatusText('Entire session has been closed.');
   document.getElementById('room-urls').innerHTML = '';
+};
+
+// Show/hide user role when they join/leave the room
+exports.showRole = function() {
+  document.getElementById('userRoleText').style.display = 'inline';
+};
+
+exports.hideRole = function() {
+  document.getElementById('userRoleText').style.display = 'none';
+};
+
+// Additional page elements to hide from client
+exports.restrictClientElements = function() {
+  document.getElementById('room-id').style.display = 'none';
+  document.getElementById('interviewerQuestionPanel').style.display = 'none';
 };
 
 // helper functions to disable/enable all buttons
 exports.disableInputButtons = function() {
-  document.getElementById('open-room').disabled = true;
-  document.getElementById('join-room').disabled = true;
+  document.getElementById('open-room').style.display = 'none';
+  // document.getElementById('join-room').disabled = true;
   document.getElementById('room-id').disabled = true;
 };
 
 exports.enableInputButtons = function() {
-  document.getElementById('open-room').disabled = false;
-  document.getElementById('join-room').disabled = false;
+  document.getElementById('open-room').style.display = 'inline';
+  // document.getElementById('join-room').disabled = false;
   document.getElementById('room-id').disabled = false;
 };
 
 // Helper function to change text of leave/close room based on role
-exports.updateCloseLeaveButton = function(connection, state){
-  document.getElementById('close-room').disabled = state;
+exports.updateCloseLeaveButton = function(connection, state) {
+  if (state) {
+    document.getElementById('close-room').style.display = 'none';
+  } else {
+    document.getElementById('close-room').style.display = 'inline';
+  }
 
   if (connection.isInitiator) {
-    document.getElementById('close-room').innerText = 'Close Room';
+    document.getElementById('close-room').innerText = 'Close Session';
   } else {
-    document.getElementById('close-room').innerText = 'Leave Room';
+    document.getElementById('close-room').innerText = 'Leave Session';
   }
 };
 

@@ -7,15 +7,13 @@ import { getConnection } from './interviewRtcHandler.js';
 var connection = getConnection();
 
 exports.openRoom = function(roomid) {
-  if (typeof roomid === 'string') {
-    document.getElementById('room-id').value = roomid;
-  } else {
-    roomid = helpers.getRoomId();
-  }
+  roomid = helpers.validateRoomid(roomid);
+
   connection.open(roomid, function() {
     helpers.disableInputButtons();
     helpers.updateCloseLeaveButton(connection, false);
     helpers.showRoomURL(connection.sessionid);
+    helpers.showRole();
 
     connection.isInitiator ? helpers.setUserRoleText('Role: ADMIN') : helpers.setUserRoleText('Role: CLIENT');
     helpers.setRoomStatusText('Waiting for participant(s) to join');
@@ -23,13 +21,12 @@ exports.openRoom = function(roomid) {
 };
 
 exports.joinRoom = function(roomid) {
+  roomid = helpers.validateRoomid(roomid);
+
   connection.join(roomid, function() {
     helpers.disableInputButtons();
     helpers.updateCloseLeaveButton(connection, false);
-
-    document.getElementById('room-id').style.display = 'none';
-    document.getElementById('open-room').style.display = 'none';
-    document.getElementById('join-room').style.display = 'none';
+    helpers.restrictClientElements();
     connection.isInitiator ? helpers.setUserRoleText('Role: ADMIN') : helpers.setUserRoleText('Role: CLIENT');
   });
   // connection.checkPresence(roomid, function(isRoomExist, roomid) {
@@ -53,6 +50,7 @@ exports.closeRoom = function() {
   if (connection.isInitiator) {
     connection.closeEntireSession(function() {
       helpers.hideRoomURL();
+      helpers.hideRole();
     });
   } else {
     connection.leave();
