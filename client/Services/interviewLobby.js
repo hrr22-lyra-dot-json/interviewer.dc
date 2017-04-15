@@ -17,7 +17,7 @@ exports.openRoom = function(roomid) {
     helpers.updateCloseLeaveButton(connection, false);
     helpers.showRoomURL(connection.sessionid);
 
-    helpers.setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
+    connection.isInitiator ? helpers.setUserRoleText('Role: ADMIN') : helpers.setUserRoleText('Role: CLIENT');
     helpers.setRoomStatusText('Waiting for participant(s) to join');
   });
 };
@@ -26,7 +26,11 @@ exports.joinRoom = function(roomid) {
   connection.join(roomid, function() {
     helpers.disableInputButtons();
     helpers.updateCloseLeaveButton(connection, false);
-    helpers.setUserRoleText('IS YOU THE ADMIN? ' + connection.isInitiator);
+
+    document.getElementById('room-id').style.display = 'none';
+    document.getElementById('open-room').style.display = 'none';
+    document.getElementById('join-room').style.display = 'none';
+    connection.isInitiator ? helpers.setUserRoleText('Role: ADMIN') : helpers.setUserRoleText('Role: CLIENT');
   });
   // connection.checkPresence(roomid, function(isRoomExist, roomid) {
     // helpers.disableInputButtons();

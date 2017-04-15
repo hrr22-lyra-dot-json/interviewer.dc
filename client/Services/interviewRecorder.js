@@ -38,6 +38,7 @@ var looper = function() {
 };
 
 exports.initializeRecorder = function() {
+  // Create canvas area to record
   elementToShare = document.getElementById('elementToShare');
   canvas2d = document.createElement('canvas');
   context = canvas2d.getContext('2d');
@@ -70,7 +71,8 @@ exports.initializeRecorder = function() {
 
 // Button action for "START"
 exports.start = function() {
-  document.getElementById('start').disabled = true;
+  document.getElementById('start').style.display = 'none';
+  document.getElementById('stop').style.display = 'inline';
   document.getElementById('save').disabled = true;
 
   // Set states
@@ -83,16 +85,12 @@ exports.start = function() {
   // Start recording
   canvasRecorder.record();
   audioRecorder.record();
-
-  setTimeout(function() {
-    document.getElementById('stop').disabled = false;
-  }, 1000);
 };
 
 // Button action "STOP"
 exports.stop = function() {
-  document.getElementById('stop').disabled = true;
-  document.getElementById('start').disabled = false;
+  document.getElementById('stop').style.display = 'none';
+  document.getElementById('start').style.display = 'inline';
 
   isStoppedRecording = true;
   isRecordingStarted = false;
