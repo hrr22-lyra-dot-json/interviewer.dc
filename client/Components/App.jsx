@@ -28,7 +28,6 @@ export default class App extends React.Component {
       <Router history={hashHistory}>
         <div>
           <Route path="/"  component={Home} auth={auth} onEnter={this.requireAuth} />
-
           <Route path='/home' component={Home} auth={auth} onEnter={this.requireAuth} />
           <Route path="/login" component={Login} auth={auth} />
           <Route path="/interviewee" component={CalendarInterviewee} auth={auth} />
