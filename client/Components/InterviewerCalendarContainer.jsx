@@ -138,7 +138,7 @@ class Calendar extends React.Component {
   eventClick(event) {
     console.log('this is the event', event)
     if (event.title === 'Book Interview') {
-      alert(event.title + ' from ' + event.start + ' to ' + event.end + 'is now deleted')
+      Materialize.toast(`Appointment slot for ${event.title} on ${event.start.toDateString()} at ${event.start.toTimeString()} deleted`, 6000)
       slotServ.deleteSlot(event.id, slotServ.getThem.bind(slotServ))
     }
   }
