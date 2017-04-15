@@ -19,9 +19,10 @@ var CalView = ({events, selectable, calService, selectSlot, eventClick}) => (
         scrollToTime={new Date(1970, 1, 1, 6)}
         defaultDate={new Date()}
         onSelectEvent={(event) =>
-            mbox.confirm('Are you sure you want to delete this event?', (yes, e = event) => {
+            {if (event.title === 'Book Interview') {
+                mbox.confirm('Are you sure you want to delete this event?', (yes, e = event) => {
                 if (yes) eventClick(e);
-            })}
+            })}}}
        onSelectSlot={(slotInfo) => {selectSlot(slotInfo);
     }}
 
