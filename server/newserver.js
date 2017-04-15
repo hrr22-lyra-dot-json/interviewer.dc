@@ -11,18 +11,18 @@ const expressSession = require('express-session');
 // with a user object, which will be set at `req.user` in route handlers after
 // authentication.
 passport.use(new Strategy({
-    clientID: '1156310631144625',
-    clientSecret: '0877d9ba30e99f112ed76b45bd943779',
+    clientID: '561574047233-oopf3ll9q5o303cmfdv240cc040coj69.apps.googleusercontent.com',
+    clientSecret: 'qsNYJagBWCU40y30SraxqukS',
     callbackURL: 'http://localhost:3000/auth/google/callback',
     passReqToCallback   : true
   },
-  function(accessToken, refreshToken, profile, cb) {
+  function(request, accessToken, refreshToken, profile, done) {
     // In this example, the user's Facebook profile is supplied as the user
     // record.  In a production-quality application, the Facebook profile should
     // be associated with a user record in the application's database, which
     // allows for account linking and authentication with other identity
     // providers.
-    return cb(null, profile);
+    return done(null, profile);
   }));
 
 
@@ -89,15 +89,15 @@ app.get('/auth/google',
 app.get( '/auth/google/callback',
   passport.authenticate( 'google', {
     successRedirect: '/',
-    failureRedirect: '/auth/google/failure'
+    failureRedirect: '/'
 }));
 
 
 
-app.get('/profile',
+app.get('/logged-in',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
-    res.render('profile', { user: req.user });
+    res.json({user: req.user});
   });
 
 app.listen(3000);
