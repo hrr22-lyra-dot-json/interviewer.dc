@@ -31,8 +31,7 @@ class InterviewRoom extends React.Component {
     console.log('did mount (post-render)');
 
     // Set initial button states
-    document.getElementById('start').disabled = false;
-    document.getElementById('stop').disabled = true;
+    document.getElementById('stop').style.display = 'none';
     document.getElementById('save').disabled = true;
     document.getElementById('close-room').disabled = true;
 
@@ -55,32 +54,42 @@ class InterviewRoom extends React.Component {
   render() {
     return (
       <div>
-        <nav className="splash-nav">
+        <nav className="splash-nav blue darken-3">
           <div className="nav-wrapper">
             <div id="room-urls" className="brand-logo center"></div>
             <ul id="recordControls" className="right">
-              <li><button id="start" className="btn btn-default z-depth-2 red" onClick={this.start}>Start Recording</button></li>
-              <li><button id="stop" className="btn btn-default z-depth-2" onClick={this.stop}>Stop</button></li>
-              <li><button id="save" className="btn btn-default z-depth-2" onClick={this.save}>Save</button></li>
+              <li><button id="start" className="btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button></li>
+              <li><button id="stop" className="btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button></li>
+              <li><button id="save" className="btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button></li>
             </ul>
           </div>
         </nav>
 
-        <div className="container">
-          <div className="row">
-            <input type="text" id="room-id"></input>
-            <button id="open-room" className="btn btn-default z-depth-2" onClick={this.openRoom}>Open Room</button>
-            <button id="join-room" className="btn btn-default z-depth-2" onClick={this.joinRoom}>Join Room</button>
-            <button id="close-room" className="btn btn-default z-depth-2" onClick={this.closeRoom}>Waiting for session...</button>
-            <div id="elementToShare" className="col s12">
-              <div id="videos-container" className="video-container"></div>
+        <div className="row">
+          <div id="elementToShare" className="col s8">
+            <div id="prompt-container" className="col s12 m8">QUESTIONS OR PROMPTS MAY APPEAR IN THIS TOP BAR</div>
+            <div className="col s12">
+              <ul className="tabs tabs-fixed-width">
+                <li className="tab col s6"><a className="active" href="#test1">Test 1</a></li>
+                <li className="tab col s6"><a href="#test2">Test 2</a></li>
+              </ul>
+            </div>
+            <div id="test1" className="col s12">
+                THIS IS GOING TO BE WHERE THE CODESHARE GOES
+            </div>
+            <div id="test2" className="col s12">
+                THIS IS WHERE THE WHITEBOARD WILL GO
             </div>
           </div>
-          <div className="row">
-            <div className="col s12 m12">
-              <div id="roomStatusText"></div>
-              <div id="userRoleText"></div>
-            </div>
+
+          <div id="interviewer-control" className="col s4">
+            <div id="videos-container" className="col s12"></div>
+            Room Name: <div className="input-field inline"><input type="text" id="room-id"></input></div><br/>
+            <button id="open-room" className="btn z-depth-2" onClick={this.openRoom}>Open</button>
+            <button id="join-room" className="btn z-depth-2" onClick={this.joinRoom}>Join</button>
+            <button id="close-room" className="btn z-depth-2" onClick={this.closeRoom}>Waiting...</button><br/><br/>
+            <div id="roomStatusText"></div><br/>
+            <div id="userRoleText" className="chip"></div>
           </div>
         </div>
 
