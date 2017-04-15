@@ -2,7 +2,8 @@
 module.exports = function(sequelize, DataTypes) {
   var Token = sequelize.define('Token', {
     owner_id: DataTypes.INTEGER,
-    token: DataTypes.TEXT
+    token: DataTypes.TEXT,
+    refreshToken: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {

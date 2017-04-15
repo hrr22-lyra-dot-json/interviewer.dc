@@ -8,12 +8,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      googleId: {
+        type: Sequelize.STRING
+      },
       username: {
         type: Sequelize.STRING
       },
       email: {
         allowNull: false,
         unique: true,
+        type: Sequelize.STRING
+      },
+      photoUrl: {
         type: Sequelize.STRING
       },
       createdAt: {

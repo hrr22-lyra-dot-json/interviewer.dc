@@ -14,6 +14,9 @@ module.exports = {
       token: {
         type: Sequelize.TEXT
       },
+      refreshToken: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         defaultValue: new Date(),
