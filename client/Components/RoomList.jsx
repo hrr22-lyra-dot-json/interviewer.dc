@@ -92,7 +92,7 @@ class RoomList extends React.Component {
                 <li className="collection-item">
                   <div>{room.job_position}
                     <Link to={{ pathname: '/interviewroom', state: room.job_position + room.owner_id/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
-                      <span className="glyphicons glyphicons-door rooms-section-icons"></span>
+                      <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
                     </Link>
                     <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
                       <span className="glyphicons glyphicons-calendar rooms-section-icons"></span>
@@ -112,16 +112,23 @@ class RoomList extends React.Component {
           contentLabel="Add Availability"
         >
 
-          <h2 ref="subtitle">Create room</h2>
-          <p>Create new room. a room is typically used for interviews of the same position as the room settings can be set to suit the type of interview. For example you might include code sharing, or you might have a different question list depending on the job you are interviewing for.</p>
-          <p>Options regarding the room are still to come</p>
-          <p>Job position the room is for?</p>
+          <div className="container">
+            <h2 ref="subtitle">Create room</h2>
+            <p>Create new room. a room is typically used for interviews of the same position as the room settings can be set to suit the type of interview. For example you might include code sharing, or you might have a different question list depending on the job you are interviewing for.</p>
+            <p>Options regarding the room are still to come</p>
+            <p>Job position the room is for?</p>
 
-          <input type="text" value={this.state.position} onChange={this.handleChange.bind(this)} />
-
-          <button className="clbtn" onClick={this.addAvailability}>Confirm</button>
-
-          <button className="clbtn" onClick={this.closeModal}>close</button>
+            <form>
+              <div className="row">
+                <div className="input-field col s12">
+                  <input id="room_name" type="text" className="validate" value={this.state.position} onChange={this.handleChange.bind(this)} />
+                  <label for="room_name">Room Name</label>
+                </div>
+              </div>
+              <button type="submit" className="clbtn btn waves-effect waves-light blue darken-3 left" onClick={this.addAvailability}><span className="glyphicons glyphicons-ok"></span></button>
+              <button type="button" className="clbtn btn waves-effect waves-light red darken-3 right" onClick={this.closeModal}><span className="glyphicons glyphicons-remove"></span></button>
+            </form>
+          </div>
 
         </Modal>
 
