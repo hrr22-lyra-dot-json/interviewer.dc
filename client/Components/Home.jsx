@@ -11,21 +11,24 @@ document.title = `Dashboard | Interviewer Direct Connection`;
 export class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {  profile: this.props.routes[1].auth.getProfile() }
+
+    this.state = {  profile: {name: 'simon'} }
+
+    //this.state = {  profile: this.props.routes[1].auth.getProfile() }
     this.auth = this.props.routes[1].auth
 
     console.log('query', props.location.query);//this allows you to access any queries in the url get request
 
-    props.routes[1].auth.on('profile_updated', (profile) => {
-      this.setState({profile: this.props.routes[1].auth.getProfile()})
-    })
-    props.routes[1].auth.on('logged_out', (bye) => {
-      this.setState({profile: this.props.routes[1].auth.getProfile()})
-    })
+    // props.routes[1].auth.on('profile_updated', (profile) => {
+    //   this.setState({profile: this.props.routes[1].auth.getProfile()})
+    // })
+    // props.routes[1].auth.on('logged_out', (bye) => {
+    //   this.setState({profile: this.props.routes[1].auth.getProfile()})
+    // })
   }
 
   logout(){
-    this.props.routes[1].auth.logout()//for some reason we have to access 'auth' which is passed in from app.jsx via props.routes
+   // this.props.routes[1].auth.logout()//for some reason we have to access 'auth' which is passed in from app.jsx via props.routes
   }
 
   render() {
@@ -33,6 +36,8 @@ export class Home extends React.Component {
     return (
       <div>
         <Nav name={this.state.profile.name} logout={this.logout.bind(this)} />
+
+        <a href="/logout">Log Out</a>
 
         <Calendar auth={this.auth}/>
       </div>

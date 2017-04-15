@@ -1,6 +1,7 @@
 import React from 'react'
 import AuthService from '../Services/AuthService.js'
 import newAuth from '../Services/newAuthenticationService.js'
+const hell = new newAuth()
 
 export class Login extends React.Component {
 
@@ -16,7 +17,8 @@ export class Login extends React.Component {
           <div className="nav-wrapper">
             <a href="#" className="brand-logo center">Interviewer Direct Connection</a>
             <a href="/auth/google">Login with Google</a>
-            <ul className="right"><li><button onClick={newAuth.loginner} className="right" className="btn waves-effect waves-light indigo darken-4">Sign In</button></li></ul>
+
+            <ul className="right"><li><button onClick={hell.isIn.bind(hell)} className="right" className="btn waves-effect waves-light indigo darken-4">Sign In</button></li></ul>
           </div>
         </nav>
 

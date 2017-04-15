@@ -8,6 +8,8 @@ import Home from './Home.jsx'
 import CalendarInterviewee from './IntervieweeCalendar.jsx' // this is the page interviewees come too to book availabilities
 import AuthService from '../Services/AuthService.js'
 import InterviewRoom from './InterviewRoom.jsx'
+import newAuth from '../Services/newAuthenticationService.js'
+
 
 //const auth = new AuthService('R6x0iX25zFBEm6qY7QoJ2Dth5Tn2SBeE', 'sdm.auth0.com')
 const auth = {}
@@ -15,19 +17,31 @@ auth.loggedIn = function() {
   return false;
 }
 
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+
   //   auth.on('logged_out', (bye) => {
   //    })
   }
 // validate authentication for private routes
-  requireAuth (nextState, replace)  {
-    console.log('auth', auth);
-      if (!auth.loggedIn()) {
+  // requireAuth (nextState, replace)  {
+  //   console.log('auth', auth);
+  //     if (!auth.loggedIn()) {
+  //     replace({ pathname: '/login' })
+  //    }
+  // }
+  requireAuth(nextState, replace)  {
+
+     if (!localStorage.getItem('googleUser'))
       replace({ pathname: '/login' })
-     }
+
   }
+
+
+
+  //newAuth.isLoggedIn
 //still working on some of the routes but this works for now
 
   render() {
@@ -41,8 +55,10 @@ export default class App extends React.Component {
           <Route path="/interviewroom" component={InterviewRoom} auth={auth} />
         </div>
 
+
       </Router>
     )
   }
 }
+//onEnter={this.requireAuth}
 

@@ -30,9 +30,9 @@ class RoomList extends React.Component {
     if (localStorage.getItem('dbUser')) {
       roomServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
     }
-    this.auth.on('added_user', (user) => {
-    roomServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
-   })
+   //  this.auth.on('added_user', (user) => {
+   //  roomServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
+   // })
 
     //roomServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
 

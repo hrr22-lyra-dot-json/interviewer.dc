@@ -52,9 +52,9 @@ class Calendar extends React.Component {
     }
    //slotServ.getSlots(localStorage.getItem('dbUser').id).bind(slotServ)
    //slotServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
-   this.auth.on('added_user', (user) => {
-    slotServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
-   })
+   // this.auth.on('added_user', (user) => {
+   //  slotServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
+   // })
     slotServ.on('got_slots', (slots) => {
       console.log('slots',typeof slots.data[0].start)
       this.setState({availableSlots: slots.data})

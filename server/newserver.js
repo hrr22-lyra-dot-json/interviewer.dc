@@ -5,6 +5,10 @@ const Strategy = require('passport-google-oauth2').Strategy;
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const RedisStore       = require( 'connect-redis' )( session )
+const User = require('./database/models').User;
+const Token = require('./database/models').Token;
+
+
 // Configure the Facebook strategy for use by Passport.
 //
 // OAuth 2.0-based strategies require a `verify` function which receives the
@@ -12,12 +16,43 @@ const RedisStore       = require( 'connect-redis' )( session )
 // behalf, along with the user's profile.  The function must invoke `cb`
 // with a user object, which will be set at `req.user` in route handlers after
 // authentication.
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
+
+// exports.checkGmailUser = function(req, res) {
+//   User.findOrCreate({where: {email: req.body.email}, defaults: {username: req.body.username}})
+//   .spread(function(newUser, created) {
+//     if (created) {
+//       res.status(201).send(newUser);
+//     } else {
+//       res.status(200).send(newUser);
+//     }
+//   }).catch(function(err) {
+//     console.error(err);
+//     res.status(500).send(err);
+//   });
+// };
+
+// xports.updateToken = function(req, res) {
+//   Token.findOrCreate({where: {owner_id: req.body.owner_id}, defaults: {token: req.body.token}})
+//   .spread(function(newToken, created) {
+//     if (!created) {
+//       return newToken.update({token: req.body.token});
+//     }
+//   }).then(function() {
+//     res.status(201).send();
+//   }).catch(function(err) {
+//     console.error(err);
+//     res.status(500).send(err);
+//   });
+// };
+
+
+//////////////////////
+passport.serializeUser(function(user, done) {
+  done(null, user);
 });
 
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
 });
 passport.use(new Strategy({
     clientID: '570801003952-9ss0c74s14sbjuof8qlmup8fd6dd4t3k.apps.googleusercontent.com',
@@ -26,11 +61,7 @@ passport.use(new Strategy({
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    // In this example, the user's Facebook profile is supplied as the user
-    // record.  In a production-quality application, the Facebook profile should
-    // be associated with a user record in the application's database, which
-    // allows for account linking and authentication with other identity
-    // providers.
+    console.log('theprofile', profile)
     process.nextTick(function () {
 
       // To keep the example simple, the user's Google profile is returned to
@@ -39,6 +70,44 @@ passport.use(new Strategy({
       // and return that user instead.
       return done(null, profile);
     });
+    // console.log('argumentos', arguments)
+    // User.findOne({
+    //   where: { googleId: profile.id}
+    // })
+    // .then(function(foundUser) {
+    //   if (!foundUser) {
+    //     User.create({
+    //       googleId: profile.id,
+    //       username: profile.displayName,
+    //       email: profile.email,
+    //       photoUrl: profile.image.url
+    //     })
+    //     .then(function(newUser) {
+    //       Token.create({
+    //         owner_id: newUser.id,
+    //         token: accessToken,
+    //         refreshToken: refreshToken
+    //       })
+
+    //     })
+    //   }
+
+
+
+
+    // In this example, the user's Facebook profile is supplied as the user
+    // record.  In a production-quality application, the Facebook profile should
+    // be associated with a user record in the application's database, which
+    // allows for account linking and authentication with other identity
+    // providers.
+    //process.nextTick(function () {
+
+      // To keep the example simple, the user's Google profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Google account with a user record in your database,
+      // and return that user instead.
+      //return done(null, profile);
+    //});
   }));
 
 
@@ -79,22 +148,29 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../')));
-app.use( session({
-  secret: 'cookie_secret',
-  name:   'kaas',
-  store:  new RedisStore({
-    host: '127.0.0.1',
-    port: 6379
-  }),
-  proxy:  true,
-    resave: true,
-    saveUninitialized: true
-}));
 
-// Initialize Passport and restore authentication state, if any, from the
-// session.
+app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static(path.join(__dirname, '../')));
+
+
+// app.use( session({
+//   secret: 'cookie_secret',
+//   name:   'kaas',
+//   store:  new RedisStore({
+//     host: '127.0.0.1',
+//     port: 6379
+//   }),
+//   //proxy:  true,
+//     resave: true,
+//     saveUninitialized: true
+// }));
+
+// // Initialize Passport and restore authentication state, if any, from the
+// // session.
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 
 // Define routes.
@@ -126,12 +202,20 @@ app.get( '/auth/google/callback',
 app.get('/logged-in',
   ensureAuthenticated,
   function(req, res){
+    console.log('dbuser', req.user)
     res.json({user: req.user});
   });
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/#/login');
+});
 
 app.listen(3000);
 
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
+  console.log('isauthed', req.user)
+  if (req.isAuthenticated()) { console.log('isauthed', req.user);
+  return next(); }
   res.redirect('/');
 }
