@@ -1,19 +1,25 @@
 //import PropTypes from 'prop-types'; //This file holds the router and instantiates the authentication superpack
 import React from 'react'
 import { browserHistory, hashHistory, Router, Route, Link, Redirect, withRouter} from 'react-router'
+//import { BrowserRouter as Router, Route } from 'react-router-dom'
+
 import Login from './Login.jsx'
 import Home from './Home.jsx'
 import CalendarInterviewee from './IntervieweeCalendar.jsx' // this is the page interviewees come too to book availabilities
 import AuthService from '../Services/AuthService.js'
 import InterviewRoom from './InterviewRoom.jsx'
 
-const auth = new AuthService('R6x0iX25zFBEm6qY7QoJ2Dth5Tn2SBeE', 'sdm.auth0.com')
+//const auth = new AuthService('R6x0iX25zFBEm6qY7QoJ2Dth5Tn2SBeE', 'sdm.auth0.com')
+const auth = {}
+auth.loggedIn = function() {
+  return false;
+}
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    auth.on('logged_out', (bye) => {
-    })
+  //   auth.on('logged_out', (bye) => {
+  //    })
   }
 // validate authentication for private routes
   requireAuth (nextState, replace)  {
@@ -23,6 +29,7 @@ export default class App extends React.Component {
      }
   }
 //still working on some of the routes but this works for now
+
   render() {
     return (
       <Router history={hashHistory}>
@@ -38,4 +45,4 @@ export default class App extends React.Component {
     )
   }
 }
-//<Route name='/' path="?access_token=:accesstoken&expires_in=:expiry&id_token=:idtoken&token_type=:tokentype&state=:stater" component={Home} auth={auth} onEnter={this.requireAuth} />
+

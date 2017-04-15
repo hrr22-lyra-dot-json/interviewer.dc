@@ -1,8 +1,10 @@
 const express = require('express');
 const passport = require('passport');
+const util             = require( 'util' )
 const Strategy = require('passport-google-oauth2').Strategy;
 const cookieParser = require('cookie-parser');
-const expressSession = require('express-session');
+const session = require('express-session');
+const RedisStore       = require( 'connect-redis' )( session )
 // Configure the Facebook strategy for use by Passport.
 //
 // OAuth 2.0-based strategies require a `verify` function which receives the
@@ -10,9 +12,16 @@ const expressSession = require('express-session');
 // behalf, along with the user's profile.  The function must invoke `cb`
 // with a user object, which will be set at `req.user` in route handlers after
 // authentication.
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
+});
+
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
 passport.use(new Strategy({
-    clientID: '561574047233-oopf3ll9q5o303cmfdv240cc040coj69.apps.googleusercontent.com',
-    clientSecret: 'qsNYJagBWCU40y30SraxqukS',
+    clientID: '570801003952-9ss0c74s14sbjuof8qlmup8fd6dd4t3k.apps.googleusercontent.com',
+    clientSecret: 'nhrAFAbgiAP8eoPtJUAvtLd-',
     callbackURL: 'http://localhost:3000/auth/google/callback',
     passReqToCallback   : true
   },
@@ -22,7 +31,14 @@ passport.use(new Strategy({
     // be associated with a user record in the application's database, which
     // allows for account linking and authentication with other identity
     // providers.
-    return done(null, profile);
+    process.nextTick(function () {
+
+      // To keep the example simple, the user's Google profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Google account with a user record in your database,
+      // and return that user instead.
+      return done(null, profile);
+    });
   }));
 
 
@@ -35,13 +51,13 @@ passport.use(new Strategy({
 // from the database when deserializing.  However, due to the fact that this
 // example does not have a database, the complete Facebook profile is serialized
 // and deserialized.
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
-});
+// passport.serializeUser(function(user, cb) {
+//   cb(null, user);
+// });
 
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
-});
+// passport.deserializeUser(function(obj, cb) {
+//   cb(null, obj);
+// });
 
 
 
@@ -61,9 +77,19 @@ const app = express();
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../')));
-app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use( session({
+  secret: 'cookie_secret',
+  name:   'kaas',
+  store:  new RedisStore({
+    host: '127.0.0.1',
+    port: 6379
+  }),
+  proxy:  true,
+    resave: true,
+    saveUninitialized: true
+}));
 
 // Initialize Passport and restore authentication state, if any, from the
 // session.
@@ -82,20 +108,23 @@ app.use(passport.session());
 //     res.render('login');
 //   });
 
-app.get('/auth/google',
-  passport.authenticate('google', { scope:
-    [ "https://www.googleapis.com/auth/calendar"] }
-));
+app.get('/auth/google', passport.authenticate('google', { scope: [
+       'https://www.googleapis.com/auth/plus.login',
+       'https://www.googleapis.com/auth/plus.profile.emails.read',
+       "https://www.googleapis.com/auth/calendar"]
+}));
+
 app.get( '/auth/google/callback',
-  passport.authenticate( 'google', {
-    successRedirect: '/',
-    failureRedirect: '/'
+      passport.authenticate( 'google', {
+        successRedirect: '/',
+        failureRedirect: '/'
 }));
 
 
 
+
 app.get('/logged-in',
-  require('connect-ensure-login').ensureLoggedIn(),
+  ensureAuthenticated,
   function(req, res){
     res.json({user: req.user});
   });
@@ -104,5 +133,5 @@ app.listen(3000);
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
+  res.redirect('/');
 }
