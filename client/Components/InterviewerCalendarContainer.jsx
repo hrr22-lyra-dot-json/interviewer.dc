@@ -12,7 +12,7 @@ import RoomList from './RoomList.jsx'
 import Modal from 'react-modal';
 import Select from 'react-select';
 
-  const customStyles = {
+const customStyles = {
   overlay: {
     zIndex: 10
   },

@@ -6,7 +6,8 @@ export class Login extends React.Component {
   render() {
 
     console.log('props', this.props);
-    const { auth } = this.props.routes[1]
+    const { auth } = this.props.routes[1];
+    document.title = `Login | ${document.title}`;
 
     return (
       <div className="splash">

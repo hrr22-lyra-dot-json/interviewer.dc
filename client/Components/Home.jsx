@@ -6,6 +6,8 @@ import CalendarAuth from './CalendarAuth.jsx'
 import CalendarService from '../Services/CalendarService.js'
 import Nav from './Nav.jsx'
 
+document.title = `Dashboard | ${document.title}`;
+
 export class Home extends React.Component {
   constructor(props) {
     super(props);

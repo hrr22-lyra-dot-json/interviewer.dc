@@ -10,7 +10,7 @@ import Select from 'react-select';
 import TimeslotService from '../Services/TimeslotService.js'
 
 
-  const customStyles = {
+const customStyles = {
   content : {
     top                   : '20%',
     left                  : '50%',
