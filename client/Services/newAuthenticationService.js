@@ -50,6 +50,7 @@ export default class newAuth extends EventEmitter {
         callback(true)
         return true
       }
+      //localStorage.setItem('googleUser', JSON.stringify(response.data.user))
       console.log('notlodgedin')
       callback(false)
       return false

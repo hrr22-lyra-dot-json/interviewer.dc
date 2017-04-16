@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const util             = require( 'util' )
-const Strategy = require('passport-google-oauth2').Strategy;
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const RedisStore       = require( 'connect-redis' )( session )
@@ -54,22 +54,60 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-passport.use(new Strategy({
+passport.use(new GoogleStrategy({
     clientID: '570801003952-9ss0c74s14sbjuof8qlmup8fd6dd4t3k.apps.googleusercontent.com',
     clientSecret: 'nhrAFAbgiAP8eoPtJUAvtLd-',
     callbackURL: 'http://localhost:3000/auth/google/callback',
+    grant_type: 'authorization_code',
     passReqToCallback   : true
+    // access_type: 'offline',
+    //   prompt: 'consent',
   },
   function(request, accessToken, refreshToken, profile, done) {
-    console.log('refresher', refreshToken)
+    console.log('refresher', arguments);
     process.nextTick(function () {
 
       // To keep the example simple, the user's Google profile is returned to
       // represent the logged-in user.  In a typical application, you would want
       // to associate the Google account with a user record in your database,
       // and return that user instead.
-      return done(null, profile);
-    });
+          console.log('refresher', refreshToken);
+    User.findOne({
+      where: { googleId: profile.id}
+    })
+    .then(function(foundUser) {
+      if (!foundUser) {
+        User.create({
+          googleId: profile.id,
+          username: profile.displayName,
+          email: profile.email
+        })
+        .then(function(newUser) {
+          Token.create({
+            owner_id: newUser.id,
+            token: accessToken,
+            refreshToken: refreshToken
+          })
+          .then(function(newToken) {
+            done(null, {user: newUser, token: newToken })
+          })
+        })
+      } else {
+        Token.find({where:{owner_id: foundUser.id}})
+        .then(function(foundToken) {
+          foundToken.update({token: accessToken})
+          .then(function(updatedToken) {
+            done(null, {user: foundUser, token: foundToken })
+          });
+        })
+
+      }
+    })
+  })
+
+
+
+
     // console.log('argumentos', arguments)
     // User.findOne({
     //   where: { googleId: profile.id}
@@ -137,6 +175,9 @@ var path = require('path');
 // Create a new Express application.
 const app = express();
 
+require('./routes.js')(app);
+
+
 // Configure view engine to render EJS templates.
 //app.set('views', __dirname + '/views');
 //app.set('view engine', 'ejs');
@@ -147,7 +188,7 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '../')));
+//app.use(express.static(path.join(__dirname, '../')));
 
 app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
@@ -162,13 +203,13 @@ app.use(express.static(path.join(__dirname, '../')));
 //     host: '127.0.0.1',
 //     port: 6379
 //   }),
-//   //proxy:  true,
+//     proxy:  true,
 //     resave: true,
 //     saveUninitialized: true
 // }));
 
-// // Initialize Passport and restore authentication state, if any, from the
-// // session.
+// // // Initialize Passport and restore authentication state, if any, from the
+// // // session.
 // app.use(passport.initialize());
 // app.use(passport.session());
 
@@ -184,7 +225,8 @@ app.use(express.static(path.join(__dirname, '../')));
 //     res.render('login');
 //   });
 
-app.get('/auth/google', passport.authenticate('google', { access_type: 'offline', scope: [
+app.get('/auth/google', passport.authenticate('google', { access_type: 'offline',
+       approvalPrompt: 'force' , scope: [
        'https://www.googleapis.com/auth/plus.login',
        'https://www.googleapis.com/auth/plus.profile.emails.read',
        "https://www.googleapis.com/auth/calendar"]
@@ -221,5 +263,7 @@ function ensureAuthenticated(req, res, next) {
   console.log('isauthed', req.user)
   if (req.isAuthenticated()) { console.log('isauthed', req.user);
   return next(); }
-  res.redirect('/#/login');
+  res.redirect('/');
 }
+module.exports = app;
+
