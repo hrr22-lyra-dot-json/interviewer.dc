@@ -33,7 +33,7 @@ exports.initializeConnection = function() {
   connection.videosContainer = document.getElementById('videos-container');
   connection.onstream = function(event) {
     // var width = parseInt(connection.videosContainer.clientWidth / 2) - 20;
-    var width = 200;
+    var width = 150;
     var mediaElement = getMediaElement(event.mediaElement, {
       title: event.userid,
       buttons: [],
@@ -62,7 +62,7 @@ exports.initializeConnection = function() {
       document.getElementById('recordControls').style.display = 'none';
     }
     helpers.updateCloseLeaveButton(connection, false);
-    helpers.setRoomStatusText('You are connected to: ' + connection.getAllParticipants().join(', '));
+    helpers.setRoomStatusText('Connected: ' + connection.getAllParticipants().join(', '));
   };
 
   connection.onclose = function() {
@@ -72,9 +72,9 @@ exports.initializeConnection = function() {
     // Events are delayed "1 person"
     // If same person leaves and joins the room, there will be 2 unique instances (one expired, one new)
     if (connection.getAllParticipants().length) {
-      helpers.setRoomStatusText('You are still connected to: ' + connection.getAllParticipants().join(', '));
+      helpers.setRoomStatusText('Connected: ' + connection.getAllParticipants().join(', '));
     } else {
-      helpers.setRoomStatusText('Seems session has been closed or all participants left.');
+      helpers.setRoomStatusText('Connected: (none)');
     }
   };
 
@@ -91,7 +91,7 @@ exports.initializeConnection = function() {
       return;
     }
 
-    helpers.setRoomStatusText('Entire session has been closed by moderator: ' + event.userid);
+    helpers.setRoomStatusText('Session closed by moderator: ' + event.userid);
     helpers.setUserRoleText('');
   };
 
