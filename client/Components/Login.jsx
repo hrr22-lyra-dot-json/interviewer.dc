@@ -7,7 +7,7 @@ export class Login extends React.Component {
 
     console.log('props', this.props);
     const { auth } = this.props.routes[1];
-    document.title = `Login | ${document.title}`;
+    document.title = `Login | Interviewer Direct Connection`;
 
     return (
       <div className="splash">

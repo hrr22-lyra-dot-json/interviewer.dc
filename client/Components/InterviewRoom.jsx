@@ -4,7 +4,6 @@ import * as rtc from '../Services/interviewRtcHandler.js';
 import * as lobby from '../Services/interviewLobby.js';
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
 
-
 class InterviewRoom extends React.Component {
   constructor (props) {
     super(props);
@@ -42,6 +41,9 @@ class InterviewRoom extends React.Component {
 
     // Auto-fill room name
     document.getElementById('room-id').value = this.roomid;
+
+    // set page title
+    document.title = `Room ${this.roomid} | Interviewer Direct Connection`;
 
     // Load link
     if (this.search) {
