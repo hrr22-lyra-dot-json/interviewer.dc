@@ -84,6 +84,41 @@ nav {
    box-shadow: 0 1px 0 0 #1565C0;
  }
 
+ /*******************************
+*        Interview Page        *
+********************************/
+
+#interviewPageContainer {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+#elementToShare {
+  height: 750px;
+  /*width: 800px;*/
+}
+
+#promptContainer {
+  height: 120px;
+}
+
+#codeBoardContainer {
+  height: 600px;
+}
+
+#interview-side-panel {
+  /*width: 400px;*/
+}
+
+#recordingIndicator {
+  margin-top: 10px;
+}
+
+#videos-container {
+  margin: 0 0 15px 0;
+}
+
 /*******************************
 *                              *
 ********************************/
