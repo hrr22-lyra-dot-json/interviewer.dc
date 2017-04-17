@@ -30,6 +30,14 @@ nav {
   max-height: 35rem;
 }
 
+.parallax-container {
+  height: 30rem;
+}
+
+#splash-img-top, #splash-img-bottom {
+  height: 40rem;
+}
+
 /*******************************
 *              HOME            *
 ********************************/
@@ -77,39 +85,14 @@ nav {
  }
 
 /*******************************
-*        Interview Page        *
-********************************/
-
-#interviewPageContainer {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-}
-
-#elementToShare {
-  height: 750px;
-  /*width: 800px;*/
-}
-
-#promptContainer {
-  height: 120px;
-}
-
-#codeBoardContainer {
-  height: 600px;
-}
-
-#interview-side-panel {
-  /*width: 400px;*/
-}
-
-#videos-container {
-  margin: 0 0 15px 0;
-}
-
-/*******************************
 *                              *
 ********************************/
+
+
+#elementToShare {
+    background: rgb(250, 250, 250);
+    height: 700px;
+}
 
 .clbtn {
   pointer-events: all !important;
