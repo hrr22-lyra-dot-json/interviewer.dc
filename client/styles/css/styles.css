@@ -30,6 +30,14 @@ nav {
   max-height: 35rem;
 }
 
+.parallax-container {
+  height: 30rem;
+}
+
+#splash-img-top, #splash-img-bottom {
+  height: 40rem;
+}
+
 /*******************************
 *              HOME            *
 ********************************/
@@ -76,7 +84,7 @@ nav {
    box-shadow: 0 1px 0 0 #1565C0;
  }
 
-/*******************************
+ /*******************************
 *        Interview Page        *
 ********************************/
 
@@ -101,6 +109,10 @@ nav {
 
 #interview-side-panel {
   /*width: 400px;*/
+}
+
+#recordingIndicator {
+  margin-top: 10px;
 }
 
 #videos-container {

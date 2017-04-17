@@ -18,18 +18,16 @@ export class Login extends React.Component {
           </div>
         </nav>
 
-        <div className="row splash-header-row center-align grey lighten-2">
-
-          <img src="client/assets/splash-header.jpg" className="responsive-img splash-header" alt="Interviewer.DS Logatron" />
-
+        <div className="parallax-container">
+          <div className="parallax"><img src="client/assets/man-writing.jpg" id="splash-img-top" alt="Interviewer.DS Logatron" /></div>
         </div>
-        <div className="container login center-align">
 
-          <div className="row">
-
+        <div className="section white login center-align">
+          <div className="row container">
+            <h3 className="header">The Next Interviewing Platform Has Arrived</h3>
             <div className="col s12 m4">
               <span className="glyphicons glyphicons-facetime-video x4 splash-icons"></span>
-              <h5>Video-Interviewing Platform</h5>
+              <h5>Streamlined Video Interface</h5>
               <p>Conduct interviews in a carefully-designed web platform full of features such as recording, white boarding, and code sharing. Early arrivals will also be greeted by a waiting page in the room lobby until the interviewer begins the meeting.</p>
             </div>
             <div className="col s6 m4">
@@ -44,7 +42,9 @@ export class Login extends React.Component {
             </div>
 
           </div>
-
+        </div>
+        <div className="parallax-container">
+          <div className="parallax"><img src="client/assets/laptop-and-notepad.jpg" id="splash-img-bottom" alt="Laptop and notepad on desk" /></div>
         </div>
       </div>
     )
@@ -52,3 +52,7 @@ export class Login extends React.Component {
 }
 
 export default Login;
+
+$(document).ready(function(){
+  $('.parallax').parallax();
+});
