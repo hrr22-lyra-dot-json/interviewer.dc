@@ -55,6 +55,27 @@ class InterviewRoom extends React.Component {
             closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
             draggable: false // Choose whether you can drag to open on touch screens
         });
+
+    // Setup CodeShare
+    setTimeout(function() {
+      var config = {
+        apiKey: 'AIzaSyAA80BaQVSh2mRcw7HWJT7VoJc7zEttlc8',
+        authDomain: 'interviewer-direct-connection.firebaseapp.com',
+        databaseURL: 'https://interviewer-direct-connection.firebaseio.com'
+      };
+      firebase.initializeApp(config);
+      var firepadRef = firebase.database().ref();
+
+      var codeMirror = CodeMirror(document.getElementById('codeshare'), {
+        mode: 'javascript',
+        keymap: 'sublime',
+        theme: 'monokai',
+        lineNumbers: true
+      });
+
+      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+        defaultText: 'Hello World!'
+      });
     });
   }
 
@@ -77,7 +98,7 @@ class InterviewRoom extends React.Component {
                             <li className="tab col s6"><a className="white-text" href="#whiteboard">Whiteboard</a></li>
                         </ul>
                     </div>
-                    <div id="codeshare" className="col s12">
+                    <div id="codeshare" className="col s12" style={{height: 100 + '%'}}>
                         <h1>CODESHARE GOES HERE</h1>
                     </div>
                     <div id="whiteboard" className="col s12">
