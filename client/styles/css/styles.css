@@ -123,12 +123,6 @@ nav {
 *                              *
 ********************************/
 
-
-#elementToShare {
-    background: rgb(250, 250, 250);
-    height: 700px;
-}
-
 .clbtn {
   pointer-events: all !important;
 }
