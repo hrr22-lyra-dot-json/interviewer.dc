@@ -91,7 +91,10 @@ class InterviewRoom extends React.Component {
                     <div className="card-content white-text">
                         <span className="card-title">Interview Session</span>
 
-                        <input type="text" id="room-id"></input>
+                        <div className="input-field col s12">
+                            <input type="text" id="room-id"></input>
+                            <label htmlFor="room-id">Room Name</label>
+                        </div>
 
                         <div id="videos-container" className="col s12 block"></div>
 
