@@ -44,6 +44,7 @@
     "morgan": "^1.8.1",
     "mysql": "^2.13.0",
     "passport": "^0.2.2",
+    "passport-google-oauth": "^1.0.0",
     "passport-google-oauth2": "^0.1.6",
     "path": "^0.12.7",
     "pg": "^6.1.5",

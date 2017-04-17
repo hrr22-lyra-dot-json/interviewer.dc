@@ -29,7 +29,6 @@ const customStyles = {
 //   { value: 60, label: '60 minutes' }
 // ];
 
-const calServ = new CalendarService()
 var slotServ = new TimeslotService();
 
 // a localizer for BigCalendar
@@ -108,9 +107,6 @@ class CalendarInterviewee extends React.Component {
     Materialize.toast(`Appointment booked for ${eventor.job_position} on ${eventor.start.toDateString()} at ${eventor.start.toTimeString()}!`, 6000);
   }
 
-  handleAuthClicker () {
-    this.calService;
-  }
 
   eventClick(event) {
 
@@ -121,7 +117,6 @@ class CalendarInterviewee extends React.Component {
     this.openModal();
   }
 
-    //alert(event.title)
   }
 
   render () {
@@ -153,7 +148,7 @@ class CalendarInterviewee extends React.Component {
           </div>
 
           <CalendarAuth calserv={this.calService}/>
-          <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable} calService={this.calService} selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
+          <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
           <div>
             <Modal
               isOpen={this.state.modalIsOpen}

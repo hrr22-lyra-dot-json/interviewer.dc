@@ -3,10 +3,9 @@ import React from 'react'
 import moment from 'moment'
 import events from '../events'
 import BigCalendar from 'react-big-calendar'
-import CalendarService from '../Services/CalendarService.js'
 import TimeslotService from '../Services/TimeslotService.js'
 import RoomService from '../Services/RoomService.js'
-
+import googleCalendar from '../Services/cService.js'
 import CalendarAuth from './CalendarAuth.jsx'
 import RoomList from './RoomList.jsx'
 import Modal from 'react-modal';
@@ -34,38 +33,28 @@ const options = [
   { value: 60, label: '60 minutes' }
 ];
 
-const calServ = new CalendarService()
-// a localizer for BigCalendar
-//BigCalendar.momentLocalizer(moment)
-var slotServ = new TimeslotService()
+const googleCalendarService = new googleCalendar()
+var slotService = new TimeslotService()
 var roomServ = new RoomService()
 
 class Calendar extends React.Component {
   constructor (props) {
     super(props)
     this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:new Date(), end:new Date()}, selectable:true, slotLength: 30};
+
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
-    this.auth = props.auth
-    //var slotServ = new TimeslotService();
-    if (localStorage.getItem('dbUser')) {
-      slotServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
+
+    if (localStorage.getItem('googleUser')) {
+      slotService.getThem(JSON.parse(localStorage.getItem('googleUser')).user.id)
     }
-   //slotServ.getSlots(localStorage.getItem('dbUser').id).bind(slotServ)
-   //slotServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
-   // this.auth.on('added_user', (user) => {
-   //  slotServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
-   // })
-    slotServ.on('got_slots', (slots) => {
-      console.log('slots',typeof slots.data[0].start)
+
+    slotService.on('got_slots', (slots) => {
+      console.log('slots', slots.data)
       this.setState({availableSlots: slots.data})
       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
     })
 
-    this.calService = calServ;
-    console.log('this is the cserv', calServ);
-    //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
-
-    calServ.on('events_loaded', (evv) => {
+    googleCalendarService.on('events_loaded', (evv) => {
        this.setState({events: evv})
        this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
      })
@@ -110,7 +99,8 @@ class Calendar extends React.Component {
     var startTime = mainSlot.start.valueOf()
     var endTime = mainSlot.end.valueOf()
     var newTimeSlots = [];
-    var userid = JSON.parse(localStorage.getItem('dbUser')).id
+    var userid = JSON.parse(localStorage.getItem('googleUser')).user.id
+    console.log('guserid', userid);
 
     while(startTime + slotSizeMs < endTime) {
       var newSlot = {}
@@ -121,7 +111,7 @@ class Calendar extends React.Component {
       newSlot.title = 'Book Interview'
       newTimeSlots.push(newSlot)
     }
-    slotServ.addThem(newTimeSlots)
+    slotService.addThem(newTimeSlots)
     //post newtime slots to database with callback GET request to get freshly added timeslots
     //this will go away as we use get request to show available slots
     //this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
@@ -132,14 +122,15 @@ class Calendar extends React.Component {
   }
 
   handleAuthClicker () {
-    this.calService;
+    googleCalendarService.getItems
+    //this.calService;
   }
 
   eventClick(event) {
     console.log('this is the event', event)
     if (event.title === 'Book Interview') {
       Materialize.toast(`Appointment slot for ${event.title} on ${event.start.toDateString()} at ${event.start.toTimeString()} deleted`, 6000)
-      slotServ.deleteSlot(event.id, slotServ.getThem.bind(slotServ))
+      slotService.deleteSlot(event.id, slotService.getThem.bind(slotService))
     }
   }
 
@@ -147,8 +138,17 @@ class Calendar extends React.Component {
     return (
 
       <div className="container calendar-section">
-      <CalendarAuth calserv={this.calService}/>
-      <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable} calService={this.calService} selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
+      <div>
+  {/* <button id="authorize-button" onClick={calserv.handleAuthClick.bind(calserv)}>See Google Calendar events</button>
+  <button id="signout-button">Hide other Google calendar events</button> */}
+
+  <button id="authorize-button" className="btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
+    <i className="glyphicons glyphicons-important-day"></i>
+  </button>
+
+  <pre id="content"></pre>
+</div>
+      <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
       <div>
 
         <Modal
@@ -178,8 +178,11 @@ class Calendar extends React.Component {
         </Modal>
       </div>
 
-      <RoomList auth={this.auth}/>
+      <RoomList />
+
+
       </div>
+
 
     )
   }

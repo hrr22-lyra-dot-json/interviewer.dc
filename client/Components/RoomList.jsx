@@ -18,7 +18,7 @@ const customStyles = {
   }
 };
 
-var roomServ = new RoomService()
+var roomService = new RoomService()
 
 
 class RoomList extends React.Component {
@@ -26,18 +26,13 @@ class RoomList extends React.Component {
     super(props)
     this.state = {rooms:[{position: 'janitor'}], modalIsOpen: false}
 
-    this.auth = props.auth
-    if (localStorage.getItem('dbUser')) {
-      roomServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
+    if (localStorage.getItem('googleUser')) {
+      roomService.getThem(JSON.parse(localStorage.getItem('googleUser')).user.id)
     }
-   //  this.auth.on('added_user', (user) => {
-   //  roomServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
-   // })
 
-    //roomServ.getThem(JSON.parse(localStorage.getItem('dbUser')).id)
 
-    roomServ.on('got_rooms', (rooms) => {
-      console.log('rooms',typeof rooms.data[0])
+    roomService.on('got_rooms', (rooms) => {
+      console.log('rooms', rooms.data)
       this.setState({rooms: rooms.data})
     })
 
@@ -66,9 +61,9 @@ class RoomList extends React.Component {
   addAvailability(slotLength, slotInfo) {
     //create room
     var room = {}
-    room.userid = JSON.parse(localStorage.getItem('dbUser')).id
+    room.userid = JSON.parse(localStorage.getItem('googleUser')).user.id
     room.position = this.state.position
-    roomServ.addRoom(room)
+    roomService.addRoom(room)
     this.setState({modalIsOpen: false});
     Materialize.toast(`Room "${this.state.position}" created!`, 4000)
   }

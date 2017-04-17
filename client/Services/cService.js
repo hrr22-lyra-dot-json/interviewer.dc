@@ -1,66 +1,152 @@
-//DO NOT DELETE
+import { EventEmitter } from 'events'
+import axios from 'axios'
+var util   = require('util');
+
+//var fs = require('fs');
+
+
+//var google_calendar = new gcal.GoogleCalendar(accessToken);
+
+
+export default class googleCalendar extends EventEmitter {
+  constructor() {
+    super()
+  }
+
+  getThem() {
+    this.getItems(this.gotItems.bind(this))
+  }
+
+  gotItems(events) {
+      this.emit('events_loaded', events);
+  }
+
+
+  getItems(callback) {
+    var accessToken = JSON.parse(JSON.parse(localStorage.getItem('googleUser')).token.token)
+    var calendarId = 'primary'
+    var params = {'timeMin': (new Date()).toISOString(),
+        'showDeleted': false,
+        'singleEvents': true,
+        'maxResults': 15,
+        'orderBy': 'startTime'
+      }
+    var url = 'https://www.googleapis.com/calendar/v3/calendars/'+calendarId+'/events'+'?access_token='+ accessToken;
+
+    for(var k in params){
+        url += '&'+encodeURIComponent(k)+'='+ encodeURIComponent(params[k]);
+      }
+
+
+    axios.get(url)
+    .then(function(data) {
+      var events = data.data.items;
+      var evss = [];
+      if (events.length > 0) {
+          for (var i = 0; i < events.length; i++) {
+            var evv = {
+              // 'title': 'sample',
+              // 'allDay': true,
+              // 'start': new Date(2015, 3, 0),
+              // 'end': new Date(2015, 3, 1)
+            };
+
+            var event = events[i];
+            var when = event.start.dateTime;
+            var end = event.end.dateTime;
+
+            if (!when) {
+              when = event.start.date;
+            }
+            if (!end) {
+              end = event.end.date;
+            }
+            evv.start = new Date(when);
+            evv.end = new Date(end);
+            evv.title = event.summary;
+            evss.push(evv);
+            //context.emit('events_loaded', evv);
+            //module.exports.events.push(evv);
+            console.log('evv', evv);
+            // this.appendPre(i+1+' '+ event.summary + ' ('+' '+ when +' '+ ')' + '\n');
+          }
+          callback(evss)
+
+        } else {
+          //this.appendPre('No upcoming events found.');
+        }
+      //console.log('err', err)
+      console.log('response', data)
+
+    })
+  }
+}
 
 
 
-////DO NOT DELETE
+
+// 'https://www.googleapis.com/calendar/v3'
+// 'GET', '/calendars/'+calendarId+'/events', +'?access_token='+access_token;
 
 
 
 
+// Events.prototype.get = function(calendarId, eventId, option, callback) {
+
+//   if(!callback){ callback = option; option = {}; }
+
+//   calendarId = encodeURIComponent(calendarId);
+//   eventId    = encodeURIComponent(eventId);
+
+//   this.request('GET', '/calendars/'+calendarId+'/events/'+eventId,
+//     option, {}, null, callback);
+// }
+
+// Events.prototype.get = function(calendarId, eventId, option, callback) {
+
+//   if(!callback){ callback = option; option = {}; }
+
+//   calendarId = encodeURIComponent(calendarId);
+//   eventId    = encodeURIComponent(eventId);
+
+//   this.request('GET', '/calendars/'+calendarId+'/events/'+eventId,
+//     option, {}, null, callback);
+// }
 
 
+// Events.prototype.list = function(calendarId, option, callback) {
+
+//   if(!callback){ callback = option; option = {}; }
+
+//   calendarId = encodeURIComponent(calendarId);
+
+//   this.request('GET', '/calendars/'+calendarId+'/events',
+//     option, {}, null, callback);
+// }
+
+// function GoogleCalendar(access_token){
+
+//   this.request  = function(type, path, params, options, body, callback) {
+
+//     var url = 'https://www.googleapis.com/calendar/v3'+path+'?access_token='+access_token;
+
+//     params = params || {}
+//     options = options || {}
+//     options.json = true;
+
+//     type = type.toUpperCase();
+//     if(body && typeof body !== 'string') body = JSON.stringify(body);
 
 
+//     for(var k in params){
+//       url += '&'+encodeURIComponent(k)+'='+ encodeURIComponent(params[k]);
+//     }
 
-// function handleClientLoad() {
-//         // Loads the client library and the auth2 library together for efficiency.
-//         // Loading the auth2 library is optional here since `gapi.client.init` function will load
-//         // it if not already loaded. Loading it upfront can save one network request.
-//         gapi.load('client:auth2', initClient);
-//       }
+//     needle.request(type, url, body, options, responseHandler);
 
-//       function initClient() {
-//         // Initialize the client with API key and People API, and initialize OAuth with an
-//         // OAuth 2.0 client ID and scopes (space delimited string) to request access.
-//         gapi.client.init({
-//             apiKey: 'YOUR_API_KEY',
-//             discoveryDocs: ["https://people.googleapis.com/$discovery/rest?version=v1"],
-//             clientId: 'YOUR_WEB_CLIENT_ID.apps.googleusercontent.com',
-//             scope: 'profile'
-//         }).then(function () {
-//           // Listen for sign-in state changes.
-//           gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-//           // Handle the initial sign-in state.
-//           updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-//         });
-//       }
-
-//       function updateSigninStatus(isSignedIn) {
-//         // When signin status changes, this function is called.
-//         // If the signin status is changed to signedIn, we make an API call.
-//         if (isSignedIn) {
-//           makeApiCall();
-//         }
-//       }
-
-//       function handleSignInClick(event) {
-//         // Ideally the button should only show up after gapi.client.init finishes, so that this
-//         // handler won't be called before OAuth is initialized.
-//         gapi.auth2.getAuthInstance().signIn();
-//       }
-
-//       function handleSignOutClick(event) {
-//         gapi.auth2.getAuthInstance().signOut();
-//       }
-
-//       function makeApiCall() {
-//         // Make an API call to the People API, and print the user's given name.
-//         gapi.client.people.people.get({
-//           resourceName: 'people/me'
-//         }).then(function(response) {
-//           console.log('Hello, ' + response.result.names[0].givenName);
-//         }, function(reason) {
-//           console.log('Error: ' + reason.result.error.message);
-//         });
-//       }
+//     function responseHandler(error, response, body) {
+//       if(error) return callback(error, body);
+//       if(body.error) return callback(body.error, null);
+//       return callback(null, body);
+//     }
+//   };

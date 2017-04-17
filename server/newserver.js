@@ -7,6 +7,8 @@ const session = require('express-session');
 const RedisStore       = require( 'connect-redis' )( session )
 const User = require('./database/models').User;
 const Token = require('./database/models').Token;
+//const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
 
 
 // Configure the Facebook strategy for use by Passport.
@@ -63,6 +65,13 @@ passport.use(new GoogleStrategy({
     // access_type: 'offline',
     //   prompt: 'consent',
   },
+  // function(request, accessToken, refreshToken, profile, done) {
+  //   console.log('refresher', refreshToken)
+
+  //   //google_calendar = new gcal.GoogleCalendar(accessToken);
+
+  //   return done(null, profile);
+
   function(request, accessToken, refreshToken, profile, done) {
     console.log('refresher', arguments);
     process.nextTick(function () {
@@ -85,7 +94,7 @@ passport.use(new GoogleStrategy({
         .then(function(newUser) {
           Token.create({
             owner_id: newUser.id,
-            token: accessToken,
+            token: JSON.stringify(accessToken),
             refreshToken: refreshToken
           })
           .then(function(newToken) {
@@ -95,9 +104,10 @@ passport.use(new GoogleStrategy({
       } else {
         Token.find({where:{owner_id: foundUser.id}})
         .then(function(foundToken) {
-          foundToken.update({token: accessToken})
+          foundToken.update({token: JSON.stringify(accessToken)})
           .then(function(updatedToken) {
-            done(null, {user: foundUser, token: foundToken })
+            console.log('newtok', updatedToken)
+            done(null, {user: foundUser, token: updatedToken })
           });
         })
 
@@ -175,7 +185,6 @@ var path = require('path');
 // Create a new Express application.
 const app = express();
 
-require('./routes.js')(app);
 
 
 // Configure view engine to render EJS templates.
@@ -256,8 +265,8 @@ app.get('/', ensureAuthenticated, function(req, res){
   res.redirect('/');
   res.json({user: req.user})
 });
+require('./routes.js')(app);
 
-app.listen(3000);
 
 function ensureAuthenticated(req, res, next) {
   console.log('isauthed', req.user)
@@ -265,5 +274,53 @@ function ensureAuthenticated(req, res, next) {
   return next(); }
   res.redirect('/');
 }
+
+var isUseHTTPs = process.env.USE_HTTPS || false;
+var fs = require('fs');
+var path = require('path');
+
+// Platform check
+var resolveURL = function(url) {
+  var isWin = !!process.platform.match(/^win/);
+  if (!isWin) return url;
+  return url.replace(/\//g, '\\');
+};
+
+// HTTPS options - see how to use a valid certificate: // https://github.com/muaz-khan/WebRTC-Experiment/issues/62
+var httpsOptions = {
+  key: fs.readFileSync(path.join(__dirname, resolveURL('socket.io/fake-keys/privatekey.pem'))),
+  cert: fs.readFileSync(path.join(__dirname, resolveURL('socket.io/fake-keys/certificate.pem')))
+};
+
+// Main server setup
+var http = require(isUseHTTPs ? 'https' : 'http');
+const port = process.env.PORT || 3000;
+var socketserver;
+isUseHTTPs ? socketserver = http.createServer(httpsOptions, app) : socketserver = http.createServer(app);
+socketserver = socketserver.listen(port);
+
+// Socket config
+require('./socket.io/Signaling-Server.js')(socketserver, function(socket) {
+  try {
+    var params = socket.handshake.query;
+    // "socket" object is totally in your own hands! Do whatever you want!
+    // In your HTML page, you can access socket as following:
+      // connection.socketCustomEvent = 'custom-message';
+      // var socket = connection.getSocket();
+      // socket.emit(connection.socketCustomEvent, { test: true });
+    if (!params.socketCustomEvent) params.socketCustomEvent = 'custom-message';
+    socket.on(params.socketCustomEvent, function(message) {
+      try {
+        socket.broadcast.emit(params.socketCustomEvent, message);
+      } catch (e) {}
+    });
+  } catch (e) {}
+});
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////// MISC ////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+console.log('[Server + socket.io server port]: ' + port);
 module.exports = app;
 

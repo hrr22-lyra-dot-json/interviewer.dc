@@ -2,12 +2,11 @@ import React from 'react'
 import moment from 'moment'
 //import events from '../events'
 import BigCalendar from 'react-big-calendar'
-import CalendarService from '../Services/CalendarService.js'
 //import CalendarAuth from './CalendarAuth.jsx'
 // a localizer for BigCalendar
 BigCalendar.momentLocalizer(moment)
 
-var CalView = ({events, selectable, calService, selectSlot, eventClick}) => (
+var CalView = ({events, selectable, selectSlot, eventClick}) => (
 
       <div>
       <BigCalendar

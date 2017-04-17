@@ -24,7 +24,7 @@ export default class TimeslotService extends EventEmitter {
     axios.delete('/api/Timeslot?id=' + slotId)
     .then(function(response) {
       console.log('slot removed')
-      callback(JSON.parse(localStorage.getItem('dbUser')).id)
+      callback(JSON.parse(localStorage.getItem('googleUser')).user.id)
     });
 
   }
@@ -36,7 +36,7 @@ export default class TimeslotService extends EventEmitter {
     .then(function (response) {
       console.log('added timeslots', response);
       callback(response)
-      callback2(JSON.parse(localStorage.getItem('dbUser')).id)
+      callback2(JSON.parse(localStorage.getItem('googleUser')).user.id)
       // this.hasBeenAdded(response).bind(this)
       // this.getSlots(localStorage.getItem('dbUser')).bind(this);
     })

@@ -7,9 +7,6 @@ export default class newAuth extends EventEmitter {
     //this.user = localStorage.getItem('dbUser');
 
   }
-
-
-
   loginner() {
     //axios('/auth/google').then(console.log)
     axios({
@@ -50,7 +47,7 @@ export default class newAuth extends EventEmitter {
         callback(true)
         return true
       }
-      //localStorage.setItem('googleUser', JSON.stringify(response.data.user))
+      localStorage.setItem('googleUser', JSON.stringify(response.data.user))
       console.log('notlodgedin')
       callback(false)
       return false
