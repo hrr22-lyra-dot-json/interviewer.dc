@@ -64,7 +64,10 @@ class InterviewRoom extends React.Component {
         databaseURL: 'https://interviewer-direct-connection.firebaseio.com'
       };
       firebase.initializeApp(config);
-      var firepadRef = firebase.database().ref();
+      var firepadRef = firebase.database().ref('onlineState');
+      firepadRef.onDisconnect().remove(function(err) {
+        if (err) {console.error(err)}
+      });
 
       var codeMirror = CodeMirror(document.getElementById('codeshare'), {
         mode: 'javascript',
