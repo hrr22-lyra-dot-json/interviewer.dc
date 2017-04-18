@@ -78,7 +78,7 @@ class InterviewRoom extends React.Component {
             <div id="interview-side-panel" className="col s4 right">
                 <div className="col s12 card blue-grey darken-1">
                     <div className="card-content white-text">
-                        <span className="card-title">Interview Session</span>
+                        <span className="card-title">Interview Session <span className="new badge red" data-badge-caption="">00:00</span></span>
                         <div className="input-field col s12">
                             <input type="text" id="room-id"></input>
                             <label htmlFor="room-id">Room Name</label>
@@ -104,18 +104,11 @@ class InterviewRoom extends React.Component {
 
                 <div id="interviewerControls" className="col s12 card blue-grey darken-1">
                     <div className="card-content white-text">
-                        <ul id="recordingIndicator" className="collection">
-                            <li className="collection-item blue-grey darken-1">
-                                <Link to='/home'><button id="back" className="btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></button></Link>&nbsp;
-                                <a id="urlButton" className="btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
-                            </li>
-                            <li className="collection-item blue-grey darken-1">
-                                <span className="new badge red" data-badge-caption="">00:00</span>
-                                <button id="start" className="btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
-                                <button id="stop" className="btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
-                                <button id="save" className="btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button>
-                            </li>
-                        </ul>
+                        <Link to='/home'><button id="back" className="btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></button></Link>&nbsp;
+                        <a id="urlButton" className="btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>&nbsp;
+                        <button id="start" className="btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
+                        <button id="stop" className="btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
+                        <button id="save" className="btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button>
                     </div>
                 </div>
 
@@ -125,7 +118,6 @@ class InterviewRoom extends React.Component {
                     <a className="collection-item"><span className="badge glyphicons glyphicons glyphicons-unchecked"></span>Write a function that does nothing</a>
                     <br />
                 </div>
-
             </div>
         </div>
 
