@@ -2,11 +2,16 @@ import React from 'react';
 import * as recorder from '../Services/interviewRecorder.js';
 import * as rtc from '../Services/interviewRtcHandler.js';
 import * as lobby from '../Services/interviewLobby.js';
+import QuestionService from '../Services/QuestionService.js';
+
+const questionService = new QuestionService()
+
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
 
 class InterviewRoom extends React.Component {
   constructor (props) {
     super(props);
+    this.state = {questionList:[]}
 
     console.log('this', this)
     console.log('props', props.location);
@@ -14,6 +19,13 @@ class InterviewRoom extends React.Component {
     this.search = props.location.search;
     this.roomid = props.location.state.split('$')[0];
     this.roomDbId = props.location.state.split('$')[1];
+
+    questionService.getThem(this.roomDbId)
+
+    questionService.on('got_questions', (questions) => {
+        console.log('questions', questions)
+        this.setState({questionList: questions})
+    })
 
     if (this.roomid === null || this.roomid === undefined) {
       let name = 'roomid'.replace(/[\[\]]/g, "\\$&");
@@ -28,6 +40,10 @@ class InterviewRoom extends React.Component {
     this.openRoom = lobby.openRoom;
     this.joinRoom = lobby.joinRoom;
     this.closeRoom = lobby.closeRoom;
+  }
+
+  addQuestion(question) {
+    questionService.addOne({meeting_id: this.roomDbId, question: question})
   }
 
   componentDidMount() {
