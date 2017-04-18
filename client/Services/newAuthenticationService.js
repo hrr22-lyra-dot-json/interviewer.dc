@@ -7,6 +7,22 @@ export default class newAuth extends EventEmitter {
     //this.user = localStorage.getItem('dbUser');
 
   }
+  getInfo(userid) {
+    this.getUserInfo(userid, this.gotUserInfo.bind(this))
+  }
+
+  getUserInfo(userid, callback) {
+    axios.post('/api/getUser', {
+        interviewerId: userid
+    })
+    .then(function (response) {
+      console.log(response)
+      callback(response)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
   loginner() {
     //axios('/auth/google').then(console.log)
     axios({
@@ -40,11 +56,11 @@ export default class newAuth extends EventEmitter {
   isLoggedIn(callback) {
      axios.get('/logged-in')
     .then(function(response) {
-      console.log('g usertown', response.data)
+      //console.log('g usertown', response.data)
       if (response.data.user) {
         localStorage.setItem('googleUser', JSON.stringify(response.data.user))
-        console.log('g usertown', response.data.user)
-        callback(true)
+        //console.log('g usertown', response.data.user)
+        callback(true, )
         return true
       }
       localStorage.setItem('googleUser', JSON.stringify(response.data.user))
@@ -55,6 +71,9 @@ export default class newAuth extends EventEmitter {
   }
   logmit(islogged) {
     this.emit('log_result', islogged)
+  }
+  gotUserInfo(user) {
+    this.emit('got_info', user)
   }
 }
 

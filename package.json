@@ -45,6 +45,7 @@
     "passport": "^0.2.2",
     "passport-google-oauth": "^1.0.0",
     "passport-google-oauth2": "^0.1.6",
+    "passport-oauth2-refresh": "^1.0.0",
     "path": "^0.12.7",
     "pg": "^6.1.5",
     "react": "^15.5.4",

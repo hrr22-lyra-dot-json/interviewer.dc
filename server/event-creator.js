@@ -5,25 +5,14 @@ var googleAuth = require('google-auth-library');
 var SCOPES = ['https://www.googleapis.com/auth/calendar'];
 var fs = require('fs');
 var readline = require('readline');
-
-function authorize(credentials, callback, token, event) {
-  var clientSecret = credentials.installed.client_secret;
-  var clientId = credentials.installed.client_id;
-  var redirectUrl = credentials.installed.redirect_uris[0];
-  var auth = new googleAuth();
-  var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-  console.log('tokeno', token)
-  oauth2Client.credentials = JSON.parse(token.token);
-  callback(oauth2Client, event);
-}
+var refresh = require('passport-oauth2-refresh');
 
 
+// This is an express callback.
+exports.createEvent = function(req, res, next) {
 
-//req.body includes:interviewerid, use toget interviewer email, start and end time
-//roomname/jobposition room.job_position + room.owner_id
-exports.createEvent = function(req, res) {
   var event = {
-    'summary': req.body.job_position + ' interview for Jason ',
+    'summary': req.body.job_position + ' interview for ' + req.body.interviewee_name,
     'location': 'Washington',
     "source": {
       "url": 'http://127.0.0.1:3000/#/interviewroom?roomid=' + req.body.roomid,
@@ -39,58 +28,200 @@ exports.createEvent = function(req, res) {
       'timeZone': 'America/Los_Angeles'
     },
     'attendees': [
-      {'email': 'simondemoor0@gmail.com'},
-      {'email': 'kasonjim@gmail.com'}
+      {'email': req.body.interviewer_email}
+      //{'email': req.body.interviewee_email}
       ]
     }
-    event.location = event.source;
+  var retries = 2;
+  console.log('this is the eventmaker:', req.body)
 
+  var send401Response = function() {
+    return res.status(401).end();
+  };
+
+  // Get the user's credentials.
   Token.find({where: {owner_id: req.body.interviewer_id}})
   .then(function(token) {
-    if (!token) {
-      console.log('error finding interviewer token')
-      return;
-    }
-    fs.readFile('client_secret.json', function processClientSecrets(err, content) {
-      if (err) {
-        console.log('Error loading client secret file: ' + err);
-        return;
+    if(!token) {     console.log('error 1');
+
+return send401Response(); }
+
+    var makeRequest = function() {
+      retries--;
+      if(!retries) {
+            console.log('error 2')
+
+        // Couldn't refresh the access token.
+        return send401Response();
       }
-      // Authorize a client with the loaded credentials, then call the
-      // Google Calendar API.
-      authorize(JSON.parse(content), createEvento, token, event);//-------------------------------------this is done on server side
-    });
-    res.status(201).send();
-  })
-  .catch(function(err) {
-    console.error(err);
-    res.status(500).send(err);
+
+      // Set the credentials and make the request.
+      var auth = new google.auth.OAuth2;
+      auth.setCredentials({
+        access_token: token.token,
+        refresh_token: token.refreshToken
+      });
+
+      var calendar = google.calendar('v3');
+      calendar.events.insert({
+        auth: auth,
+        calendarId: 'primary',
+        resource: event,
+      }, function(err, event) {
+        if (err) {
+          console.log('The API failed to create event; error: ' + err);
+          refresh.requestNewAccessToken('google', token.refreshToken, function(err, accessToken) {
+            if(err || !accessToken) {     console.log('error 3', err);
+
+return send401Response(); }
+
+            // Save the new accessToken for future use
+            Token.save({ token: accessToken }, function() {
+             // Retry the request.
+             makeRequest();
+            });
+          });
+          //return err;
+        }
+
+        console.log('Event created: %s', event.htmlLink);
+        res.status(201).send();
+//   })
+//   .catch(function(err) {
+//     console.error(err);
+//     res.status(500).send(err);
+//   });
+      }
+      )
+    }
+    makeRequest();
   });
 }
 
 
 
 
+//       var gmail = google.gmail('v1');
+//       var request = gmail.users.getProfile({
+//         auth: auth,
+//         userId: 'me'
+//       });
+//       request.then(function(resp) {
+//         // Success! Do something with the response
+//         return res.json(resp);
+
+//       }, function(reason) {
+//         if(reason.code === 401) {
+//           // Access token expired.
+//           // Try to fetch a new one.
+//           refresh.requestNewAccessToken('google', user.refreshToken, function(err, accessToken) {
+//             if(err || !accessToken) { return send401Response(); }
+
+//             // Save the new accessToken for future use
+//             user.save({ accessToken: accessToken }, function() {
+//              // Retry the request.
+//              makeRequest();
+//             });
+//           });
+
+//         } else {
+//           // There was another error, handle it appropriately.
+//           return res.status(reason.code).json(reason.message);
+//         }
+//       });
+//     };
+
+//     // Make the initial request.
+//     makeRequest();
+//   });
+// }
+
+
+// function authorize(credentials, callback, token, event) {
+//   var clientSecret = credentials.installed.client_secret;
+//   var clientId = credentials.installed.client_id;
+//   var redirectUrl = credentials.installed.redirect_uris[0];
+//   var auth = new googleAuth();
+//   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+//   console.log('tokeno', token)
+//   oauth2Client.credentials = JSON.parse(token.token);
+//   callback(oauth2Client, event);
+// }
 
 
 
-function createEvento(auth, event) {
-  var calendar = google.calendar('v3');
-    calendar.events.insert({
-      auth: auth,
-      calendarId: 'primary',
-      resource: event,
-    }, function(err, event) {
-        if (err) {
-          console.log('The API failed to create event; error: ' + err);
+// //req.body includes:interviewerid, use toget interviewer email, start and end time
+// //roomname/jobposition room.job_position + room.owner_id
+// exports.createEvent = function(req, res) {
+//   var event = {
+//     'summary': req.body.job_position + ' interview for Jason ',
+//     'location': 'Washington',
+//     "source": {
+//       "url": 'http://127.0.0.1:3000/#/interviewroom?roomid=' + req.body.roomid,
+//       "title": 'Link to Interviewroom'
+//     },
+//     'description': 'Your first inner-view',
+//     'start': {
+//       'dateTime': new Date(req.body.start),
+//       'timeZone': 'America/Los_Angeles'
+//     },
+//     'end': {
+//       'dateTime': new Date(req.body.end),
+//       'timeZone': 'America/Los_Angeles'
+//     },
+//     'attendees': [
+//       {'email': 'simondemoor0@gmail.com'},
+//       {'email': 'kasonjim@gmail.com'}
+//       ]
+//     }
+//     event.location = event.source;
+
+//   Token.find({where: {owner_id: req.body.interviewer_id}})
+//   .then(function(token) {
+//     if (!token) {
+//       console.log('error finding interviewer token')
+//       return;
+//     }
+//     fs.readFile('client_secret.json', function processClientSecrets(err, content) {
+//       if (err) {
+//         console.log('Error loading client secret file: ' + err);
+//         return;
+//       }
+//       // Authorize a client with the loaded credentials, then call the
+//       // Google Calendar API.
+//       authorize(JSON.parse(content), createEvento, token, event);//-------------------------------------this is done on server side
+//     });
+//     res.status(201).send();
+//   })
+//   .catch(function(err) {
+//     console.error(err);
+//     res.status(500).send(err);
+//   });
+// }
 
 
-          return err;
-        }
-        console.log('Event created: %s', event.htmlLink);
-      }
-      )
-  }
+
+
+
+
+
+// function createEvento(auth, event) {
+//   var calendar = google.calendar('v3');
+//     calendar.events.insert({
+//       auth: auth,
+//       calendarId: 'primary',
+//       resource: event,
+//     }, function(err, event) {
+//         if (err) {
+//           console.log('The API failed to create event; error: ' + err);
+
+
+//           return err;
+//         }
+//         console.log('Event created: %s', event.htmlLink);
+//       }
+//       )
+//   }
 
 
 
