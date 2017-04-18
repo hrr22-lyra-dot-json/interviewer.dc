@@ -49,13 +49,8 @@ class InterviewRoom extends React.Component {
     this.codeMirror;
   }
 
-<<<<<<< b05fad55c83f868e09e7c18eb5cefff68790fb63
   addQuestion(question) {
     questionService.addOne({meeting_id: this.roomDbId, question: question})
-=======
-  copyCodeshare() {
-
->>>>>>> Attach firepad to this
   }
 
   showQuestion() {
