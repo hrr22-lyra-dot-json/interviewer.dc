@@ -22,7 +22,7 @@ export default class RoomService extends EventEmitter {
     .then(function (response) {
       console.log(response)
       callback(response)
-      callback2(JSON.parse(localStorage.getItem('dbUser')).id)
+      callback2(JSON.parse(localStorage.getItem('googleUser')).user.id)
 
     })
     .catch(function (error) {

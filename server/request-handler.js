@@ -185,6 +185,7 @@ exports.addTimeslot = function(req, res) {
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.addMultipleTimeslots = function(req, res) {
+  console.log('requestbody', req.body)
   Timeslot.bulkCreate(req.body.timeslots)
   .then(function() {
     res.status(201).send();

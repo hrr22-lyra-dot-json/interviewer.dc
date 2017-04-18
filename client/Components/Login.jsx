@@ -1,20 +1,25 @@
 import React from 'react'
 import AuthService from '../Services/AuthService.js'
+import newAuth from '../Services/newAuthenticationService.js'
+const hell = new newAuth()
 
 export class Login extends React.Component {
 
   render() {
 
     console.log('props', this.props);
-    const { auth } = this.props.routes[1];
     document.title = `Login | Interviewer Direct Connection`;
+
+
 
     return (
       <div className="splash">
         <nav className="splash-nav blue darken-3">
           <div className="nav-wrapper">
             <a href="#" className="brand-logo center">Interviewer Direct Connection</a>
-            <ul className="right"><li><button onClick={auth.login.bind(this)} className="right" className="btn waves-effect waves-light indigo darken-4">Sign In</button></li></ul>
+            <a href="/auth/google">Login with Google</a>
+
+            <ul className="right"><li><button onClick={hell.isIn.bind(hell)} className="right" className="btn waves-effect waves-light indigo darken-4">Sign In</button></li></ul>
           </div>
         </nav>
 

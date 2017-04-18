@@ -53,7 +53,7 @@ export default class CalendarService extends EventEmitter {
     }, cb); //this.handleAuthResult
   }
   handleAuthResult(authResult) {
-    addToken(JSON.parse(localStorage.getItem('dbUser')).id, authResult)
+    //addToken(JSON.parse(localStorage.getItem('dbUser')).id, authResult)
     console.log('authresult',  authResult);
     var authorizeDiv = document.getElementById('authorize-button');
     if (authResult && !authResult.error) {

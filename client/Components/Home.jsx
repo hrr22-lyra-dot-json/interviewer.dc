@@ -3,41 +3,60 @@ import AuthService from '../Services/AuthService.js'
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
 import Calendar from './InterviewerCalendarContainer.jsx' //InterviewerCalendarContainer
 import CalendarAuth from './CalendarAuth.jsx'
-import CalendarService from '../Services/CalendarService.js'
 import Nav from './Nav.jsx'
+import newAuth from '../Services/newAuthenticationService.js'
+import Login from './Login.jsx'
+
+
+const googleLoginService = new newAuth()
+
 
 document.title = `Dashboard | Interviewer Direct Connection`;
 
 export class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {  profile: this.props.routes[1].auth.getProfile() }
-    this.auth = this.props.routes[1].auth
+    this.state = {isIn: false}
+    googleLoginService.isIn()
+    googleLoginService.on('log_result', (result) => {
+      this.setState({isIn: result})
+    }
+    )
+
+    this.state = {  profile: {name: 'simon'} }
+
+    //this.state = {  profile: this.props.routes[1].auth.getProfile() }
 
     console.log('query', props.location.query);//this allows you to access any queries in the url get request
 
-    props.routes[1].auth.on('profile_updated', (profile) => {
-      this.setState({profile: this.props.routes[1].auth.getProfile()})
-    })
-    props.routes[1].auth.on('logged_out', (bye) => {
-      this.setState({profile: this.props.routes[1].auth.getProfile()})
-    })
+    // props.routes[1].auth.on('profile_updated', (profile) => {
+    //   this.setState({profile: this.props.routes[1].auth.getProfile()})
+    // })
+    // props.routes[1].auth.on('logged_out', (bye) => {
+    //   this.setState({profile: this.props.routes[1].auth.getProfile()})
+    // })
   }
 
-  logout(){
-    this.props.routes[1].auth.logout()//for some reason we have to access 'auth' which is passed in from app.jsx via props.routes
-  }
+
 
   render() {
+    if (!this.state.isIn) {
+      return (
+        <Login />
+        )
+    } else {
+
 
     return (
       <div>
-        <Nav name={this.state.profile.name} logout={this.logout.bind(this)} />
+        <Nav name={this.state.profile.name}  />
+        <a href="/logout">Log Out</a>
 
-        <Calendar auth={this.auth}/>
+        <Calendar />
       </div>
     )
   }
+}
 }
 
 export default Home;
