@@ -13,6 +13,12 @@ class InterviewRoom extends React.Component {
     // this.roomid = props.location.search.replace('?roomid=', '');
     this.search = props.location.search;
     this.roomid = props.location.state;
+    if (this.roomid === null || this.roomid === undefined) {
+      let name = 'roomid'.replace(/[\[\]]/g, "\\$&");
+      let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+      let results = regex.exec(window.location.href);
+      this.roomid = decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
 
     this.start = recorder.start;
     this.stop = recorder.stop;
@@ -56,6 +62,30 @@ class InterviewRoom extends React.Component {
             draggable: false // Choose whether you can drag to open on touch screens
         });
     });
+
+    // Setup CodeShare
+    var that = this;
+    setTimeout(function() {
+      var config = {
+        apiKey: 'AIzaSyAA80BaQVSh2mRcw7HWJT7VoJc7zEttlc8',
+        authDomain: 'interviewer-direct-connection.firebaseapp.com',
+        databaseURL: 'https://interviewer-direct-connection.firebaseio.com'
+      };
+      firebase.initializeApp(config);
+      var firepadRef = firebase.database().ref(that.roomid);
+      firepadRef.onDisconnect().remove(function(err) {
+        if (err) {console.error(err)}
+      });
+
+      var codeMirror = CodeMirror(document.getElementById('codeshare'), {
+        mode: 'javascript',
+        keymap: 'sublime',
+        theme: 'monokai',
+        lineNumbers: true
+      });
+
+      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {});
+    });
   }
 
   render() {
@@ -77,8 +107,7 @@ class InterviewRoom extends React.Component {
                             <li className="tab col s6"><a className="white-text" href="#whiteboard">Whiteboard</a></li>
                         </ul>
                     </div>
-                    <div id="codeshare" className="col s12">
-                        <h1>CODESHARE GOES HERE</h1>
+                    <div id="codeshare" className="col s12" style={{height: 90 + '%'}}>
                     </div>
                     <div id="whiteboard" className="col s12">
                         <h1>WHITEBOARD GOES HERE</h1>
