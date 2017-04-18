@@ -156,6 +156,7 @@ class InterviewRoom extends React.Component {
         // Make editor available to take values out later
         that.codeMirror = codeMirror;
     });
+
   }
 
   render() {
