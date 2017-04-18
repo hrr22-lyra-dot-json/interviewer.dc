@@ -28,11 +28,13 @@ exports.createEvent = function(req, res, next) {
       'timeZone': 'America/Los_Angeles'
     },
     'attendees': [
-      {'email': req.body.interviewer_email}
-      //{'email': req.body.interviewee_email}
-      ]
-    }
-  var retries = 2;
+      {'email': req.body.interviewer_email},
+      {'email': req.body.interviewee_email}
+      ],
+    'sendNotifications': true
+  }
+
+  var retries = 3;
   console.log('this is the eventmaker:', req.body)
 
   var send401Response = function() {
@@ -42,15 +44,15 @@ exports.createEvent = function(req, res, next) {
   // Get the user's credentials.
   Token.find({where: {owner_id: req.body.interviewer_id}})
   .then(function(token) {
-    if(!token) {     console.log('error 1');
+    if(!token) {  console.log('error 1');
 
 return send401Response(); }
 
     var makeRequest = function() {
       retries--;
+      console.log('run number', (3 - retries))
       if(!retries) {
             console.log('error 2')
-
         // Couldn't refresh the access token.
         return send401Response();
       }
@@ -76,16 +78,23 @@ return send401Response(); }
 return send401Response(); }
 
             // Save the new accessToken for future use
-            Token.save({ token: accessToken }, function() {
+            token.update({ token: accessToken }, function(token) {
+              console.log('retrywithnewtoken')
              // Retry the request.
              makeRequest();
             });
           });
           //return err;
-        }
+        } else {
 
-        console.log('Event created: %s', event.htmlLink);
-        res.status(201).send();
+        if (event) {
+          console.log('Event created: %s', event.htmlLink);
+          res.status(201).send();
+        } else {
+          console.log('failed  run');
+        }
+      }
+
 //   })
 //   .catch(function(err) {
 //     console.error(err);

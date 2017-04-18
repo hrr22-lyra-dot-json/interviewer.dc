@@ -43,7 +43,7 @@ const userinfo = new newAuth()
 class CalendarInterviewee extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:false, slotLength: 30, booking:{}, interviewerInfo:'', interviewee:{name:'', email:''}};
+    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:false, slotLength: 30, booking:{start:'', end:''}, interviewerInfo:'', intervieweeName:'', intervieweeEmail:''};
 
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
     console.log('query', props.location.query);
@@ -51,7 +51,9 @@ class CalendarInterviewee extends React.Component {
     userinfo.getInfo(this.interviewer)
     userinfo.on('got_info', (info) => {
       console.log('got info:', info)
-      this.setState({interviewerInfo: info.data})
+      localStorage.setItem('googleUser', JSON.stringify({user: info.data}))
+
+    this.setState({interviewerInfo: info.data})
     })
     this.job_position = props.location.query.job_position
 
@@ -108,8 +110,8 @@ class CalendarInterviewee extends React.Component {
 
     var eventor = {interviewer_id: this.interviewer,
       job_position: this.job_position,
-      interviewee_name: this.state.interviewee.name,
-      interviewee_email: this.state.interviewee.email,
+      interviewee_name: this.state.intervieweeName,
+      interviewee_email: this.state.intervieweeEmail,
       interviewer_email: this.state.interviewerInfo.email,
       interviewer_name: this.state.interviewerInfo.username,
       roomid: this.job_position + this.interviewer,
@@ -124,12 +126,16 @@ class CalendarInterviewee extends React.Component {
   eventClick(event) {
 
     if (event.title === 'Book Interview') {
-
-    this.setState({booking:event})
-    console.log('this is the event:', event);
-    this.openModal();
+      this.setState({booking:event})
+      console.log('this is the event:', event);
+      this.openModal();
+    }
   }
-
+  handleChangeName(event) {
+    this.setState({intervieweeName: event.target.value});
+  }
+  handleChangeEmail(event) {
+    this.setState({intervieweeEmail: event.target.value});
   }
 
   render () {
@@ -148,12 +154,12 @@ class CalendarInterviewee extends React.Component {
             <div className="col s12">
               <div className="card">
                 <div className="card-content">
-                  <span className="card-title">Book your interview with ...interviewername</span>
+                  <span className="card-title">Book your interview with {this.state.interviewerInfo.username} for the {this.job_position}  job.</span>
                   <div className="divider"></div><br />
                   <p>
-                    Please book a calendar with ... interviewername by clicking on one of the available timeslots.
+                    Please book a calendar with {this.state.interviewerInfo.username} by clicking on one of the available timeslots.
                     <br />
-                    Enter your email -- ideally GMail -- to receive the details of the interview.
+                    Enter your email -- ideally GMail -- to receive the event invite with the details of the interview.
                   </p>
                 </div>
               </div>
@@ -171,20 +177,18 @@ class CalendarInterviewee extends React.Component {
               >
 
                 <h2 ref="subtitle">Book interview</h2>
-                <p>Do you want to book an interview with ? {this.state.booking.title} : </p>
+                <p>Confirm your interview with {this.state.interviewerInfo.username} on {new Date(this.state.booking.start).toLocaleDateString()} at {new Date(this.state.booking.start).toLocaleTimeString()}.</p>
+                <p>Please enter your name and email, the interview details will be sent to this email address and the event invite must be accepted to be confirmed.</p>
                 <form>
-                  <input />
-
+                  <input id="intervieweeName" placeholder="Type in your full name..." onChange={this.handleChangeName.bind(this)}/>
+                  <input id="intervieweeEmail" type="email" placeholder="Type in your email address..." onChange={this.handleChangeEmail.bind(this)}/>
                 </form>
 
                 <button className="clbtn" onClick={this.addAvailability}>Confirm</button>
 
                 <button className="clbtn" onClick={this.closeModal}>close</button>
                 <div>Good luck!</div>
-                <form>
-                  <input />
 
-                </form>
               </Modal>
             </div>
           </div>

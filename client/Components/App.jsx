@@ -12,10 +12,7 @@ import newAuth from '../Services/newAuthenticationService.js'
 
 
 //const auth = new AuthService('R6x0iX25zFBEm6qY7QoJ2Dth5Tn2SBeE', 'sdm.auth0.com')
-const auth = {}
-auth.loggedIn = function() {
-  return false;
-}
+
 
 
 export default class App extends React.Component {
@@ -49,10 +46,10 @@ export default class App extends React.Component {
       <Router history={hashHistory}>
 
          <div>
-         <Route path="/"  component={Home} auth={auth}  />
-           <Route path='/home' component={Home} auth={auth} />
-           <Route path="/interviewee" component={CalendarInterviewee} auth={auth} />
-           <Route path="/interviewroom" component={InterviewRoom} auth={auth} />
+         <Route path="/"  component={Home}  />
+           <Route path='/home' component={Home}  />
+           <Route path="/interviewee" component={CalendarInterviewee}  />
+           <Route path="/interviewroom" component={InterviewRoom}  />
          </div>
 
       </Router>
