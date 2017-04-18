@@ -61,6 +61,7 @@ class InterviewRoom extends React.Component {
             closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
             draggable: false // Choose whether you can drag to open on touch screens
         });
+    });
 
     // Setup CodeShare
     var that = this;
@@ -83,9 +84,7 @@ class InterviewRoom extends React.Component {
         lineNumbers: true
       });
 
-      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
-        defaultText: 'Hello World!'
-      });
+      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {});
     });
   }
 
