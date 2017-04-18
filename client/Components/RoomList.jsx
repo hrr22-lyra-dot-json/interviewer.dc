@@ -86,7 +86,7 @@ class RoomList extends React.Component {
               <div key={key}>
                 <li className="collection-item">
                   <div>{room.job_position}
-                    <Link to={{ pathname: '/interviewroom', state: room.job_position + room.owner_id/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
+                    <Link to={{ pathname: '/interviewroom', state: room.job_position + room.owner_id + '$' + room.id/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
                       <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
                     </Link>
                     <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">

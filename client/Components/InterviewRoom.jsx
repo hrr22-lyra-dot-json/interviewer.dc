@@ -12,7 +12,9 @@ class InterviewRoom extends React.Component {
     console.log('props', props.location);
     // this.roomid = props.location.search.replace('?roomid=', '');
     this.search = props.location.search;
-    this.roomid = props.location.state;
+    this.roomid = props.location.state.split('$')[0];
+    this.roomDbId = props.location.state.split('$')[1];
+
     if (this.roomid === null || this.roomid === undefined) {
       let name = 'roomid'.replace(/[\[\]]/g, "\\$&");
       let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
