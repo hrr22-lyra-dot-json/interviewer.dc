@@ -48,6 +48,7 @@ exports.restrictClientElements = function() {
   document.getElementById('room-id').style.display = 'none';
   document.getElementById('interviewerControls').style.display = 'none';
   document.getElementById('interviewerQuestionPanel').style.display = 'none';
+  document.getElementById('interviewerQuestionPanelButton').style.display = 'none';
 };
 
 // helper functions to disable/enable all buttons

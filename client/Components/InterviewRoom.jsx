@@ -45,6 +45,17 @@ class InterviewRoom extends React.Component {
     } else {
       this.openRoom(this.roomid);
     }
+
+    // Make sure tabs and side-nav function properly after rendered
+    $(document).ready(function(){
+        $('ul.tabs').tabs();
+        $(".button-collapse").sideNav({
+            menuWidth: 400, // Default is 300
+            edge: 'right', // Choose the horizontal origin
+            closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+            draggable: false // Choose whether you can drag to open on touch screens
+        });
+    });
   }
 
   render() {
@@ -76,6 +87,7 @@ class InterviewRoom extends React.Component {
             </div>
 
             <div id="interview-side-panel" className="col s4 right">
+                {/* Room info, webcam, roles, participants, session buttons */}
                 <div className="col s12 card blue-grey darken-1">
                     <div className="card-content white-text">
                         <span className="card-title">Interview Session <span className="new badge red" data-badge-caption="">00:00</span></span>
@@ -102,6 +114,7 @@ class InterviewRoom extends React.Component {
                     </div>
                 </div>
 
+                {/* Home, URL, Record buttons */}
                 <div id="interviewerControls" className="col s12 card blue-grey darken-1">
                     <div className="card-content white-text">
                         <Link to='/home'><button id="back" className="btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></button></Link>&nbsp;
@@ -111,14 +124,39 @@ class InterviewRoom extends React.Component {
                         <button id="save" className="btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button>
                     </div>
                 </div>
-
-                <div id="interviewerQuestionPanel" className="col s12 collection with-header blue-grey darken-1">
-                    <div className="collection-header white-text blue-grey darken-1"><strong>Questions</strong></div>
-                    <a className="collection-item"><span className="badge glyphicons glyphicons-check"></span>Tell me about yourself</a>
-                    <a className="collection-item"><span className="badge glyphicons glyphicons glyphicons-unchecked"></span>Write a function that does nothing</a>
-                    <br />
-                </div>
             </div>
+        </div>
+
+        {/* Questions Side Nav */}
+        <ul id="interviewerQuestionPanel" className="side-nav">
+            <li>
+                <div className="col s12 collection with-header">
+                    <div className="collection-header white-text blue-grey darken-1"><strong>Questions / Prompts</strong></div>
+                    <a className="collection-item">
+                        <form><p>
+                            <input type="checkbox" className="filled-in" id="testQuestion1"></input>
+                            <label htmlFor="testQuestion1" className="black-text">Tell me about yourself</label>
+                        </p></form>
+                    </a>
+                    <a className="collection-item">
+                        <form><p>
+                            <input type="checkbox" className="filled-in" id="testQuestion2"></input>
+                            <label htmlFor="testQuestion2" className="black-text">Write a function that does nothing</label>
+                        </p></form>
+                    </a>
+                    <a className="collection-item">
+                        <form><p>
+                            <input type="checkbox" className="filled-in" id="testQuestion3"></input>
+                            <label htmlFor="testQuestion3" className="black-text">What is the difference between you, Potoooooooo, a potato, and a McDonalds French Fry?</label>
+                        </p></form>
+                    </a>
+                </div>
+            </li>
+        </ul>
+        <div id="interviewerQuestionPanelButton" className="fixed-action-btn">
+            <a href="#" data-activates="interviewerQuestionPanel" className="button-collapse btn-floating btn-large waves-effect waves-light">
+                <span className="glyphicons glyphicons-question-sign"></span>
+            </a>
         </div>
 
       </div>
