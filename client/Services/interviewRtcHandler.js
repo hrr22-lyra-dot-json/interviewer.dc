@@ -58,9 +58,6 @@ exports.initializeConnection = function() {
 
   // Handling session / rooms
   connection.onopen = function() {
-    if (!connection.isInitiator) {
-      document.getElementById('recordControls').style.display = 'none';
-    }
     helpers.updateCloseLeaveButton(connection, false);
     helpers.setRoomStatusText('Connected: ' + connection.getAllParticipants().join(', '));
   };

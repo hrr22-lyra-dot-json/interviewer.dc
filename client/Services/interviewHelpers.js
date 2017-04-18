@@ -19,16 +19,19 @@ exports.showRoomURL = function(roomid) {
   var roomQueryStringURL = '?roomid=' + roomid;
   // var fullURL = window.location.href + roomQueryStringURL;
   var fullURL = window.location.href.split('?_k=').shift() + roomQueryStringURL;
-  var html = '<u><a href="' + fullURL + '" target="_blank">' + roomid + '</a></u>';
+  var html = '<u><a href="' + fullURL + '" target="_blank">Full Room URL</a></u>';
   // var html = '<u><a href="' + window.location.href + '" target="_blank">' + roomid + '</a></u>';
   // var html = '<u><a href="' + window.location.href.split('?_k=').shift() + '" target="_blank">' + roomid + '</a></u>';
 
-  document.getElementById('room-urls').innerHTML = html;
+  // Enable room url link button
+  document.getElementById('urlButton').href = fullURL;
 };
 
 exports.hideRoomURL = function() {
   exports.setRoomStatusText('Entire session has been closed.');
-  document.getElementById('room-urls').innerHTML = '';
+
+  // Disable room url link button
+  document.getElementById('urlButton').removeAttribute('href');
 };
 
 // Show/hide user role when they join/leave the room
@@ -43,6 +46,7 @@ exports.hideRole = function() {
 // Additional page elements to hide from client
 exports.restrictClientElements = function() {
   document.getElementById('room-id').style.display = 'none';
+  document.getElementById('interviewerControls').style.display = 'none';
   document.getElementById('interviewerQuestionPanel').style.display = 'none';
 };
 

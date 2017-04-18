@@ -50,17 +50,6 @@ class InterviewRoom extends React.Component {
   render() {
     return (
       <div id="interviewPageContainer" className="blue-grey darken-4">
-        <nav className="splash-nav blue darken-3">
-          <div className="nav-wrapper">
-            <div id="room-urls" className="brand-logo valign-wrapper"></div>
-            <ul id="recordControls" className="right">
-              <li><button id="start" className="btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button></li>
-              <li><button id="stop" className="btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button></li>
-              <li><button id="save" className="btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button></li>
-            </ul>
-          </div>
-        </nav>
-
         <div className="row">
             <div id="elementToShare" className="col s8 card blue-grey darken-1">
                 <div id="promptContainer" className="card blue-grey">
@@ -90,7 +79,6 @@ class InterviewRoom extends React.Component {
                 <div className="col s12 card blue-grey darken-1">
                     <div className="card-content white-text">
                         <span className="card-title">Interview Session</span>
-
                         <div className="input-field col s12">
                             <input type="text" id="room-id"></input>
                             <label htmlFor="room-id">Room Name</label>
@@ -111,6 +99,23 @@ class InterviewRoom extends React.Component {
                     <div className="card-action">
                         <a id="open-room" onClick={this.openRoom}>Open Session</a>
                         <a id="close-room" onClick={this.closeRoom}>Waiting...</a>
+                    </div>
+                </div>
+
+                <div id="interviewerControls" className="col s12 card blue-grey darken-1">
+                    <div className="card-content white-text">
+                        <ul id="recordingIndicator" className="collection">
+                            <li className="collection-item blue-grey darken-1">
+                                <Link to='/home'><button id="back" className="btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></button></Link>&nbsp;
+                                <a id="urlButton" className="btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
+                            </li>
+                            <li className="collection-item blue-grey darken-1">
+                                <span className="new badge red" data-badge-caption="">00:00</span>
+                                <button id="start" className="btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
+                                <button id="stop" className="btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
+                                <button id="save" className="btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
