@@ -81,9 +81,9 @@ class RoomList extends React.Component {
         <ul className="collection with-header">
           <li className="collection-header"><div><h4>Rooms<button id="add-room-button" onClick={this.openModal} className="btn-floating btn-large waves-effect waves-light blue darken-3 secondary-content"><i className="glyphicons glyphicons-plus"></i></button></h4></div></li>
 
-          {this.state.rooms.map(function(room) {
+          {this.state.rooms.map(function(room, key) {
             return (
-              <div>
+              <div key={key}>
                 <li className="collection-item">
                   <div>{room.job_position}
                     <Link to={{ pathname: '/interviewroom', state: room.job_position + room.owner_id/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
