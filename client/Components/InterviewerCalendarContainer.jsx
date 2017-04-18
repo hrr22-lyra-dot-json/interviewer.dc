@@ -172,9 +172,7 @@ class Calendar extends React.Component {
           />
           <button className="btn btn-default blue darken-3" onClick={this.addAvailability}>Confirm</button>
           <button className="btn btn-default red" onClick={this.closeModal}>close</button>
-          <form>
-            <input />
-          </form>
+
         </Modal>
       </div>
 

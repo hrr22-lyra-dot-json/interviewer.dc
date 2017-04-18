@@ -50,8 +50,6 @@ export class Home extends React.Component {
     return (
       <div>
         <Nav name={this.state.profile.name}  />
-        <button onClick={googleLoginService.logout.bind(googleLoginService)} className="right" className="btn waves-effect waves-light indigo darken-4">getout</button>
-
         <a href="/logout">Log Out</a>
 
         <Calendar />

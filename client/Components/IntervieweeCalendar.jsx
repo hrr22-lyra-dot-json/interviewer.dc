@@ -8,6 +8,8 @@ import CalendarAuth from './CalendarAuth.jsx'
 import Modal from 'react-modal';
 import Select from 'react-select';
 import TimeslotService from '../Services/TimeslotService.js'
+import googleCalendar from '../Services/cService.js'
+
 
 
 const customStyles = {
@@ -30,6 +32,8 @@ const customStyles = {
 // ];
 
 var slotServ = new TimeslotService();
+const googleCalendarService = new googleCalendar()
+
 
 // a localizer for BigCalendar
 //BigCalendar.momentLocalizer(moment)
@@ -39,8 +43,6 @@ class CalendarInterviewee extends React.Component {
     super(props)
     this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:false, slotLength: 30, booking:{}};
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
-    this.calService = calServ;
-    console.log(calServ);
     console.log('query', props.location.query);
     this.interviewer = Number(props.location.query.interviewer)
     this.job_position = props.location.query.job_position
@@ -48,7 +50,7 @@ class CalendarInterviewee extends React.Component {
     slotServ.getThem(this.interviewer)
     //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
 
-    calServ.on('events_loaded', (evv) => {
+    googleCalendarService.on('events_loaded', (evv) => {
        this.setState({events: evv})
        this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
      })
@@ -147,7 +149,7 @@ class CalendarInterviewee extends React.Component {
             </div>
           </div>
 
-          <CalendarAuth calserv={this.calService}/>
+          <CalendarAuth />
           <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
           <div>
             <Modal
