@@ -7,6 +7,8 @@ const session = require('express-session');
 const RedisStore       = require( 'connect-redis' )( session )
 const User = require('./database/models').User;
 const Token = require('./database/models').Token;
+const refresh = require('passport-oauth2-refresh')
+
 //const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 
@@ -56,13 +58,29 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-passport.use(new GoogleStrategy({
+
+// var GoogleStrategy2 = require('passport-google-oauth').OAuth2Strategy;
+//  passport.use(new GoogleStrategy2({
+//  clientID: '570801003952-9ss0c74s14sbjuof8qlmup8fd6dd4t3k.apps.googleusercontent.com',
+//  clientSecret: 'nhrAFAbgiAP8eoPtJUAvtLd-',
+//  callbackURL: 'http://localhost:3000/auth/google/callback',
+//      accessType: 'offline'
+//  },
+//  function(accessToken, refreshToken, profile, done) {
+//   console.log('rrr', refreshToken);
+//   process.nextTick(function () {
+//       return done(null, [{token:accessToken}, {rToken:refreshToken}, {profile:profile}]);
+//   });
+// }
+// ));
+
+var strat = new GoogleStrategy({
     clientID: '570801003952-9ss0c74s14sbjuof8qlmup8fd6dd4t3k.apps.googleusercontent.com',
     clientSecret: 'nhrAFAbgiAP8eoPtJUAvtLd-',
     callbackURL: 'http://localhost:3000/auth/google/callback',
-    grant_type: 'authorization_code',
-    passReqToCallback   : true
-    // access_type: 'offline',
+    //grant_type: 'authorization_code',
+    passReqToCallback   : true,
+    accessType: 'offline'
     //   prompt: 'consent',
   },
   // function(request, accessToken, refreshToken, profile, done) {
@@ -72,8 +90,9 @@ passport.use(new GoogleStrategy({
 
   //   return done(null, profile);
 
+
+
   function(request, accessToken, refreshToken, profile, done) {
-    console.log('refresher', arguments);
     process.nextTick(function () {
 
       // To keep the example simple, the user's Google profile is returned to
@@ -94,7 +113,7 @@ passport.use(new GoogleStrategy({
         .then(function(newUser) {
           Token.create({
             owner_id: newUser.id,
-            token: JSON.stringify(accessToken),
+            token: accessToken,
             refreshToken: refreshToken
           })
           .then(function(newToken) {
@@ -104,7 +123,7 @@ passport.use(new GoogleStrategy({
       } else {
         Token.find({where:{owner_id: foundUser.id}})
         .then(function(foundToken) {
-          foundToken.update({token: JSON.stringify(accessToken)})
+          foundToken.update({token: accessToken, refreshToken: refreshToken})
           .then(function(updatedToken) {
             console.log('newtok', updatedToken)
             done(null, {user: foundUser, token: updatedToken })
@@ -114,6 +133,11 @@ passport.use(new GoogleStrategy({
       }
     })
   })
+ })
+passport.use(strat);
+refresh.use(strat);
+
+
 
 
 
@@ -156,7 +180,6 @@ passport.use(new GoogleStrategy({
       // and return that user instead.
       //return done(null, profile);
     //});
-  }));
 
 
 // Configure Passport authenticated session persistence.
@@ -234,11 +257,11 @@ app.use(express.static(path.join(__dirname, '../')));
 //     res.render('login');
 //   });
 
-app.get('/auth/google', passport.authenticate('google', { access_type: 'offline',
-       approvalPrompt: 'force' , scope: [
+app.get('/auth/google', passport.authenticate('google', { scope: [
        'https://www.googleapis.com/auth/plus.login',
        'https://www.googleapis.com/auth/plus.profile.emails.read',
-       "https://www.googleapis.com/auth/calendar"]
+       "https://www.googleapis.com/auth/calendar"], accessType: 'offline',
+       approvalPrompt: 'force'
 }));
 
 app.get( '/auth/google/callback',

@@ -23,7 +23,7 @@ export default class googleCalendar extends EventEmitter {
 
 
   getItems(callback) {
-    var accessToken = JSON.parse(JSON.parse(localStorage.getItem('googleUser')).token.token)
+    var accessToken = JSON.parse(localStorage.getItem('googleUser')).token.token
     var calendarId = 'primary'
     var params = {'timeMin': (new Date()).toISOString(),
         'showDeleted': false,

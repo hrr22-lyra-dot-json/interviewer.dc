@@ -16,14 +16,15 @@ document.title = `Dashboard | Interviewer Direct Connection`;
 export class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isIn: false}
+    this.state = {isIn: false, profile: {username: 'loading...'} }
     googleLoginService.isIn()
     googleLoginService.on('log_result', (result) => {
-      this.setState({isIn: result})
+      if (result) {
+      this.setState({isIn: result, profile: JSON.parse(localStorage.getItem('googleUser')).user})
+    }
     }
     )
 
-    this.state = {  profile: {name: 'simon'} }
 
     //this.state = {  profile: this.props.routes[1].auth.getProfile() }
 
@@ -49,7 +50,7 @@ export class Home extends React.Component {
 
     return (
       <div>
-        <Nav name={this.state.profile.name}  />
+        <Nav name={this.state.profile.username}  />
         <a href="/logout">Log Out</a>
 
         <Calendar />

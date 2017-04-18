@@ -1,4 +1,4 @@
-import CalView from './CalendarView.jsx'
+import CalView from './CalendarViewViewee.jsx'
 import React from 'react'
 import moment from 'moment'
 import events from '../events'
@@ -9,6 +9,8 @@ import Modal from 'react-modal';
 import Select from 'react-select';
 import TimeslotService from '../Services/TimeslotService.js'
 import googleCalendar from '../Services/cService.js'
+import newAuth from '../Services/newAuthenticationService.js'
+
 
 
 
@@ -33,7 +35,7 @@ const customStyles = {
 
 var slotServ = new TimeslotService();
 const googleCalendarService = new googleCalendar()
-
+const userinfo = new newAuth()
 
 // a localizer for BigCalendar
 //BigCalendar.momentLocalizer(moment)
@@ -41,10 +43,18 @@ const googleCalendarService = new googleCalendar()
 class CalendarInterviewee extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:false, slotLength: 30, booking:{}};
+    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:false, slotLength: 30, booking:{start:'', end:''}, interviewerInfo:'', intervieweeName:'', intervieweeEmail:''};
+
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
     console.log('query', props.location.query);
     this.interviewer = Number(props.location.query.interviewer)
+    userinfo.getInfo(this.interviewer)
+    userinfo.on('got_info', (info) => {
+      console.log('got info:', info)
+      localStorage.setItem('googleUser', JSON.stringify({user: info.data}))
+
+    this.setState({interviewerInfo: info.data})
+    })
     this.job_position = props.location.query.job_position
 
     slotServ.getThem(this.interviewer)
@@ -100,7 +110,10 @@ class CalendarInterviewee extends React.Component {
 
     var eventor = {interviewer_id: this.interviewer,
       job_position: this.job_position,
-      interviewee_name: 'simon',
+      interviewee_name: this.state.intervieweeName,
+      interviewee_email: this.state.intervieweeEmail,
+      interviewer_email: this.state.interviewerInfo.email,
+      interviewer_name: this.state.interviewerInfo.username,
       roomid: this.job_position + this.interviewer,
       start: new Date(booking.start),
       end: new Date(booking.end)
@@ -113,12 +126,16 @@ class CalendarInterviewee extends React.Component {
   eventClick(event) {
 
     if (event.title === 'Book Interview') {
-
-    this.setState({booking:event})
-    console.log('this is the event:', event);
-    this.openModal();
+      this.setState({booking:event})
+      console.log('this is the event:', event);
+      this.openModal();
+    }
   }
-
+  handleChangeName(event) {
+    this.setState({intervieweeName: event.target.value});
+  }
+  handleChangeEmail(event) {
+    this.setState({intervieweeEmail: event.target.value});
   }
 
   render () {
@@ -137,19 +154,18 @@ class CalendarInterviewee extends React.Component {
             <div className="col s12">
               <div className="card">
                 <div className="card-content">
-                  <span className="card-title">Book your interview with ...interviewername</span>
+                  <span className="card-title">Book your interview with {this.state.interviewerInfo.username} for the {this.job_position}  job.</span>
                   <div className="divider"></div><br />
                   <p>
-                    Please book a calendar with ... interviewername by clicking on one of the available timeslots.
+                    Please book a calendar with {this.state.interviewerInfo.username} by clicking on one of the available timeslots.
                     <br />
-                    Enter your email -- ideally GMail -- to receive the details of the interview.
+                    Enter your email -- ideally GMail -- to receive the event invite with the details of the interview.
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <CalendarAuth />
           <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
           <div>
             <Modal
@@ -161,16 +177,18 @@ class CalendarInterviewee extends React.Component {
               >
 
                 <h2 ref="subtitle">Book interview</h2>
-                <p>confirm interview? {this.state.booking.title} to: </p>
+                <p>Confirm your interview with {this.state.interviewerInfo.username} on {new Date(this.state.booking.start).toLocaleDateString()} at {new Date(this.state.booking.start).toLocaleTimeString()}.</p>
+                <p>Please enter your name and email, the interview details will be sent to this email address and the event invite must be accepted to be confirmed.</p>
+                <form>
+                  <input id="intervieweeName" placeholder="Type in your full name..." onChange={this.handleChangeName.bind(this)}/>
+                  <input id="intervieweeEmail" type="email" placeholder="Type in your email address..." onChange={this.handleChangeEmail.bind(this)}/>
+                </form>
 
                 <button className="clbtn" onClick={this.addAvailability}>Confirm</button>
 
                 <button className="clbtn" onClick={this.closeModal}>close</button>
                 <div>Good luck!</div>
-                <form>
-                  <input />
 
-                </form>
               </Modal>
             </div>
           </div>

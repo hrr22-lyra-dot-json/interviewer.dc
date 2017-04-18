@@ -7,6 +7,7 @@ module.exports = function(app) {
   app.delete('/api/Meeting', requestHandler.deleteMeeting);
 
   app.post('/api/User', requestHandler.addUser);
+  app.post('/api/getUser', requestHandler.getUserInfo);
   app.post('/api/gmailUser', requestHandler.checkGmailUser);
 
   app.post('/api/UserMeeting', requestHandler.addUserMeeting);

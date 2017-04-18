@@ -79,6 +79,21 @@ exports.addUser = function(req, res) {
   });
 };
 
+exports.getUserInfo = function(req, res) {
+  User.findOne({where: {id: req.body.interviewerId}})
+  .then(function(foundUser) {
+    res.status(200).send(foundUser);
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send(err);
+  })
+}
+
+
+
+
+
 /*
 ** Expected request body: {username(string): 'username', email(string): 'user email'}
 ** Expected response if user exists: 200 OK status, {username(string): 'username', email(string): 'user email'}
