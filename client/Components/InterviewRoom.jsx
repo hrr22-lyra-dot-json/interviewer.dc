@@ -155,6 +155,25 @@ class InterviewRoom extends React.Component {
 
         // Make editor available to take values out later
         that.codeMirror = codeMirror;
+
+        // Setup whiteboard
+        var whiteboard = new CanvasDesigner();
+        whiteboard.widgetHtmlURL = 'https://cdn.webrtc-experiment.com/Canvas-Designer/widget.html';
+        whiteboard.widgetJsURL = 'https://cdn.webrtc-experiment.com/Canvas-Designer/widget.js';
+
+        rtc.getConnection().onmessage = function(event) {
+          whiteboard.syncData( event.data );
+        };
+        whiteboard.addSyncListener(function(data) {
+          rtc.getConnection().send(data);
+        });
+
+        whiteboard.setTools({
+          pencil: true
+        });
+        whiteboard.setSelected('pencil');
+
+        whiteboard.appendTo(document.getElementById('whiteboard'));
     });
 
   }
@@ -177,8 +196,7 @@ class InterviewRoom extends React.Component {
                     </div>
                     <div id="codeshare" className="col s12" style={{height: 90 + '%'}}>
                     </div>
-                    <div id="whiteboard" className="col s12">
-                        <h1>WHITEBOARD GOES HERE</h1>
+                    <div id="whiteboard" className="col s12" style={{height: 90 + '%'}}>
                     </div>
                 </div>
             </div>
