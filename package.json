@@ -4,7 +4,8 @@
   "description": "Interviewing platform",
   "main": "server.js",
   "scripts": {
-    "start": "node server/server.js",
+    "start": "node server/newserver.js",
+    "start:old": "node server/server.js",
     "test": "nyc mocha test/ServerSpec.js --reporter mochawesome && casperjs test/EndSpec.js",
     "test-server": "nyc mocha test/ServerSpec.js --reporter mochawesome",
     "db:create": "sequelize db:migrate",

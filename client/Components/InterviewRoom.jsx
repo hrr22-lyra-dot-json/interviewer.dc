@@ -2,7 +2,6 @@ import React from 'react';
 import * as recorder from '../Services/interviewRecorder.js';
 import * as rtc from '../Services/interviewRtcHandler.js';
 import * as lobby from '../Services/interviewLobby.js';
-import { displayQuestion, endInterview } from '../Services/interviewHelpers.js';
 import QuestionService from '../Services/QuestionService.js';
 
 const questionService = new QuestionService()
@@ -54,6 +53,13 @@ class InterviewRoom extends React.Component {
     questionService.addOne({meeting_id: this.roomDbId, question: question})
   }
 
+  showQuestion() {
+    console.log(this);
+    this.context.clearScreen();
+    this.context.codeMirror.setValue('/* \n' + this.q.question + '\n*/');
+    document.getElementById('prompt-text').innerHTML = this.q.question;
+  }
+
   takeScreenSnapshot() {
     var snapshot = {
         question: document.getElementById('prompt-text').innerHTML,
@@ -62,13 +68,13 @@ class InterviewRoom extends React.Component {
         // whiteboard data
     };
     console.log(snapshot);
-    // save to this.state.snapshots.push({   });
+    this.state.snapshots.push(snapshot);
 
     Materialize.toast(`Screen saved!`, 2000);
   }
 
   clearScreen() {
-    document.getElementById('prompt-text').innerHTML = 'Waiting for interviewer...';
+    document.getElementById('prompt-text').innerHTML = '(No question selected)';
     document.getElementById('questionNote').value = '';
     this.codeMirror.setValue('');
 
@@ -76,7 +82,19 @@ class InterviewRoom extends React.Component {
   }
 
   endInterview() {
+    console.log(this.state);
+    var results = [];
+    this.state.snapshots.forEach( (snapshot, index) => {
+        var q = `<strong><u>Question #${index + 1}: ${snapshot.question}</u></strong>`;
+        var n = `<strong>Notes:</strong> ${snapshot.notes}`;
+        var c = `Code: <br /><pre>${snapshot.codeshare}</pre>`;
+        results.push(q + '<br />' + n + '<br /><br />' + c);
+    })
+    var html = '<!DOCTYPE html><html><head> <title>Interview Notes</title></head><body><h1>Interview Notes for session ' + this.roomid + '</h2>';
+    html += results.join('<hr>');
 
+    var blob = new Blob([html], {type: "text/plain;charset=utf-8"});
+    invokeSaveAsDialog(blob, 'Responses (' + this.roomid + ').html');
   }
 
   componentDidMount() {
@@ -145,11 +163,8 @@ class InterviewRoom extends React.Component {
       <div id="interviewPageContainer" className="blue-grey darken-4">
         <div className="row">
             <div id="elementToShare" className="col s8 card blue-grey darken-1">
-                <div id="promptContainer" className="card blue-grey">
-                    <div className="card-content white-text">
-                        <span className="card-title"><strong>Prompt/Question</strong></span>
-                        <div id="prompt-text">Waiting for interviewer...</div>
-                    </div>
+                <div className="row blue-grey z-depth-1">
+                    <div id="videos-container"></div>
                 </div>
 
                 <div id="codeBoardContainer" className="row blue-grey z-depth-1">
@@ -172,12 +187,10 @@ class InterviewRoom extends React.Component {
                 <div className="col s12 card blue-grey darken-1">
                     <div className="card-content white-text">
                         <span className="card-title">Interview Session <span className="new badge red" data-badge-caption="">00:00</span></span>
-                        <div className="input-field col s12">
+                        <div id="room-name-container" className="input-field col s12">
                             <input type="text" id="room-id"></input>
                             <label htmlFor="room-id">Room Name</label>
                         </div>
-
-                        <div id="videos-container" className="col s12 block"></div>
 
                         <div className="chip">
                             <span className="glyphicons glyphicons-lock"></span>
@@ -198,14 +211,19 @@ class InterviewRoom extends React.Component {
                 {/* Home, URL, Record buttons */}
                 <div id="interviewerControls" className="col s12 blue-grey darken-1">
                     <div className="row">
-                        <Link to='/home'><button id="back" className="btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></button></Link>&nbsp;
-                        <a id="urlButton" className="btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>&nbsp;
-                        <button id="start" className="btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
-                        <button id="stop" className="btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
-                        <button id="save" className="btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button>
+                        <Link to='/home'><button id="back" className="col s3 btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></button></Link>
+                        <a id="urlButton" className="col s3 btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
+                        <button id="start" className="col s3 btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
+                        <button id="stop" className="col s3 btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
+                        <button id="save" className="col s3 btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button>
                     </div>
                     <hr></hr>
                     <form className="col s12">
+                        <div className="row">
+                            <div id="promptContainer" className="col s12 blue-grey white-text">
+                                <span><strong>Prompt/Question: </strong></span><span id="prompt-text">(No question selected)</span>
+                            </div>
+                        </div>
                         <div className="row">
                             <div className="input-field col s12">
                                 <textarea id="questionNote" className="materialize-textarea" placeholder="Insert notes here..."></textarea>
@@ -213,9 +231,9 @@ class InterviewRoom extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <button id="saveScreen" className="btn waves-effect waves-light blue" onClick={this.takeScreenSnapshot.bind(this)}><span className="glyphicons glyphicons-log-book"></span>Save Screen</button>&nbsp;
-                            <button id="clearScreen" className="btn waves-effect waves-light blue lighten-2" onClick={this.clearScreen.bind(this)}><span className="glyphicons glyphicons-ban-circle"></span>Clear Screen</button>&nbsp;
-                            <button id="endInterview" className="btn waves-effect waves-light green" onClick={this.endInterview.bind(this)}><span className="glyphicons glyphicons-handshake"></span>End Interview (Export)</button>
+                            <button id="saveScreen" className="col s6 btn waves-effect waves-light blue" onClick={this.takeScreenSnapshot.bind(this)}><span className="glyphicons glyphicons-log-book"></span>Save Screen</button>
+                            <button id="clearScreen" className="col s6 btn waves-effect waves-light blue lighten-2" onClick={this.clearScreen.bind(this)}><span className="glyphicons glyphicons-ban-circle"></span>Clear Screen</button>
+                            <button id="endInterview" className="col s12 btn waves-effect waves-light green" onClick={this.endInterview.bind(this)}><span className="glyphicons glyphicons-handshake"></span>End Interview</button>
                         </div>
                     </form>
                 </div>
@@ -228,8 +246,8 @@ class InterviewRoom extends React.Component {
                 <div className="col s12 collection with-header">
                     <div className="collection-header white-text blue-grey darken-1"><strong>Questions / Prompts</strong></div>
                     {
-                        this.state.questionList.map(function(q, key) {
-                            return (<a className="collection-item" key={key} onClick={displayQuestion.bind(q)}>{q.question}</a>)
+                        this.state.questionList.map( (q, key) => {
+                            return (<a className="collection-item" key={key} onClick={this.showQuestion.bind({context: this, q: q})}>{q.question}</a>)
                         })
                     }
                 </div>
@@ -237,7 +255,7 @@ class InterviewRoom extends React.Component {
         </ul>
         <div id="interviewerQuestionPanelButton" className="fixed-action-btn">
             <a href="#" data-activates="interviewerQuestionPanel" className="button-collapse btn-floating btn-large waves-effect waves-light">
-                <span className="glyphicons glyphicons-question-sign"></span>
+                <span className="glyphicons glyphicons-list"></span>
             </a>
         </div>
 
