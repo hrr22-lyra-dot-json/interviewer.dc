@@ -1,14 +1,6 @@
 //////////////////////////////////////////////////////////////
 /////////////////////  HELPER FUNCTIONS  /////////////////////
 //////////////////////////////////////////////////////////////
-// Display question on screen
-exports.displayQuestion = function() {
-  document.getElementById('prompt-text').innerHTML = this.question;
-};
-
-exports.endInterview = function() {
-  // option to download or upload to google drive each file in the array of snapshots
-};
 
 // Get room id of current page
 exports.getRoomId = function() {
@@ -55,7 +47,8 @@ exports.hideRole = function() {
 
 // Additional page elements to hide from client
 exports.restrictClientElements = function() {
-  document.getElementById('room-id').style.display = 'none';
+  document.getElementById('room-name-container').style.display = 'none';
+  document.getElementById('promptContainer').style.display = 'none';
   document.getElementById('interviewerControls').style.display = 'none';
   document.getElementById('interviewerQuestionPanel').style.display = 'none';
   document.getElementById('interviewerQuestionPanelButton').style.display = 'none';

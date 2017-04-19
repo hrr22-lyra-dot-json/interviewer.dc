@@ -119,16 +119,16 @@ main {
 }
 
 #elementToShare {
-  height: 750px;
+  height: 800px;
   /*width: 800px;*/
 }
 
 #promptContainer {
-  height: 120px;
+  padding: 10px;
 }
 
 #codeBoardContainer {
-  height: 600px;
+  height: 650px;
 }
 
 #interview-side-panel {
@@ -144,7 +144,7 @@ main {
 }
 
 #videos-container {
-  margin: 0 0 15px 0;
+  padding: 5px;
 }
 
 a.powered-by-firepad {
