@@ -56,6 +56,8 @@ class CalendarInterviewee extends React.Component {
     this.setState({interviewerInfo: info.data})
     })
     this.job_position = props.location.query.job_position
+    this.roomDbId = props.location.query.roomDbId
+
 
     slotServ.getThem(this.interviewer)
     //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
@@ -116,7 +118,8 @@ class CalendarInterviewee extends React.Component {
       interviewer_name: this.state.interviewerInfo.username,
       roomid: this.job_position + this.interviewer,
       start: new Date(booking.start),
-      end: new Date(booking.end)
+      end: new Date(booking.end),
+      roomDbId: this.roomDbId
     }
     slotServ.createEvent(eventor, booking);
     Materialize.toast(`Appointment booked for ${eventor.job_position} on ${eventor.start.toDateString()} at ${eventor.start.toTimeString()}!`, 6000);
