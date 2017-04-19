@@ -52,6 +52,15 @@ export class Login extends React.Component {
           </div>
         </div>
 
+        <footer className="page-footer blue darken-3">
+          <div className="footer-copyright indigo darken-4 valign-wrapper">
+            <div className="container">
+            &copy; 2017 Interviewer DC, All rights reserved.
+            <a className="grey-text text-lighten-4 right" href="https://github.com/hrr22-lyra-dot-json/interviewer.dc">ISC License</a>
+            </div>
+          </div>
+        </footer>
+
       </div>
     )
   }
