@@ -22,7 +22,7 @@
     "url": "https://github.com/hrr22-lyra-dot-json/interviewer.dc"
   },
   "author": "hrr22-lyra-dot-json",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "auth0-lock": "^10.13.0",
     "axios": "^0.16.1",
