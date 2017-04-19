@@ -3,6 +3,7 @@ import * as recorder from '../Services/interviewRecorder.js';
 import * as rtc from '../Services/interviewRtcHandler.js';
 import * as lobby from '../Services/interviewLobby.js';
 import QuestionService from '../Services/QuestionService.js';
+import DrawableCanvas from '../lib/DrawableCanvas.js';
 
 const questionService = new QuestionService()
 
@@ -121,7 +122,7 @@ class InterviewRoom extends React.Component {
       this.openRoom(this.roomid);
     }
 
-    var that = this; //for firepad / codeshare
+    var context = this; //for firepad / codeshare
     $(document).ready(function(){
         // Make sure tabs and side-nav function properly after rendered
         $('ul.tabs').tabs();
@@ -139,7 +140,7 @@ class InterviewRoom extends React.Component {
             databaseURL: 'https://interviewer-direct-connection.firebaseio.com'
         };
         firebase.initializeApp(config);
-        var firepadRef = firebase.database().ref(that.roomid);
+        var firepadRef = firebase.database().ref(context.roomid);
         firepadRef.onDisconnect().remove(function(err) {
             if (err) {console.error(err)}
         });
@@ -151,10 +152,10 @@ class InterviewRoom extends React.Component {
             lineNumbers: true
         });
 
-        var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {});
+        context.firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {});
 
         // Make editor available to take values out later
-        that.codeMirror = codeMirror;
+        context.codeMirror = codeMirror;
     });
   }
 
@@ -176,8 +177,8 @@ class InterviewRoom extends React.Component {
                     </div>
                     <div id="codeshare" className="col s12" style={{height: 90 + '%'}}>
                     </div>
-                    <div id="whiteboard" className="col s12">
-                        <h1>WHITEBOARD GOES HERE</h1>
+                    <div id="whiteboard" className="col s12" style={{height: 90 + '%'}}>
+                      <DrawableCanvas webrtc={rtc.getConnection()} />
                     </div>
                 </div>
             </div>
