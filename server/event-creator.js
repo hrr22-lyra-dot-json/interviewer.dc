@@ -72,6 +72,7 @@ return send401Response(); }
         auth: auth,
         calendarId: 'primary',
         resource: event,
+        sendNotifications: true
       }, function(err, event) {
         if (err) {
           console.log('The API failed to create event; error: ' + err);

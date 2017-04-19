@@ -24,6 +24,7 @@ export class Login extends React.Component {
             <ul className="right"><li><button onClick={hell.isIn.bind(hell)} className="right" className="btn waves-effect waves-light indigo darken-4">Sign In</button></li></ul> */}
             <ul className="right"><li><a href="/auth/google" className="right" className="btn waves-effect waves-light indigo darken-4">Sign In</a></li></ul>
 
+
           </div>
         </nav>
 

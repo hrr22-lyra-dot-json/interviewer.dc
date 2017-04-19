@@ -103,6 +103,17 @@ exports.listMeetings = function(req, res) {
   });
 };
 
+
+
+exports.listInterviews = function(req, res) {
+  Interview.findAll({where: req.query})
+  .then(function(foundInterviews) {
+    res.status(200).send(foundInterviews);
+  }).catch(function(err) {
+    res.status(500).send(err);
+  });
+};
+
 /*
 ** Expected request query: {id(integer): 'id'}
 ** Expected resposne: 200 OK status
