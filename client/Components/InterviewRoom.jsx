@@ -38,7 +38,7 @@ class InterviewRoom extends React.Component {
 
     questionService.on('got_questions', (questions) => {
         // console.log('questions', questions)
-        // this.setState({questionList: questions})
+        this.setState({questionList: questions})
     })
 
     this.start = recorder.start;
