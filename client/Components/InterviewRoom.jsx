@@ -3,6 +3,7 @@ import * as recorder from '../Services/interviewRecorder.js';
 import * as rtc from '../Services/interviewRtcHandler.js';
 import * as lobby from '../Services/interviewLobby.js';
 import QuestionService from '../Services/QuestionService.js';
+import DrawableCanvas from '../lib/DrawableCanvas.js';
 
 const questionService = new QuestionService()
 
@@ -177,6 +178,7 @@ class InterviewRoom extends React.Component {
                     <div id="codeshare" className="col s12" style={{height: 90 + '%'}}>
                     </div>
                     <div id="whiteboard" className="col s12" style={{height: 90 + '%'}}>
+                      <DrawableCanvas webrtc={rtc.getConnection()} />
                     </div>
                 </div>
             </div>
