@@ -3,6 +3,7 @@ import AuthService from '../Services/AuthService.js'
 import newAuth from '../Services/newAuthenticationService.js'
 const hell = new newAuth()
 
+
 export class Login extends React.Component {
 
   render() {
@@ -52,6 +53,7 @@ export class Login extends React.Component {
           </div>
         </div>
 
+
         <footer className="page-footer blue darken-3">
           <div className="footer-copyright indigo darken-4 valign-wrapper">
             <div className="container">
@@ -67,7 +69,3 @@ export class Login extends React.Component {
 }
 
 export default Login;
-
-$(document).ready(function(){
-  $('.parallax').parallax();
-});
