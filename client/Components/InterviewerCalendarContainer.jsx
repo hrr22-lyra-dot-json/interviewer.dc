@@ -16,12 +16,12 @@ const customStyles = {
     zIndex: 10
   },
   content : {
-    // top                   : '30%',
-    // left                  : '50%',
-    // right                 : 'auto',
-    // bottom                : 'auto',
-    // marginRight           : '-50%',
-    // transform             : 'translate(-50%, -50%)'
+    top                   : '30%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
   }
 };
 
@@ -65,6 +65,16 @@ class Calendar extends React.Component {
     this.addAvailability = this.addAvailability.bind(this)
     this.logChange = this.logChange.bind(this)
 
+  }
+
+  componentDidMount() {
+    // Initialize collapse button
+    $(".button-collapse").sideNav({
+      menuWidth: 400,
+      closeOnClick: true
+    });
+    // Initialize collapsible (uncomment the line below if you use the dropdown variation)
+    //$('.collapsible').collapsible();
   }
 
   addInfo(slotInfo) {
@@ -137,8 +147,15 @@ class Calendar extends React.Component {
   render () {
     return (
       <div className="container calendar-section">
-        <div>
-          <button id="authorize-button" className="btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
+
+
+        <div className="row">
+          <ul id="slide-out" className="side-nav">
+            <RoomList />
+          </ul>
+          <a href="#" data-activates="slide-out" className="button-collapse btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button left"><i className="glyphicons glyphicons-menu-hamburger left"></i></a>
+
+          <button id="authorize-button" className="btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button right" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
             <i className="glyphicons glyphicons-important-day"></i>
           </button>
 
@@ -171,8 +188,6 @@ class Calendar extends React.Component {
 
           </Modal>
         </div>
-
-        <RoomList />
       </div>
     )
   }
