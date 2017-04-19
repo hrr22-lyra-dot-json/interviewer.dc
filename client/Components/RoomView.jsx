@@ -67,7 +67,7 @@ class RoomView extends React.Component {
             </li>
             <li>
                 <div className="col s12 collection with-header">
-                    <div className="collection-header white-text blue-grey darken-1"><strong>Questions / Prompts</strong></div>
+                    <div className="collection-header white-text blue-grey darken-1"><strong>Interviews</strong></div>
                     {
                         this.state.interviews.map(function(interview, key) {
                             return (<a className="collection-item" key={key} >{interview.interviewee_email}</a>)
