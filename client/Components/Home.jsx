@@ -51,7 +51,6 @@ export class Home extends React.Component {
     return (
       <div>
         <Nav name={this.state.profile.username}  />
-        <a href="/logout">Log Out</a>
 
         <Calendar />
       </div>
