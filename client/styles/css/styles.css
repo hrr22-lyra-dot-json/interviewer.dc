@@ -6,6 +6,16 @@ nav {
   padding: 0 1rem;
 }
 
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
 /*******************************
 *       LOGIN SPLASH PAGE      *
 ********************************/
@@ -22,7 +32,7 @@ nav {
 .splash-header-row {
   max-height: 35rem;
   padding: 0 0 -1.5rem 0;
-  margin-bottom: 1.5rem;
+  margin-bottom: 3rem;
 }
 
 .splash-header {
@@ -30,12 +40,17 @@ nav {
   max-height: 35rem;
 }
 
-.parallax-container {
-  height: 30rem;
+.splash-try-button {
+  margin: 3rem 0;
 }
 
 #splash-img-top, #splash-img-bottom {
   height: 40rem;
+}
+
+.footer-copyright {
+  height: 4rem;
+  color: #FFF;
 }
 
 /*******************************
