@@ -16,12 +16,12 @@ const customStyles = {
     zIndex: 10
   },
   content : {
-    top                   : '30%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    // top                   : '30%',
+    // left                  : '50%',
+    // right                 : 'auto',
+    // bottom                : 'auto',
+    // marginRight           : '-50%',
+    // transform             : 'translate(-50%, -50%)'
   }
 };
 
@@ -70,12 +70,11 @@ class Calendar extends React.Component {
   addInfo(slotInfo) {
     this.setState({slotInfo:slotInfo, selectable:false})
     this.openModal();
-
   }
+
   logChange(val) {
     this.setState({slotLength: val.value})
     console.log("Selected: ", val);
-
   }
 
   openModal() {
@@ -91,6 +90,7 @@ class Calendar extends React.Component {
   closeModal() {
     this.setState({modalIsOpen: false, selectable:true});
   }
+
   addAvailability(slotLength, slotInfo) {
 
     var mainSlot = this.state.slotInfo
@@ -136,52 +136,44 @@ class Calendar extends React.Component {
 
   render () {
     return (
-
       <div className="container calendar-section">
-      <div>
-  {/* <button id="authorize-button" onClick={calserv.handleAuthClick.bind(calserv)}>See Google Calendar events</button>
-  <button id="signout-button">Hide other Google calendar events</button> */}
+        <div>
+          <button id="authorize-button" className="btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
+            <i className="glyphicons glyphicons-important-day"></i>
+          </button>
 
-  <button id="authorize-button" className="btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
-    <i className="glyphicons glyphicons-important-day"></i>
-  </button>
+          <pre id="content"></pre>
+        </div>
 
-  <pre id="content"></pre>
-</div>
-      <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
-      <div>
+        <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
 
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Add Availability"
-        >
+        <div>
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onAfterOpen={this.afterOpenModal}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+            contentLabel="Add Availability">
 
-          <h2 ref="subtitle">Add Availability</h2>
-          <p>Add availability slot for interviews from {this.state.slotInfo.start.toString()} \nto: {this.state.slotInfo.end.toString()}</p>
-          <p>Select the length of each interview timeslot. (This will allow interviewees to make bookings of desired length)</p>
-          <Select
-            name="form-field-name"
-            value={this.state.slotLength}
-            options={options}
-            onChange={this.logChange}
-            searchable={false}
-            clearable={false}
-          />
-          <button className="btn btn-default blue darken-3" onClick={this.addAvailability}>Confirm</button>
-          <button className="btn btn-default red" onClick={this.closeModal}>close</button>
+            <h2 ref="subtitle">Add Availability</h2>
+            <p>Add availability slot for interviews from {this.state.slotInfo.start.toString()} \nto: {this.state.slotInfo.end.toString()}</p>
+            <p>Select the length of each interview timeslot. (This will allow interviewees to make bookings of desired length)</p>
+            <Select
+              name="form-field-name"
+              value={this.state.slotLength}
+              options={options}
+              onChange={this.logChange}
+              searchable={false}
+              clearable={false}
+            />
+            <button className="btn btn-default blue darken-3" onClick={this.addAvailability}>Confirm</button>
+            <button className="btn btn-default red" onClick={this.closeModal}>close</button>
 
-        </Modal>
+          </Modal>
+        </div>
+
+        <RoomList />
       </div>
-
-      <RoomList />
-
-
-      </div>
-
-
     )
   }
 }
