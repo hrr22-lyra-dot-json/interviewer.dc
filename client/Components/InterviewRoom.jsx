@@ -121,7 +121,7 @@ class InterviewRoom extends React.Component {
       this.openRoom(this.roomid);
     }
 
-    var that = this; //for firepad / codeshare
+    var context = this; //for firepad / codeshare
     $(document).ready(function(){
         // Make sure tabs and side-nav function properly after rendered
         $('ul.tabs').tabs();
@@ -139,7 +139,7 @@ class InterviewRoom extends React.Component {
             databaseURL: 'https://interviewer-direct-connection.firebaseio.com'
         };
         firebase.initializeApp(config);
-        var firepadRef = firebase.database().ref(that.roomid);
+        var firepadRef = firebase.database().ref(context.roomid);
         firepadRef.onDisconnect().remove(function(err) {
             if (err) {console.error(err)}
         });
@@ -151,10 +151,10 @@ class InterviewRoom extends React.Component {
             lineNumbers: true
         });
 
-        var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {});
+        context.firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {});
 
         // Make editor available to take values out later
-        that.codeMirror = codeMirror;
+        context.codeMirror = codeMirror;
 
         // Setup whiteboard
         var whiteboard = new CanvasDesigner();
