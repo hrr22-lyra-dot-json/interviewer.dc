@@ -8,6 +8,8 @@ const RedisStore       = require( 'connect-redis' )( session )
 const User = require('./database/models').User;
 const Token = require('./database/models').Token;
 const refresh = require('passport-oauth2-refresh')
+var google = require('googleapis');
+var googleAuth = require('google-auth-library');
 
 //const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
@@ -117,7 +119,30 @@ var strat = new GoogleStrategy({
             refreshToken: refreshToken
           })
           .then(function(newToken) {
-            done(null, {user: newUser, token: newToken })
+            var auth = new google.auth.OAuth2;
+            auth.setCredentials({
+              access_token: newToken.token,
+              refresh_token: newToken.refreshToken
+            });
+            var drive = google.drive('v3');
+            var fileMetadata = {
+              'name' : 'InterviewerDC',
+              'mimeType' : 'application/vnd.google-apps.folder'
+            };
+            drive.files.create({
+              auth: auth,
+              resource: fileMetadata,
+              fields: 'id'
+            }, function(err, file) {
+              if (err) {
+                console.log('The API failed to create folder error: ' + err);
+              } else {
+                newUser.update({drive_folder_id:file.id})
+                .then(function(UpdatedUser) {
+                  done(null, {user: UpdatedUser, token: newToken })
+                })
+              }
+            })
           })
         })
       } else {
@@ -260,7 +285,7 @@ app.use(express.static(path.join(__dirname, '../')));
 app.get('/auth/google', passport.authenticate('google', { scope: [
        'https://www.googleapis.com/auth/plus.login',
        'https://www.googleapis.com/auth/plus.profile.emails.read',
-       "https://www.googleapis.com/auth/calendar"], accessType: 'offline',
+       "https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/drive.file"], accessType: 'offline',
        approvalPrompt: 'force'
 }));
 

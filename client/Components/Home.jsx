@@ -6,7 +6,7 @@ import CalendarAuth from './CalendarAuth.jsx'
 import Nav from './Nav.jsx'
 import newAuth from '../Services/newAuthenticationService.js'
 import Login from './Login.jsx'
-
+import  uploadService from '../Services/UploadService.js';
 
 const googleLoginService = new newAuth()
 
@@ -51,6 +51,7 @@ export class Home extends React.Component {
         <Nav name={this.state.profile.username}  />
 
         <Calendar />
+        <button onClick={uploadService.makeFolder}  className="btn waves-effect waves-light indigo darken-4">addfolder</button>
       </div>
     )
   }

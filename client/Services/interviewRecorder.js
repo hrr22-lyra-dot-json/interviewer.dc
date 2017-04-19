@@ -2,6 +2,8 @@
 //////////////////////   RECORDER Code   //////////////////////
 ///////////////////////////////////////////////////////////////
 // State variables
+import  uploadService from './UploadService.js';
+
 var isRecordingStarted = false;
 var isStoppedRecording = false;
 
@@ -100,6 +102,8 @@ exports.stop = function() {
     audioRecorder.stop(function(aBlob) {
       currentAudioBlob = aBlob;
       document.getElementById('save').disabled = false;
+      //uploadService.uploadAudio(currentAudioBlob)
+
 
       console.log('VIDEO BLOB', currentVideoBlob);
       console.log('AUDIO BLOB', currentAudioBlob);

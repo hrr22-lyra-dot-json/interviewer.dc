@@ -4,6 +4,13 @@ const UserMeeting = require('./database/models').UserMeeting;
 const Timeslot = require('./database/models').Timeslot;
 const Token = require('./database/models').Token;
 const Question = require('./database/models').Question;
+const Interview = require('./database/models').Interview;
+var google = require('googleapis');
+var googleAuth = require('google-auth-library');
+//var SCOPES = ['https://www.googleapis.com/auth/calendar'];
+var fs = require('fs');
+var readline = require('readline');
+var refresh = require('passport-oauth2-refresh');
 // const utils = require('../lib/server_utility.js');
 
 /*
@@ -12,14 +19,74 @@ const Question = require('./database/models').Question;
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.addMeeting = function(req, res) {
-  Meeting.create(req.body)
-  .then(function(newMeeting) {
-    res.status(201).send();
-  }).catch(function(err) {
-    console.error(err);
-    res.status(500).send(err);
-  });
-};
+  var retries = 3;
+  User.find({where:{id: req.body.owner_id}})
+  .then(function(user) {
+
+    Token.find({where: {owner_id: req.body.owner_id}})
+    .then(function(token) {
+      if(!token) {  console.log('error 1');
+        return send401Response();
+      }
+      var makeRequest = function() {
+        var fileMetadata = {
+          'name' : req.body.job_position,
+          'mimeType' : 'application/vnd.google-apps.folder'
+        };
+        if (user.drive_folder_id) {
+          fileMetadata.parents = [user.drive_folder_id];
+        }
+        retries--;
+        console.log('run number', (3 - retries))
+        if(!retries) {
+          console.log('error 2')        // Couldn't refresh the access token.
+          return send401Response();
+        }
+    // Set the credentials and make the request.
+        var auth = new google.auth.OAuth2;
+        auth.setCredentials({
+          access_token: token.token,
+          refresh_token: token.refreshToken
+        });
+
+        var drive = google.drive('v3');
+        drive.files.create({
+          auth: auth,
+          resource: fileMetadata,
+          fields: 'id'
+        }, function(err, file) {
+          if (err) {
+            console.log('The API failed to create folder error: ' + err);
+            refresh.requestNewAccessToken('google', token.refreshToken, function(err, accessToken) {
+              if(err || !accessToken) {     console.log('error 3', err);
+                return send401Response(); }
+          // Save the new accessToken for future use
+              token.update({ token: accessToken }, function(token) {
+                console.log('retrywithnewtoken')
+           // Retry the request.
+                makeRequest();
+              });
+            });
+          } else {
+            var meetingObj = req.body;
+            meetingObj.folder_id = file.id;
+            Meeting.create(meetingObj)
+            .then(function(newMeeting) {
+              res.status(201).send();
+            }).catch(function(err) {
+              console.error(err);
+              res.status(500).send(err);
+            });
+          };
+        })
+      }
+      makeRequest();
+    })
+  })
+}
+
+
+
 
 /*
 ** Expected request query: {owner_id(integer): 'owner id'}

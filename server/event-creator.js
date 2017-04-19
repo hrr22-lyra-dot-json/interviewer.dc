@@ -6,6 +6,9 @@ var SCOPES = ['https://www.googleapis.com/auth/calendar'];
 var fs = require('fs');
 var readline = require('readline');
 var refresh = require('passport-oauth2-refresh');
+const Interview = require('./database/models').Interview;
+const Meeting = require('./database/models').Meeting;
+
 
 
 // This is an express callback.
@@ -88,6 +91,23 @@ return send401Response(); }
         } else {
 
         if (event) {
+          Meeting.find({where:{owner_id: req.body.interviewer_id, job_position: req.body.job_position}})
+          .then(function(meeting) {
+            Interview.create({
+              owner_id: req.body.interviewer_id,
+              start: new Date(req.body.start),
+              end: new Date(req.body.end),
+              interviewee_name: req.body.interviewee_name,
+              interviewee_email: req.body.interviewee_email,
+              title: req.body.job_position,
+              roomid: meeting.id,
+              status: 'created'
+            })
+            .then(function(interview) {
+              console.log('created interview in db', interview)
+
+            })
+          })
           console.log('Event created: %s', event.htmlLink);
           res.status(201).send();
         } else {

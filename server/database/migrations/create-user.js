@@ -22,6 +22,9 @@ module.exports = {
       photoUrl: {
         type: Sequelize.STRING
       },
+      drive_folder_id: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         defaultValue: new Date(),

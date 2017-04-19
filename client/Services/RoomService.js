@@ -15,6 +15,10 @@ export default class RoomService extends EventEmitter {
   }
 
   createRoom(room, callback, callback2) {
+    // if (JSON.parse(localStorage.getItem('googleUser')).user.drive_folder_id === null) {
+
+    // }
+
     axios.post('/api/Meeting', {
         owner_id: room.userid,
         job_position: room.position
