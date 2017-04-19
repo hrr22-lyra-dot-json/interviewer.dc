@@ -11,8 +11,9 @@ const interviewService = new InterviewService()
 class RoomView extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {roomDetails:props.info, questionList: [] , interviews:[]}
+    this.state = {roomDetails:props.info, questionList: [] , interviews:[], newQuestion:''}
     console.log('roominfo', this.state.roomDetails)
+    this.roomSelect = props.roomSelect;
     interviewService.getThem(this.state.roomDetails.id)
     interviewService.on('got_interviews', (interviews) => {
       if (interviews) {
@@ -23,41 +24,49 @@ class RoomView extends React.Component {
 
     questionService.on('got_questions', (questions) => {
         console.log('questions', questions)
-         this.setState({questionList: questions})
+        this.setState({questionList: questions})
     })
 
+  }
 
-    // if (localStorage.getItem('googleUser')) {
-    //   roomService.getThem(JSON.parse(localStorage.getItem('googleUser')).user.id)
-    // }
-    // questionService.getThem(this.roomDbId)
-
-    // questionService.on('got_questions', (questions) => {
-    //     // console.log('questions', questions)
-    //     // this.setState({questionList: questions})
-    // })
-
-
+  addQuestion() {
+    var question = this.state.newQuestion;
+    questionService.addOne({meeting_id: this.state.roomDetails.id, question: question})
+    this.setState({newQuestion:''})
   }
 
 
 
 
 
-  // handleChange(event) {
-  //   this.setState({position: event.target.value});
-  // }
+  handleChange(event) {
+    this.setState({newQuestion: event.target.value});
+  }
+  goHome() {
+    this.roomSelect(null)
+  }
 
 
 
   render() {
+    var roomDatabaseId = this.state.roomDetails.id
     return (
       <div>
-        <p>hello {this.state.roomDetails.job_position} </p>
+        <p>Room for {this.state.roomDetails.job_position} job.</p>
+
+        <div  onClick={this.goHome.bind(this)}>Home</div>
+
+        <Link to={{ pathname: '/interviewee', query: {interviewer: this.state.roomDetails.owner_id, job_position: this.state.roomDetails.job_position, roomDbId:this.state.roomDetails.id}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
+          <span className="glyphicons glyphicons-calendar rooms-section-icons"></span>
+        </Link>
+
+
 
         <li>
                 <div className="col s12 collection with-header">
                     <div className="collection-header white-text blue-grey darken-1"><strong>Questions / Prompts</strong></div>
+                    <input id="newQuestion" value={this.state.newQuestion} placeholder="Type in new question..." onChange={this.handleChange.bind(this)}/>
+                    <div  onClick={this.addQuestion.bind(this)}>Add Question</div>
                     {
                         this.state.questionList.map(function(q, key) {
                             return (<a className="collection-item" key={key} >{q.question}</a>)
@@ -70,7 +79,18 @@ class RoomView extends React.Component {
                     <div className="collection-header white-text blue-grey darken-1"><strong>Interviews</strong></div>
                     {
                         this.state.interviews.map(function(interview, key) {
-                            return (<a className="collection-item" key={key} >{interview.interviewee_email}</a>)
+                          console.log('interview', interview)
+                            return (
+                              <div className="collection-item" >
+
+                              <a   >{interview.start}</a>
+                                <a   >{interview.interviewee_name}</a>
+                                <a   >{interview.interviewee_email}</a>
+                                <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                                  <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
+                                </Link>
+
+                              </div>)
                         })
                     }
                 </div>

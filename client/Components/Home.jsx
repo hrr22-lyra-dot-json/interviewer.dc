@@ -47,10 +47,10 @@ export class Home extends React.Component {
         <Login />
         )
     } else {
+      document.title = `Dashboard | Interviewer Direct Connection`;
 
       if (!this.state.activeRoom) {
         return (
-          document.title = `Dashboard | Interviewer Direct Connection`;
           <div>
             <Nav name={this.state.profile.username}  />
 
@@ -61,7 +61,11 @@ export class Home extends React.Component {
 
       } else {
         return (
-          <RoomView info={this.state.activeRoom} />
+          <div>
+            <Nav name={this.state.profile.username}  />
+
+            <RoomView info={this.state.activeRoom} roomSelect={this.roomSelect.bind(this)}/>
+          </div>
           )
       }
 

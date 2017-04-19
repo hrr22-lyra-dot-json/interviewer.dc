@@ -51,7 +51,7 @@ class CalendarInterviewee extends React.Component {
     userinfo.getInfo(this.interviewer)
     userinfo.on('got_info', (info) => {
       console.log('got info:', info)
-      localStorage.setItem('googleUser', JSON.stringify({user: info.data}))
+      localStorage.setItem('googleUser', JSON.stringify({user: info.data}))//this has to be removed and done a different way
 
     this.setState({interviewerInfo: info.data})
     })
