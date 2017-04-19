@@ -52,13 +52,28 @@ const DrawableCanvas = React.createClass({
       context: ctx
     });
 
-    var context = this;
+    let context = this;
     this.props.webrtc.onmessage = function(event) {
-      var drawX = event.data.X;
-      var drawY = event.data.Y;
+      let drawX = event.data.X;
+      let drawY = event.data.Y;
+      let otherWidth = event.data.width;
+      let otherHeight = event.data.height;
 
-      for (var i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
-        context.draw(drawX[i], drawY[i], drawX[i+1], drawY[i+1])
+      if (canvas.width !== otherWidth || canvas.height !== otherHeight) {
+        let widthMultiplier = canvas.width / otherWidth;
+        let heightMultiplier = canvas.height / otherHeight;
+        for (let i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
+          context.draw(
+            drawX[i] * widthMultiplier,
+            drawY[i] * heightMultiplier,
+            drawX[i+1] * widthMultiplier,
+            drawY[i+1] * heightMultiplier
+          );
+        }
+      } else {
+        for (let i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
+          context.draw(drawX[i], drawY[i], drawX[i+1], drawY[i+1]);
+        }
       }
     };
   },
@@ -120,7 +135,9 @@ const DrawableCanvas = React.createClass({
     });
     this.props.webrtc.send({
       X: trackingX,
-      Y: trackingY
+      Y: trackingY,
+      width: ReactDOM.findDOMNode(this).width,
+      height: ReactDOM.findDOMNode(this).height
     });
     trackingX = [];
     trackingY = [];
