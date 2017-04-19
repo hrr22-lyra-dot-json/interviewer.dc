@@ -38,7 +38,7 @@ const DrawableCanvas = React.createClass({
     };
   },
   componentDidMount(){
-    let canvas = ReactDOM.findDOMNode(this);
+    let canvas = ReactDOM.findDOMNode(this).children[0];
 
     canvas.style.width = '100%';
     canvas.style.height = '100%';
@@ -173,15 +173,18 @@ const DrawableCanvas = React.createClass({
   },
   render() {
     return (
-      <canvas style = {this.canvasStyle()}
-        onMouseDown = {this.handleOnMouseDown}
-        onTouchStart = {this.handleOnMouseDown}
-        onMouseMove = {this.handleOnMouseMove}
-        onTouchMove = {this.handleOnMouseMove}
-        onMouseUp = {this.handleonMouseUp}
-        onTouchEnd = {this.handleonMouseUp}
-      >
-      </canvas>
+      <div style={{height: 100 + '%'}}>
+        <canvas style = {this.canvasStyle()}
+          onMouseDown = {this.handleOnMouseDown}
+          onTouchStart = {this.handleOnMouseDown}
+          onMouseMove = {this.handleOnMouseMove}
+          onTouchMove = {this.handleOnMouseMove}
+          onMouseUp = {this.handleonMouseUp}
+          onTouchEnd = {this.handleonMouseUp}
+        >
+        </canvas>
+        <button onClick={this.resetCanvas}>Clear</button>
+      </div>
     );
   }
 
