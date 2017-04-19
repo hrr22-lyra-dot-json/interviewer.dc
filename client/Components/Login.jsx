@@ -31,7 +31,7 @@ export class Login extends React.Component {
 
         <div className="container login center-align">
           <div className="row">
-            <h3 className="header">The Next Interviewing Platform Has Arrived</h3>
+            <h4 className="header">The Next Interviewing Platform Has Arrived</h4>
             <div className="col s12 m4">
               <span className="glyphicons glyphicons-facetime-video x4 splash-icons"></span>
               <h5>Streamlined Video Interface</h5>
@@ -58,7 +58,7 @@ export class Login extends React.Component {
           <div className="footer-copyright indigo darken-4 valign-wrapper">
             <div className="container">
             &copy; 2017 Interviewer DC, All rights reserved.
-            <a className="grey-text text-lighten-4 right" href="https://github.com/hrr22-lyra-dot-json/interviewer.dc">ISC License</a>
+            <a className="grey-text text-lighten-4 right" href="https://github.com/hrr22-lyra-dot-json/interviewer.dc/master/LICENSE">MIT License</a>
             </div>
           </div>
         </footer>
