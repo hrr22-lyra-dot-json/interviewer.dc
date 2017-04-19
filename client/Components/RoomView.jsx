@@ -11,13 +11,30 @@ const interviewService = new InterviewService()
 class RoomView extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {roomDetails:props.info, questionList: [] , interviews:[], newQuestion:''}
+    this.state = {roomDetails:props.info, questionList: [] , interviews:[], newQuestion:'', upcomingInterviews:[], pastInterviews:[]}
     console.log('roominfo', this.state.roomDetails)
     this.roomSelect = props.roomSelect;
     interviewService.getThem(this.state.roomDetails.id)
+
     interviewService.on('got_interviews', (interviews) => {
       if (interviews) {
-        this.setState({interviews: interviews})
+
+        var upcoming = interviews.filter(function(interview) {
+          return (new Date(interview.start)).getTime() >= (new Date()).getTime()
+        }).sort(function(a, b) {
+          return (new Date(a.start)).getTime() - (new Date(b.start)).getTime()
+        })
+
+        console.log('upcoming', upcoming)
+
+        var past = interviews.filter(function(interview) {
+          return (new Date(interview.start)).getTime() <= (new Date()).getTime()
+        })
+        console.log('past', past)
+
+
+
+        this.setState({interviews: interviews, upcomingInterviews: upcoming, pastInterviews:past })
       }
     })
     questionService.getThem(this.state.roomDetails.id)
@@ -76,10 +93,30 @@ class RoomView extends React.Component {
             </li>
             <li>
                 <div className="col s12 collection with-header">
-                    <div className="collection-header white-text blue-grey darken-1"><strong>Interviews</strong></div>
+                    <div className="collection-header white-text blue-grey darken-1"><strong>Upcoming Interviews</strong></div>
                     {
-                        this.state.interviews.map(function(interview, key) {
+                        this.state.upcomingInterviews.map(function(interview, key) {
                           console.log('interview', interview)
+                            return (
+                              <div className="collection-item" >
+
+                              <a   >{interview.start}</a>
+                                <a   >{interview.interviewee_name}</a>
+                                <a   >{interview.interviewee_email}</a>
+                                <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                                  <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
+                                </Link>
+
+                              </div>)
+                        })
+                    }
+                </div>
+            </li>
+             <li>
+                <div className="col s12 collection with-header">
+                    <div className="collection-header white-text blue-grey darken-1"><strong>Past Interviews</strong></div>
+                    {
+                        this.state.pastInterviews.map(function(interview, key) {
                             return (
                               <div className="collection-item" >
 
