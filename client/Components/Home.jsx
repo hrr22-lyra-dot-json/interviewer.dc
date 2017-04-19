@@ -10,9 +10,6 @@ import Login from './Login.jsx'
 
 const googleLoginService = new newAuth()
 
-
-document.title = `Dashboard | Interviewer Direct Connection`;
-
 export class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -47,6 +44,7 @@ export class Home extends React.Component {
         )
     } else {
 
+    document.title = `Dashboard | Interviewer Direct Connection`;
 
     return (
       <div>

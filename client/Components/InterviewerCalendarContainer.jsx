@@ -67,15 +67,24 @@ class Calendar extends React.Component {
 
   }
 
+  componentDidMount() {
+    // Initialize collapse button
+    $(".button-collapse").sideNav({
+      menuWidth: 400,
+      closeOnClick: true
+    });
+    // Initialize collapsible (uncomment the line below if you use the dropdown variation)
+    //$('.collapsible').collapsible();
+  }
+
   addInfo(slotInfo) {
     this.setState({slotInfo:slotInfo, selectable:false})
     this.openModal();
-
   }
+
   logChange(val) {
     this.setState({slotLength: val.value})
     console.log("Selected: ", val);
-
   }
 
   openModal() {
@@ -91,6 +100,7 @@ class Calendar extends React.Component {
   closeModal() {
     this.setState({modalIsOpen: false, selectable:true});
   }
+
   addAvailability(slotLength, slotInfo) {
 
     var mainSlot = this.state.slotInfo
@@ -136,52 +146,49 @@ class Calendar extends React.Component {
 
   render () {
     return (
-
       <div className="container calendar-section">
-      <div>
-  {/* <button id="authorize-button" onClick={calserv.handleAuthClick.bind(calserv)}>See Google Calendar events</button>
-  <button id="signout-button">Hide other Google calendar events</button> */}
 
-  <button id="authorize-button" className="btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
-    <i className="glyphicons glyphicons-important-day"></i>
-  </button>
 
-  <pre id="content"></pre>
-</div>
-      <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
-      <div>
+        <div className="row">
+          <ul id="slide-out" className="side-nav">
+            <RoomList />
+          </ul>
+          <a href="#" data-activates="slide-out" className="button-collapse btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button left"><i className="glyphicons glyphicons-menu-hamburger left"></i></a>
 
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Add Availability"
-        >
+          <button id="authorize-button" className="btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button right" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
+            <i className="glyphicons glyphicons-important-day"></i>
+          </button>
 
-          <h2 ref="subtitle">Add Availability</h2>
-          <p>Add availability slot for interviews from {this.state.slotInfo.start.toString()} \nto: {this.state.slotInfo.end.toString()}</p>
-          <p>Select the length of each interview timeslot. (This will allow interviewees to make bookings of desired length)</p>
-          <Select
-            name="form-field-name"
-            value={this.state.slotLength}
-            options={options}
-            onChange={this.logChange}
-            searchable={false}
-            clearable={false}
-          />
-          <button className="btn btn-default blue darken-3" onClick={this.addAvailability}>Confirm</button>
-          <button className="btn btn-default red" onClick={this.closeModal}>close</button>
+          <pre id="content"></pre>
+        </div>
 
-        </Modal>
+        <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
+
+        <div>
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onAfterOpen={this.afterOpenModal}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+            contentLabel="Add Availability">
+
+            <h2 ref="subtitle">Add Availability</h2>
+            <p>Add availability slot for interviews from {this.state.slotInfo.start.toString()} \nto: {this.state.slotInfo.end.toString()}</p>
+            <p>Select the length of each interview timeslot. (This will allow interviewees to make bookings of desired length)</p>
+            <Select
+              name="form-field-name"
+              value={this.state.slotLength}
+              options={options}
+              onChange={this.logChange}
+              searchable={false}
+              clearable={false}
+            />
+            <button className="btn btn-default blue darken-3" onClick={this.addAvailability}>Confirm</button>
+            <button className="btn btn-default red" onClick={this.closeModal}>close</button>
+
+          </Modal>
+        </div>
       </div>
-
-      <RoomList />
-
-
-      </div>
-
-
     )
   }
 }
