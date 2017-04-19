@@ -111,6 +111,10 @@ nav {
   /*width: 400px;*/
 }
 
+#interviewerControls {
+  padding: 15px 15px 0px 15px;
+}
+
 #recordingIndicator {
   margin-top: 10px;
 }

@@ -1,6 +1,16 @@
 //////////////////////////////////////////////////////////////
 /////////////////////  HELPER FUNCTIONS  /////////////////////
 //////////////////////////////////////////////////////////////
+// Display question on screen
+exports.displayQuestion = function() {
+  document.getElementById('prompt-text').innerHTML = this.question;
+};
+
+exports.endInterview = function() {
+  // option to download or upload to google drive each file in the array of snapshots
+};
+
+// Get room id of current page
 exports.getRoomId = function() {
   return document.getElementById('room-id').value;
 };
