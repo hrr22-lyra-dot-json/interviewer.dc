@@ -155,27 +155,7 @@ class InterviewRoom extends React.Component {
 
         // Make editor available to take values out later
         context.codeMirror = codeMirror;
-
-        // Setup whiteboard
-        var whiteboard = new CanvasDesigner();
-        whiteboard.widgetHtmlURL = 'https://cdn.webrtc-experiment.com/Canvas-Designer/widget.html';
-        whiteboard.widgetJsURL = 'https://cdn.webrtc-experiment.com/Canvas-Designer/widget.js';
-
-        rtc.getConnection().onmessage = function(event) {
-          whiteboard.syncData( event.data );
-        };
-        whiteboard.addSyncListener(function(data) {
-          rtc.getConnection().send(data);
-        });
-
-        whiteboard.setTools({
-          pencil: true
-        });
-        whiteboard.setSelected('pencil');
-
-        whiteboard.appendTo(document.getElementById('whiteboard'));
     });
-
   }
 
   render() {
