@@ -95,7 +95,7 @@ class RoomList extends React.Component {
                     <Link to={{ pathname: '/interviewroom', state: room.job_position + room.owner_id + '$' + room.id/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
                       <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
                     </Link>
-                    <div className="secondary-content" onClick={() => roomSelect(room)}> Go to Room</div>
+                    <div className="secondary-content" onClick={() => roomSelect(room)}></div>
                     <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position, roomDbId:room.id}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
                       <span className="glyphicons glyphicons-calendar rooms-section-icons"></span>
                     </Link>
