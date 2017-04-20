@@ -77,7 +77,7 @@ exports.makeFolder = function(name, parents) { //parents passed as an array of p
   // req.body.interview_id
   // req.body.owner_id
 
-  exports.makeInterviewFolder = function(input) {
+  exports.makeInterviewFolder = function(input) {//not in action
     axios.post('/api/addInterviewFolder', input)
     .then(function(response) {
       console.log('interview folder made ', response)

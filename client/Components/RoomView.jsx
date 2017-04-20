@@ -73,7 +73,7 @@ class RoomView extends React.Component {
 
         <div  onClick={this.goHome.bind(this)}>Home</div>
 
-        <Link to={{ pathname: '/interviewee', state:this.state.roomDetails query: {interviewer: this.state.roomDetails.owner_id, job_position: this.state.roomDetails.job_position, roomDbId:this.state.roomDetails.id}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
+        <Link to={{ pathname: '/interviewee',  query: {interviewer: this.state.roomDetails.owner_id, job_position: this.state.roomDetails.job_position, roomDbId:this.state.roomDetails.id}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
           <span className="glyphicons glyphicons-calendar rooms-section-icons"></span>
         </Link>
 

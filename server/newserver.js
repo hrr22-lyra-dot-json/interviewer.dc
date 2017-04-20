@@ -151,7 +151,8 @@ var strat = new GoogleStrategy({
           foundToken.update({token: accessToken, refreshToken: refreshToken})
           .then(function(updatedToken) {
             console.log('newtok', updatedToken)
-            done(null, {user: foundUser, token: updatedToken })
+            var tokenToSend = {token: updatedToken.token}
+            done(null, {user: foundUser, token: tokenToSend })
           });
         })
 
@@ -301,7 +302,7 @@ app.get( '/auth/google/callback',
 app.get('/logged-in',
   ensureAuthenticated,
   function(req, res){
-    console.log('dbuser', req.user)
+    //console.log('dbuser', req.user)
     res.json({user: req.user});
   });
 app.get('/logout', function(req, res){

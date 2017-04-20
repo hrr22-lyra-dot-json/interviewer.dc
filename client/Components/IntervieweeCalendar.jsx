@@ -64,10 +64,7 @@ class CalendarInterviewee extends React.Component {
     slotServ.getThem(this.interviewer)
     //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
 
-    googleCalendarService.on('events_loaded', (evv) => {
-       this.setState({events: evv})
-       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
-     })
+
     slotServ.on('got_slots', (slots) => {
       console.log('slots',typeof slots.data[0].start)
       this.setState({availableSlots: slots.data})

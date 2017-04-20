@@ -9,7 +9,7 @@ import CalendarInterviewee from './IntervieweeCalendar.jsx' // this is the page 
 import AuthService from '../Services/AuthService.js'
 import InterviewRoom from './InterviewRoom.jsx'
 import newAuth from '../Services/newAuthenticationService.js'
-
+//const googleLoginService = new newAuth()
 
 //const auth = new AuthService('R6x0iX25zFBEm6qY7QoJ2Dth5Tn2SBeE', 'sdm.auth0.com')
 

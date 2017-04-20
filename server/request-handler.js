@@ -25,6 +25,7 @@ exports.createInterviewFolder = function(req, res) {
   // req.body.owner_id
 
   var retries = 3;
+  console.log('hahaha had it all allong or did I', req.user)
 
   User.find({where:{id: req.body.owner_id}})
   .then(function(user) {
@@ -96,6 +97,8 @@ exports.createInterviewFolder = function(req, res) {
 
 
 exports.addMeeting = function(req, res) {
+    console.log('hahaha had it all allong should have it here', req.user)
+
   var retries = 3;
   User.find({where:{id: req.body.owner_id}})
   .then(function(user) {

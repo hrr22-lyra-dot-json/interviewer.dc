@@ -13,6 +13,8 @@ const Meeting = require('./database/models').Meeting;
 
 // This is an express callback.
 exports.createEvent = function(req, res, next) {
+    console.log('hahaha had it all allong or did I', req.user)
+
   var retries = 3;
 
     var send401Response = function() {
