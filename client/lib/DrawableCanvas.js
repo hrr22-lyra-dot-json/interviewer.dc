@@ -54,26 +54,30 @@ const DrawableCanvas = React.createClass({
 
     let context = this;
     this.props.webrtc.onmessage = function(event) {
-      let drawX = event.data.X;
-      let drawY = event.data.Y;
-      let otherWidth = event.data.width;
-      let otherHeight = event.data.height;
+      if (event.data.type === 'draw') {
+        let drawX = event.data.X;
+        let drawY = event.data.Y;
+        let otherWidth = event.data.width;
+        let otherHeight = event.data.height;
 
-      if (canvas.width !== otherWidth || canvas.height !== otherHeight) {
-        let widthMultiplier = canvas.width / otherWidth;
-        let heightMultiplier = canvas.height / otherHeight;
-        for (let i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
-          context.draw(
-            drawX[i] * widthMultiplier,
-            drawY[i] * heightMultiplier,
-            drawX[i+1] * widthMultiplier,
-            drawY[i+1] * heightMultiplier
-          );
+        if (canvas.width !== otherWidth || canvas.height !== otherHeight) {
+          let widthMultiplier = canvas.width / otherWidth;
+          let heightMultiplier = canvas.height / otherHeight;
+          for (let i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
+            context.draw(
+              drawX[i] * widthMultiplier,
+              drawY[i] * heightMultiplier,
+              drawX[i+1] * widthMultiplier,
+              drawY[i+1] * heightMultiplier
+            );
+          }
+        } else {
+          for (let i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
+            context.draw(drawX[i], drawY[i], drawX[i+1], drawY[i+1]);
+          }
         }
-      } else {
-        for (let i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
-          context.draw(drawX[i], drawY[i], drawX[i+1], drawY[i+1]);
-        }
+      } else if (event.data.type === 'clear') {
+        context.resetCanvas();
       }
     };
   },
@@ -134,10 +138,13 @@ const DrawableCanvas = React.createClass({
       drawing: false
     });
     this.props.webrtc.send({
-      X: trackingX,
-      Y: trackingY,
-      width: ReactDOM.findDOMNode(this).children[0].width,
-      height: ReactDOM.findDOMNode(this).children[0].height
+      type: 'draw',
+      data: {
+        X: trackingX,
+        Y: trackingY,
+        width: ReactDOM.findDOMNode(this).children[0].width,
+        height: ReactDOM.findDOMNode(this).children[0].height
+      }
     });
     trackingX = [];
     trackingY = [];
@@ -148,6 +155,12 @@ const DrawableCanvas = React.createClass({
     this.state.context.moveTo(lX,lY);
     this.state.context.lineTo(cX,cY);
     this.state.context.stroke();
+  },
+  handleClear(){
+    this.props.webrtc.send({
+      type: 'clear'
+    });
+    this.resetCanvas();
   },
   resetCanvas(){
     let width = this.state.context.canvas.width;
@@ -183,7 +196,7 @@ const DrawableCanvas = React.createClass({
           onTouchEnd = {this.handleonMouseUp}
         >
         </canvas>
-        <button onClick={this.resetCanvas}>Clear</button>
+        <button onClick={this.handleClear}>Clear</button>
       </div>
     );
   }
