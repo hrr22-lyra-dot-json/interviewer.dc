@@ -19,6 +19,7 @@ const customStyles = {
     zIndex: 10
   },
   content : {
+    bottom: 'auto'
   }
 };
 
