@@ -66,8 +66,12 @@ class InterviewRoom extends React.Component {
     this.uploadBlobs(info)
   }
 
-  addQuestion(question) {
-    questionService.addOne({meeting_id: this.roomDbId, question: question})
+  addQuestion() {
+    var question = document.getElementById('newQuestion').value;
+    if (question.length > 0) {
+        document.getElementById('newQuestion').value = '';
+        questionService.addOne({meeting_id: this.roomDbId, question: question})
+    }
   }
 
   showQuestion() {
@@ -81,8 +85,8 @@ class InterviewRoom extends React.Component {
     var snapshot = {
         question: document.getElementById('prompt-text').innerHTML,
         notes: document.getElementById('questionNote').value,
-        codeshare: this.codeMirror.getValue()
-        // whiteboard data
+        codeshare: this.codeMirror.getValue(),
+        whiteboard: document.querySelector('#whiteboard canvas').toDataURL()
     };
     console.log(snapshot);
     this.state.snapshots.push(snapshot);
@@ -94,25 +98,33 @@ class InterviewRoom extends React.Component {
     document.getElementById('prompt-text').innerHTML = '(No question selected)';
     document.getElementById('questionNote').value = '';
     this.codeMirror.setValue('');
+    // document.querySelector('#whiteboard button').click();
 
     Materialize.toast(`Screen cleared`, 2000);
   }
 
   endInterview() {
     //this.uploadTheBlobs()
-    console.log(this.state);
-    var results = [];
-    this.state.snapshots.forEach( (snapshot, index) => {
-        var q = `<strong><u>Question #${index + 1}: ${snapshot.question}</u></strong>`;
-        var n = `<strong>Notes:</strong> ${snapshot.notes}`;
-        var c = `Code: <br /><pre>${snapshot.codeshare}</pre>`;
-        results.push(q + '<br />' + n + '<br /><br />' + c);
-    })
-    var html = '<!DOCTYPE html><html><head> <title>Interview Notes</title></head><body><h1>Interview Notes for session ' + this.roomid + '</h2>';
-    html += results.join('<hr>');
+    console.log(this);
+    // if recording is still playing, stop it
 
-    var blob = new Blob([html], {type: "text/plain;charset=utf-8"});
-    invokeSaveAsDialog(blob, 'Responses (' + this.roomid + ').html');
+    if (this.type === 'ul') {
+
+    } else {
+        var results = [];
+        this.context.state.snapshots.forEach( (snapshot, index) => {
+            var q = `<strong><u>Question #${index + 1}: ${snapshot.question}</u></strong>`;
+            var n = `<strong>Notes:</strong> ${snapshot.notes}`;
+            var c = `<strong>Code:</strong> <br /><pre>${snapshot.codeshare}</pre>`;
+            var wb = `<strong>Whiteboard:</strong> <br /><img src="${snapshot.whiteboard}" style="border-style: solid; border-width: 1px;">`;
+            results.push(q + '<br />' + n + '<br /><br />' + c + '<br />' + wb);
+        })
+        var html = '<!DOCTYPE html><html><head> <title>Interview Notes</title></head><body><h1>Interview Notes for session ' + this.context.roomid + '</h2>';
+        html += results.join('<hr>');
+
+        var blob = new Blob([html], {type: "text/plain;charset=utf-8"});
+        invokeSaveAsDialog(blob, 'Responses (' + this.context.roomid + ').html');
+    }
   }
 
   componentDidMount() {
@@ -251,7 +263,13 @@ class InterviewRoom extends React.Component {
                         <div className="row">
                             <button id="saveScreen" className="col s6 btn waves-effect waves-light blue" onClick={this.takeScreenSnapshot.bind(this)}><span className="glyphicons glyphicons-log-book"></span>Save Screen</button>
                             <button id="clearScreen" className="col s6 btn waves-effect waves-light blue lighten-2" onClick={this.clearScreen.bind(this)}><span className="glyphicons glyphicons-ban-circle"></span>Clear Screen</button>
-                            <button id="endInterview" className="col s12 btn waves-effect waves-light green" onClick={this.endInterview.bind(this)}><span className="glyphicons glyphicons-handshake"></span>End Interview</button>
+
+                            <a className="dropdown-button btn col s12 green" href="#" data-activates="endInterview"><span className="glyphicons glyphicons-handshake"></span>End Interview</a>
+                            <ul id='endInterview' className='dropdown-content'>
+                                <li><a onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
+                                <li className="divider"></li>
+                                <li><a onClick={this.endInterview.bind({ context: this, type: 'ul' })}><span className="social social-google-drive"></span>Upload to Drive</a></li>
+                            </ul>
                         </div>
                     </form>
                 </div>
@@ -269,6 +287,20 @@ class InterviewRoom extends React.Component {
                         })
                     }
                 </div>
+            </li>
+            <hr></hr>
+            <li>
+                <form className="col s12">
+                    <div className="row">
+                        <div className="input-field col s12">
+                            <input id="newQuestion" type="text"></input>
+                            <label htmlFor="newQuestion">New Question</label>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <button id="addQuestion" className="col s12 btn waves-effect waves-light blue" onClick={this.addQuestion.bind(this)}>Add Question</button>
+                    </div>
+                </form>
             </li>
         </ul>
         <div id="interviewerQuestionPanelButton" className="fixed-action-btn">
