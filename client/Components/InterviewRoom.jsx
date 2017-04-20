@@ -4,7 +4,9 @@ import * as rtc from '../Services/interviewRtcHandler.js';
 import * as lobby from '../Services/interviewLobby.js';
 import QuestionService from '../Services/QuestionService.js';
 import DrawableCanvas from '../lib/DrawableCanvas.js';
+import InterviewService from '../Services/InterviewService.js';
 
+const interviewService = new InterviewService()
 const questionService = new QuestionService()
 
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
@@ -18,7 +20,8 @@ class InterviewRoom extends React.Component {
             {question: 'Write a function that does nothing'},
             {question: 'What is the difference between you, Potoooooooo, a potato, and a McDonalds French Fry?'}
         ],
-        snapshots: []
+        snapshots: [],
+        interviewInfo:{}
     }
 
     console.log('this', this)
@@ -32,14 +35,22 @@ class InterviewRoom extends React.Component {
         // For interviewers
         this.roomid = props.location.state.split('$')[0];
         this.roomDbId = props.location.state.split('$')[1];
+        interviewService.getOne(this.roomid)
     }
 
     questionService.getThem(this.roomDbId)
+    //interviewService.getOne(this.roomid)
+
+    interviewService.on('got_interview', (interview) => {
+        this.setState({interviewInfo: interview})
+    })
 
     questionService.on('got_questions', (questions) => {
         // console.log('questions', questions)
         this.setState({questionList: questions})
     })
+
+    this.uploadBlobs = recorder.uploadBlobs //uploads both video and audio blob to google drive folder, takes input object with properties interviewee_name and folder_id
 
     this.start = recorder.start;
     this.stop = recorder.stop;
@@ -48,6 +59,11 @@ class InterviewRoom extends React.Component {
     this.joinRoom = lobby.joinRoom;
     this.closeRoom = lobby.closeRoom;
     this.codeMirror;
+  }
+
+  uploadTheBlobs() {
+    var info = {interviewee_name: this.state.interviewInfo.interviewee_name, folder_id: this.state.interviewInfo.drive_link}
+    this.uploadBlobs(info)
   }
 
   addQuestion(question) {
@@ -83,6 +99,7 @@ class InterviewRoom extends React.Component {
   }
 
   endInterview() {
+    //this.uploadTheBlobs()
     console.log(this.state);
     var results = [];
     this.state.snapshots.forEach( (snapshot, index) => {

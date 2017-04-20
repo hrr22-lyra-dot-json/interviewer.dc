@@ -121,3 +121,8 @@ exports.save = function() {
   invokeSaveAsDialog(currentVideoBlob, 'DC ' + formatted + '.webm');
   invokeSaveAsDialog(currentAudioBlob, 'DC ' + formatted + '.wav');
 };
+
+exports.uploadBlobs = function(info) {//info is object with properties interviewee_name and folder_id
+  uploadService.uploadBlobToDrive(currentAudioBlob, info)
+  uploadService.uploadBlobToDrive(currentVideoBlob, info)
+}

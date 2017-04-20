@@ -1,28 +1,63 @@
 
 import axios from 'axios'
 
-exports.uploadAudio = function(blob) {
+exports.uploadBlobToDrive = function(blob, info) { //info = object with properties:interviewee_name, folder_id both accessed from interviewService
+  LoggedIn(uploadBlob, blob, info)
+
+}
+
+var LoggedIn = function(callback, callbackInput1, callbackInput2) {
+     axios.get('/logged-in')
+    .then(function(response) {
+      //console.log('g usertown', response.data)
+      if (response.data.user) {
+        localStorage.setItem('googleUser', JSON.stringify(response.data.user))
+        //console.log('g usertown', response.data.user)
+        console.log('is logged in, now running callback')
+        callback(callbackInput1, callbackInput2)
+        //return true
+      } else {
+        localStorage.setItem('googleUser', JSON.stringify(response.data.user))
+        console.log('notlodgedin')
+      }
+      //callback(false)
+      //return false
+    })
+    .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  // logmit(islogged) {
+  //   this.emit('log_result', islogged)
+  // }
+
+var uploadBlob = function(blob, info) {
 //     //include Authorization: Bearer AbCdEf123456 header if accesstoken in url doesn't work const AuthStr = 'Bearer '.concat(USER_TOKEN);
 // axios.get(URL, { headers: { Authorization: AuthStr } })
 //  .then(response => {
+
   var accessToken = JSON.parse(localStorage.getItem('googleUser')).token.token
 
   var url = "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable" +'&access_token='+ accessToken;
 
   var headers = {'X-Upload-Content-Type': blob.type , 'X-Upload-Content-Length': blob.size, 'Content-Type': 'application/json; charset=UTF-8'
 }
+  var name = info.interviewee_name + '_interviewRecording';
+  var parents = [info.folder_id];
 
   axios({
     method: 'post',
     url: url,
     headers: headers,
     data:{
-      name: 'audio'
+      name: name,
+      parents: parents
     }
   })
   .then(function(response) {
     if (response.status === 200) {
-      console.log('success! resumable session URI for upload:', response.headers.location)
+      console.log('success! resumable session URI for upload:', response.headers.location)//should save this url somewhere
       var url = response.headers.location;
       var headers = {'Content-Type': blob.type , 'Content-Length': blob.size }
       axios({

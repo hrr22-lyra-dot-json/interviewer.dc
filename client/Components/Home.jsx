@@ -4,9 +4,10 @@ import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} 
 import Calendar from './InterviewerCalendarContainer.jsx' //InterviewerCalendarContainer
 import CalendarAuth from './CalendarAuth.jsx'
 import Nav from './Nav.jsx'
-import newAuth from '../Services/newAuthenticationService.js'
 import Login from './Login.jsx'
 import RoomView from './RoomView.jsx'
+import newAuth from '../Services/newAuthenticationService.js'
+
 
 
 const googleLoginService = new newAuth()

@@ -25,13 +25,13 @@ export default class InterviewService extends EventEmitter {
   //   })
   // }
   getInterview(id, callback){
-    axios.get('/api/getInterview', {
+    axios.get('/api/Interviews', {
       params:{
         id: id
       }
     }).then(function(response) {
       console.log('getinterviewres', response)
-      callback(response)
+      callback(response.data[0])
     })
     .catch(function (error) {
       console.log('get interview error', error);
