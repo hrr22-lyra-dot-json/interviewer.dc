@@ -141,7 +141,7 @@ class Calendar extends React.Component {
     console.log('this is the event', event)
     if (event.title === 'Book Interview') {
       Materialize.toast(`Appointment slot for ${event.title} on ${event.start.toDateString()} at ${event.start.toTimeString()} deleted`, 6000)
-      slotService.deleteSlot(event.id, slotService.getThem.bind(slotService))
+      slotService.deleteSlot(event.id, slotService.getThem.bind(slotService), JSON.parse(localStorage.getItem('googleUser')).user.id )
     }
   }
 

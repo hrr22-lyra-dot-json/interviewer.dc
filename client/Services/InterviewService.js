@@ -12,6 +12,10 @@ export default class InterviewService extends EventEmitter {
   getThem(roomDbId) {
     this.getInterviews(roomDbId, this.gotInterviews.bind(this))
   }
+  getOne(interviewId) {
+    this.getInterview(interviewId, this.gotInterview.bind(this))
+
+  }
 
   // addAQuestion(question, callback) {
   //   axios.post('/api/Interview', question//meeting_id:roomDbId, question: question
@@ -20,6 +24,19 @@ export default class InterviewService extends EventEmitter {
   //     callback(question.meeting_id)
   //   })
   // }
+  getInterview(id, callback){
+    axios.get('/api/getInterview', {
+      params:{
+        id: id
+      }
+    }).then(function(response) {
+      console.log('getinterviewres', response)
+      callback(response)
+    })
+    .catch(function (error) {
+      console.log('get interview error', error);
+    });
+  }
 
   getInterviews(roomDbId, callback) {
     var userid = JSON.parse(localStorage.getItem('googleUser')).user.id;
@@ -32,8 +49,14 @@ export default class InterviewService extends EventEmitter {
     .then(function(response) {
       callback(response.data)
     })
+    .catch(function (error) {
+      console.log('get interviews error', error);
+    });
   }
   gotInterviews(interviews) {
     this.emit('got_interviews', interviews)
+  }
+  gotInterview(interview) {
+    this.emit('got_interview', interview)
   }
 }

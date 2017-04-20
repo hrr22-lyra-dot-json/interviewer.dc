@@ -34,7 +34,7 @@ const customStyles = {
 // ];
 
 var slotServ = new TimeslotService();
-const googleCalendarService = new googleCalendar()
+//const googleCalendarService = new googleCalendar()
 const userinfo = new newAuth()
 
 // a localizer for BigCalendar
@@ -48,10 +48,12 @@ class CalendarInterviewee extends React.Component {
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
     console.log('query', props.location.query);
     this.interviewer = Number(props.location.query.interviewer)
+    this.state.roomDetails = props.location.state
+    console.log('thestate', props.location.state)
     userinfo.getInfo(this.interviewer)
     userinfo.on('got_info', (info) => {
       console.log('got info:', info)
-      localStorage.setItem('googleUser', JSON.stringify({user: info.data}))//this has to be removed and done a different way
+      //localStorage.setItem('googleUser', JSON.stringify({user: info.data}))//this has to be removed and done a different way
 
     this.setState({interviewerInfo: info.data})
     })
@@ -121,7 +123,7 @@ class CalendarInterviewee extends React.Component {
       end: new Date(booking.end),
       roomDbId: this.roomDbId
     }
-    slotServ.createEvent(eventor, booking);
+    slotServ.createEvent(eventor, booking, this.interviewer);
     Materialize.toast(`Appointment booked for ${eventor.job_position} on ${eventor.start.toDateString()} at ${eventor.start.toTimeString()}!`, 6000);
   }
 

@@ -18,6 +18,83 @@ var refresh = require('passport-oauth2-refresh');
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
+exports.createInterviewFolder = function(req, res) {
+  // req.body.interviewee
+  // req.body.room_folder_id
+  // req.body.interview_id
+  // req.body.owner_id
+
+  var retries = 3;
+
+  User.find({where:{id: req.body.owner_id}})
+  .then(function(user) {
+    Token.find({where: {owner_id: user.id}})
+    .then(function(token) {
+      if(!token) {  console.log('error 1');
+        return send401Response();
+      }
+      var makeRequest = function() {
+        var fileMetadata = {
+          'name' : req.body.interviewee,
+          'mimeType' : 'application/vnd.google-apps.folder',
+          'parents': [req.body.room_folder_id]
+        };
+        retries--;
+        console.log('run number', (3 - retries))
+        if(!retries) {
+          console.log('error 2')        // Couldn't refresh the access token.
+          return send401Response();
+        }
+    // Set the credentials and make the request.
+        var auth = new google.auth.OAuth2;
+        auth.setCredentials({
+          access_token: token.token,
+          refresh_token: token.refreshToken
+        });
+
+        var drive = google.drive('v3');
+        drive.files.create({
+          auth: auth,
+          resource: fileMetadata,
+          fields: 'id'
+        }, function(err, file) {
+          if (err) {
+            console.log('The API failed to create folder error: ' + err);
+            refresh.requestNewAccessToken('google', token.refreshToken, function(err, accessToken) {
+              if(err || !accessToken) {     console.log('error 3', err);
+                return send401Response(); }
+          // Save the new accessToken for future use
+              token.update({ token: accessToken }, function(token) {
+                console.log('retrywithnewtoken')
+           // Retry the request.
+                makeRequest();
+              });
+            });
+          } else {
+
+            Interview.find({where:{id: req.body.interview_id}})
+            .then(function(interview) {
+              interview.update({drive_link: file.id})
+            })
+            .then(function(updatedInterview) {
+              res.status(201).send(updatedInterview);
+            }).catch(function(err) {
+              console.error(err);
+              res.status(500).send(err);
+            });
+          }
+        })
+      }
+      makeRequest();
+    })
+  })
+}
+
+
+
+
+
+
 exports.addMeeting = function(req, res) {
   var retries = 3;
   User.find({where:{id: req.body.owner_id}})

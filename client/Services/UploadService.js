@@ -72,6 +72,22 @@ exports.makeFolder = function(name, parents) { //parents passed as an array of p
   });
 
 }
+  // req.body.interviewee
+  // req.body.room_folder_id
+  // req.body.interview_id
+  // req.body.owner_id
+
+  exports.makeInterviewFolder = function(input) {
+    axios.post('/api/addInterviewFolder', input)
+    .then(function(response) {
+      console.log('interview folder made ', response)
+    })
+    .catch(function (error) {
+      console.log('makefoldererror', error);
+    });
+
+  }
+
 
 // var fileMetadata = {
 //   'name' : 'Invoices',
