@@ -25,6 +25,10 @@ main {
   margin: auto;
 }
 
+.idc-orange {
+  background-color: #EF4C2D;
+}
+
 /*******************************
 *       LOGIN SPLASH PAGE      *
 ********************************/
@@ -71,8 +75,8 @@ main {
   margin-top: -12px;
 }
 
-.calendar-section {
-  margin-top: 2rem;
+.toggle-buttons {
+  margin: 2.5rem auto;
 }
 
 .rooms-section-icons:before {

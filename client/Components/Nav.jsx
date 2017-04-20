@@ -10,8 +10,12 @@ const Nav = ({name}) => (
       <a href="/#">Hello, {name}!</a>
       {/* <a href="/#" className="brand-logo center">Interviewer.DC</a> */}
 
+      <ul className="right">
+        <li>
+          <a href="/logout" className="btn waves-effect waves-light indigo darken-4">Sign Out</a>
+        </li>
+      </ul>
 
-      <ul className="right"><li><a href="/logout" className="right" className="btn waves-effect waves-light indigo darken-4">Sign Out</a></li></ul>
     </div>
   </nav>
 )
