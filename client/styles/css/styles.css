@@ -170,6 +170,10 @@ a.powered-by-firepad {
   margin: .5rem 0;
 }
 
+.intermediary-header {
+  margin-bottom: 3rem;
+}
+
 .clbtn {
   pointer-events: all !important;
 }

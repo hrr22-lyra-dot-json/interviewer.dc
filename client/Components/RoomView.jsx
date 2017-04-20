@@ -52,13 +52,10 @@ class RoomView extends React.Component {
     this.setState({newQuestion:''})
   }
 
-
-
-
-
   handleChange(event) {
     this.setState({newQuestion: event.target.value});
   }
+
   goHome() {
     this.roomSelect(null)
   }
@@ -84,67 +81,79 @@ class RoomView extends React.Component {
         </div>
 
         <div className="container">
-          <h3>{this.state.roomDetails.job_position}</h3>
+          <h3 className="intermediary-header">{this.state.roomDetails.job_position}</h3>
 
-          {/* <div onClick={this.goHome.bind(this)}>Home</div> */}
-
-
-          <ul>
-            <li>
-              <div className="col s12 collection with-header">
+          <div className="row">
+            <div className="col s12 collection with-header">
+              <div className="row">
                 <div className="collection-header white-text blue-grey darken-1"><strong>Questions / Prompts</strong></div>
-                <input id="newQuestion" value={this.state.newQuestion} placeholder="Type in new question..." onChange={this.handleChange.bind(this)}/>
-                <div  onClick={this.addQuestion.bind(this)}>Add Question</div>
-                {
-                  this.state.questionList.map(function(q, key) {
-                    return (<a className="collection-item" key={key} >{q.question}</a>)
-                  })
-                }
               </div>
-            </li>
-            <li>
-              <div className="col s12 collection with-header">
+              <div className="row">
+                <div className="col s10 left">
+                  <input id="newQuestion" value={this.state.newQuestion} placeholder="Type in new question..." onChange={this.handleChange.bind(this)}/>
+                </div>
+                <div className="col s2 right">
+                  <a className="waves-effect waves-light btn blue darken-3" onClick={this.addQuestion.bind(this)}><span className="glyphicons glyphicons-plus"></span></a>
+                </div>
+              </div>
+              {
+                this.state.questionList.map(function(q, key) {
+                  return (<div className="row"><div className="col s12"><a className="collection-item" key={key} >{q.question}</a></div></div>)
+                })
+              }
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col s12 collection with-header">
+              <div className="row">
                 <div className="collection-header white-text blue-grey darken-1"><strong>Upcoming Interviews</strong></div>
-                {
-                  this.state.upcomingInterviews.map(function(interview, key) {
-                    console.log('interview', interview)
-                    return (
-                      <div className="collection-item" >
-
-                        <a   >{interview.start}</a>
-                        <a   >{interview.interviewee_name}</a>
-                        <a   >{interview.interviewee_email}</a>
-                        <a href={'https://drive.google.com/drive/folders/' + interview.drive_link}>Link to Google drive folder</a>
-                        <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
-                        <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
-                        </Link>
-                      </div>
-                    )
-                  })
-                }
               </div>
-            </li>
-            <li>
-              <div className="col s12 collection with-header">
+              {
+                this.state.upcomingInterviews.map(function(interview, key) {
+                  console.log('interview', interview)
+                  return (
+                    <div className="collection-item" >
+
+                      <a   >{interview.start}</a>
+                      <a   >{interview.interviewee_name}</a>
+                      <a   >{interview.interviewee_email}</a>
+                      <a href={'https://drive.google.com/drive/folders/' + interview.drive_link}>Link to Google drive folder</a>
+                      <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                      <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
+                      </Link>
+                    </div>
+                  )
+                })
+              }
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col s12 collection with-header">
+              <div className="row">
                 <div className="collection-header white-text blue-grey darken-1"><strong>Past Interviews</strong></div>
-                {
-                  this.state.pastInterviews.map(function(interview, key) {
-                    return (
-                      <div className="collection-item" >
-
-                        <a   >{interview.start}</a>
-                        <a   >{interview.interviewee_name}</a>
-                        <a   >{interview.interviewee_email}</a>
-                        <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
-                        <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
-                        </Link>
-                      </div>
-                    )
-                  })
-                }
               </div>
-            </li>
-          </ul>
+              {
+                this.state.pastInterviews.map(function(interview, key) {
+                  return (
+                    <div className="collection-item">
+
+                      <a>{interview.start}</a>
+                      <a>{interview.interviewee_name}</a>
+                      <a>{interview.interviewee_email}</a>
+                      <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                        <div className="secondary-content">
+                          <span className="glyphicons glyphicons-exit rooms-section-icons right"></span>
+                        </div>
+                      </Link>
+                    </div>
+                  )
+                })
+              }
+            </div>
+          </div>
+
         </div>
       </div>
 
