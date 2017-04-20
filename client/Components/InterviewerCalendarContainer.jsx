@@ -172,7 +172,8 @@ class Calendar extends React.Component {
             onAfterOpen={this.afterOpenModal}
             onRequestClose={this.closeModal}
             style={customStyles}
-            contentLabel="Add Availability">
+            contentLabel="Add Availability"
+            className="front">
 
             <h2 ref="subtitle">Add Availability</h2>
             <p>Add availability slot for interviews from {this.state.slotInfo.start.toString()} \nto: {this.state.slotInfo.end.toString()}</p>
