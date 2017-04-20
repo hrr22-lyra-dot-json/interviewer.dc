@@ -136,8 +136,8 @@ const DrawableCanvas = React.createClass({
     this.props.webrtc.send({
       X: trackingX,
       Y: trackingY,
-      width: ReactDOM.findDOMNode(this).width,
-      height: ReactDOM.findDOMNode(this).height
+      width: ReactDOM.findDOMNode(this).children[0].width,
+      height: ReactDOM.findDOMNode(this).children[0].height
     });
     trackingX = [];
     trackingY = [];
