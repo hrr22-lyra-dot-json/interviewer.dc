@@ -150,15 +150,16 @@ class Calendar extends React.Component {
       <div className="container calendar-section">
 
 
-
-        <div className="row">
+        <div className="row toggle-buttons">
           <ul id="slide-out" className="side-nav">
             <RoomList roomSelect={this.roomSelect}/>
           </ul>
-          <a href="#" data-activates="slide-out" className="button-collapse btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button left"><i className="glyphicons glyphicons-menu-hamburger left"></i></a>
+          <a href="#" data-activates="slide-out" className="button-collapse btn waves-effect waves-light blue darken-3 view-cal-events-button left">
+            Toggle Room List
+          </a>
 
-          <button id="authorize-button" className="btn-floating btn-large waves-effect waves-light blue darken-3 view-cal-events-button right" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
-            <i className="glyphicons glyphicons-important-day"></i>
+          <button id="authorize-button" className="btn waves-effect waves-light blue darken-3 view-cal-events-button right" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
+            Toggle GCal Events
           </button>
 
           <pre id="content"></pre>
@@ -172,7 +173,8 @@ class Calendar extends React.Component {
             onAfterOpen={this.afterOpenModal}
             onRequestClose={this.closeModal}
             style={customStyles}
-            contentLabel="Add Availability">
+            contentLabel="Add Availability"
+            className="front">
 
             <h2 ref="subtitle">Add Availability</h2>
             <p>Add availability slot for interviews from {this.state.slotInfo.start.toString()} \nto: {this.state.slotInfo.end.toString()}</p>
