@@ -175,7 +175,8 @@ class Calendar extends React.Component {
             contentLabel="Add Availability">
 
             <h2 ref="subtitle">Add Availability</h2>
-            <p>Add availability slot for interviews from {this.state.slotInfo.start.toString()} \nto: {this.state.slotInfo.end.toString()}</p>
+            <p>Add availability slot for interviews from {this.state.slotInfo.start.toString()}
+            to: {this.state.slotInfo.end.toString()}</p>
             <p>Select the length of each interview timeslot. (This will allow interviewees to make bookings of desired length)</p>
             <Select
               name="form-field-name"

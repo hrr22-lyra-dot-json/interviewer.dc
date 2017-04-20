@@ -15,6 +15,9 @@ import newAuth from '../Services/newAuthenticationService.js'
 
 
 const customStyles = {
+  overlay: {
+    zIndex: 10
+  },
   content : {
     top                   : '20%',
     left                  : '50%',
@@ -169,7 +172,7 @@ class CalendarInterviewee extends React.Component {
           </div>
 
           <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
-          <div>
+            <div>
             <Modal
               isOpen={this.state.modalIsOpen}
               onAfterOpen={this.afterOpenModal}
@@ -181,15 +184,16 @@ class CalendarInterviewee extends React.Component {
                 <h2 ref="subtitle">Book interview</h2>
                 <p>Confirm your interview with {this.state.interviewerInfo.username} on {new Date(this.state.booking.start).toLocaleDateString()} at {new Date(this.state.booking.start).toLocaleTimeString()}.</p>
                 <p>Please enter your name and email, the interview details will be sent to this email address and the event invite must be accepted to be confirmed.</p>
+
                 <form>
                   <input id="intervieweeName" placeholder="Type in your full name..." onChange={this.handleChangeName.bind(this)}/>
                   <input id="intervieweeEmail" type="email" placeholder="Type in your email address..." onChange={this.handleChangeEmail.bind(this)}/>
                 </form>
 
-                <button className="clbtn" onClick={this.addAvailability}>Confirm</button>
+                <button className="btn btn-default blue darken-3" onClick={this.addAvailability}>Confirm</button>
+                <button className="btn btn-default red" onClick={this.closeModal}>close</button>
 
-                <button className="clbtn" onClick={this.closeModal}>close</button>
-                <div>Good luck!</div>
+                <blockquote>Good luck!</blockquote>
 
               </Modal>
             </div>
