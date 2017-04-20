@@ -124,6 +124,7 @@ class RoomView extends React.Component {
                               <a   >{interview.start}</a>
                                 <a   >{interview.interviewee_name}</a>
                                 <a   >{interview.interviewee_email}</a>
+                                <a href={'https://drive.google.com/drive/folders/' + interview.drive_link}>Link to Google drive folder</a>
                                 <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
                                   <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
                                 </Link>
