@@ -9,6 +9,12 @@ const customStyles = {
     zIndex: 10
   },
   content : {
+    top                   : '20%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
   }
 };
 
@@ -92,7 +98,7 @@ class RoomList extends React.Component {
               <div key={key}>
                 <li className="collection-item">
                   <div>{room.job_position}
-                    
+
                     <div className="secondary-content" onClick={() => roomSelect(room)}>
                     <span className="glyphicons glyphicons-exit rooms-section-icons"></span></div>
                     <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position, roomDbId:room.id}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">

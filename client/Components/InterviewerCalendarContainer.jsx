@@ -167,14 +167,12 @@ class Calendar extends React.Component {
 
         <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
 
-        <div>
           <Modal
             isOpen={this.state.modalIsOpen}
             onAfterOpen={this.afterOpenModal}
             onRequestClose={this.closeModal}
             style={customStyles}
-            contentLabel="Add Availability"
-            className="front">
+            contentLabel="Add Availability">
 
             <h2 ref="subtitle">Add Availability</h2>
             <p>Add availability slot for interviews from {this.state.slotInfo.start.toString()} \nto: {this.state.slotInfo.end.toString()}</p>
@@ -191,7 +189,6 @@ class Calendar extends React.Component {
             <button className="btn btn-default red" onClick={this.closeModal}>close</button>
 
           </Modal>
-        </div>
       </div>
     )
   }
