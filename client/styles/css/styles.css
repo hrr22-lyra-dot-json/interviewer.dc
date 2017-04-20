@@ -166,6 +166,10 @@ a.powered-by-firepad {
 *                              *
 ********************************/
 
+.breadcrumbs {
+  margin: .5rem 0;
+}
+
 .clbtn {
   pointer-events: all !important;
 }

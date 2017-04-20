@@ -69,71 +69,83 @@ class RoomView extends React.Component {
     var roomDatabaseId = this.state.roomDetails.id
     return (
       <div>
-        <p>Room for {this.state.roomDetails.job_position} job.</p>
+        <div className="row breadcrumbs">
+          <div className="col s12">
+            <div className="left">
+              <a href="#!" onClick={this.goHome.bind(this)}>Home </a>
+              > Rooms > {this.state.roomDetails.job_position}
+            </div>
+            <div className="right">
+              <Link to={{ pathname: '/interviewee',  query: {interviewer: this.state.roomDetails.owner_id, job_position: this.state.roomDetails.job_position, roomDbId:this.state.roomDetails.id}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
+              <span className="glyphicons glyphicons-calendar rooms-section-icons"></span>
+              </Link>
+            </div>
+          </div>
+        </div>
 
-        <div  onClick={this.goHome.bind(this)}>Home</div>
+        <div className="container">
+          <h3>{this.state.roomDetails.job_position}</h3>
 
-        <Link to={{ pathname: '/interviewee',  query: {interviewer: this.state.roomDetails.owner_id, job_position: this.state.roomDetails.job_position, roomDbId:this.state.roomDetails.id}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
-          <span className="glyphicons glyphicons-calendar rooms-section-icons"></span>
-        </Link>
-
+          {/* <div onClick={this.goHome.bind(this)}>Home</div> */}
 
 
-        <li>
-                <div className="col s12 collection with-header">
-                    <div className="collection-header white-text blue-grey darken-1"><strong>Questions / Prompts</strong></div>
-                    <input id="newQuestion" value={this.state.newQuestion} placeholder="Type in new question..." onChange={this.handleChange.bind(this)}/>
-                    <div  onClick={this.addQuestion.bind(this)}>Add Question</div>
-                    {
-                        this.state.questionList.map(function(q, key) {
-                            return (<a className="collection-item" key={key} >{q.question}</a>)
-                        })
-                    }
-                </div>
+          <ul>
+            <li>
+              <div className="col s12 collection with-header">
+                <div className="collection-header white-text blue-grey darken-1"><strong>Questions / Prompts</strong></div>
+                <input id="newQuestion" value={this.state.newQuestion} placeholder="Type in new question..." onChange={this.handleChange.bind(this)}/>
+                <div  onClick={this.addQuestion.bind(this)}>Add Question</div>
+                {
+                  this.state.questionList.map(function(q, key) {
+                    return (<a className="collection-item" key={key} >{q.question}</a>)
+                  })
+                }
+              </div>
             </li>
             <li>
-                <div className="col s12 collection with-header">
-                    <div className="collection-header white-text blue-grey darken-1"><strong>Upcoming Interviews</strong></div>
-                    {
-                        this.state.upcomingInterviews.map(function(interview, key) {
-                          console.log('interview', interview)
-                            return (
-                              <div className="collection-item" >
+              <div className="col s12 collection with-header">
+                <div className="collection-header white-text blue-grey darken-1"><strong>Upcoming Interviews</strong></div>
+                {
+                  this.state.upcomingInterviews.map(function(interview, key) {
+                    console.log('interview', interview)
+                    return (
+                      <div className="collection-item" >
 
-                              <a   >{interview.start}</a>
-                                <a   >{interview.interviewee_name}</a>
-                                <a   >{interview.interviewee_email}</a>
-                                <a href={'https://drive.google.com/drive/folders/' + interview.drive_link}>Link to Google drive folder</a>
-                                <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
-                                  <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
-                                </Link>
-
-                              </div>)
-                        })
-                    }
-                </div>
+                        <a   >{interview.start}</a>
+                        <a   >{interview.interviewee_name}</a>
+                        <a   >{interview.interviewee_email}</a>
+                        <a href={'https://drive.google.com/drive/folders/' + interview.drive_link}>Link to Google drive folder</a>
+                        <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                        <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
+                        </Link>
+                      </div>
+                    )
+                  })
+                }
+              </div>
             </li>
-             <li>
-                <div className="col s12 collection with-header">
-                    <div className="collection-header white-text blue-grey darken-1"><strong>Past Interviews</strong></div>
-                    {
-                        this.state.pastInterviews.map(function(interview, key) {
-                            return (
-                              <div className="collection-item" >
+            <li>
+              <div className="col s12 collection with-header">
+                <div className="collection-header white-text blue-grey darken-1"><strong>Past Interviews</strong></div>
+                {
+                  this.state.pastInterviews.map(function(interview, key) {
+                    return (
+                      <div className="collection-item" >
 
-                              <a   >{interview.start}</a>
-                                <a   >{interview.interviewee_name}</a>
-                                <a   >{interview.interviewee_email}</a>
-                                <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
-                                  <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
-                                </Link>
-
-                              </div>)
-                        })
-                    }
-                </div>
+                        <a   >{interview.start}</a>
+                        <a   >{interview.interviewee_name}</a>
+                        <a   >{interview.interviewee_email}</a>
+                        <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                        <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
+                        </Link>
+                      </div>
+                    )
+                  })
+                }
+              </div>
             </li>
-
+          </ul>
+        </div>
       </div>
 
       )
