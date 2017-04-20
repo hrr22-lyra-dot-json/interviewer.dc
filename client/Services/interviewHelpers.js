@@ -52,6 +52,7 @@ exports.restrictClientElements = function() {
   document.getElementById('interviewerControls').style.display = 'none';
   document.getElementById('interviewerQuestionPanel').style.display = 'none';
   document.getElementById('interviewerQuestionPanelButton').style.display = 'none';
+  document.querySelector('#whiteboard button').style.display = 'none'
 };
 
 // helper functions to disable/enable all buttons
