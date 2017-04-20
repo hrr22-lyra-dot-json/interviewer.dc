@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: function(queryInterface, Sequelize) {
-    return queryInterface.createTable('Meetings', {
+    return queryInterface.createTable('Interviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,10 +11,28 @@ module.exports = {
       owner_id: {
         type: Sequelize.INTEGER
       },
-      job_position: {
+      start: {
+        type: Sequelize.DATE
+      },
+      end: {
+        type: Sequelize.DATE
+      },
+      interviewee_name: {
         type: Sequelize.STRING
       },
-      folder_id: {
+      interviewee_email: {
+        type: Sequelize.STRING
+      },
+      title: {
+        type: Sequelize.STRING
+      },
+      roomid: {
+        type: Sequelize.STRING
+      },
+      status: {
+        type: Sequelize.STRING
+      },
+      drive_link: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -30,6 +48,7 @@ module.exports = {
     });
   },
   down: function(queryInterface, Sequelize) {
-    return queryInterface.dropTable('Meetings');
+    return queryInterface.dropTable('Interviews');
   }
 };
+

@@ -4,7 +4,8 @@ module.exports = function(sequelize, DataTypes) {
     googleId: DataTypes.STRING,
     username: DataTypes.STRING,
     email: DataTypes.STRING,
-    photoUrl: DataTypes.STRING
+    photoUrl: DataTypes.STRING,
+    drive_folder_id: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {

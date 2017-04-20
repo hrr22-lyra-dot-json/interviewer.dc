@@ -2,7 +2,8 @@
 module.exports = function(sequelize, DataTypes) {
   var Meeting = sequelize.define('Meeting', {
     owner_id: DataTypes.INTEGER,
-    job_position: DataTypes.STRING
+    job_position: DataTypes.STRING,
+    folder_id: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {

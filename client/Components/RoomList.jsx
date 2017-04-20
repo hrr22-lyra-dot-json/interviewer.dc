@@ -25,6 +25,7 @@ class RoomList extends React.Component {
   constructor (props) {
     super(props)
     this.state = {rooms:[{position: 'janitor'}], modalIsOpen: false}
+    this.roomSelect = props.roomSelect
 
     if (localStorage.getItem('googleUser')) {
       roomService.getThem(JSON.parse(localStorage.getItem('googleUser')).user.id)
@@ -75,6 +76,7 @@ class RoomList extends React.Component {
 
 
   render() {
+    var roomSelect = this.roomSelect.bind(this);
     return (
       <div>
 
@@ -89,7 +91,8 @@ class RoomList extends React.Component {
                     <Link to={{ pathname: '/interviewroom', state: room.job_position + room.owner_id + '$' + room.id/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
                       <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
                     </Link>
-                    <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
+                    <div className="secondary-content" onClick={() => roomSelect(room)}> Go to Room</div>
+                    <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position, roomDbId:room.id}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
                       <span className="glyphicons glyphicons-calendar rooms-section-icons"></span>
                     </Link>
                   </div>

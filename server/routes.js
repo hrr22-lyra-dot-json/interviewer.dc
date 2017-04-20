@@ -31,4 +31,6 @@ module.exports = function(app) {
   app.delete('/api/Question', requestHandler.deleteQuestion);
 
   app.post('/api/Event', eventCreator.createEvent);
+  app.get('/api/Interviews', requestHandler.listInterviews);
+
 };

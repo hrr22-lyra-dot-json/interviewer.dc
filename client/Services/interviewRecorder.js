@@ -2,6 +2,8 @@
 //////////////////////   RECORDER Code   //////////////////////
 ///////////////////////////////////////////////////////////////
 // State variables
+import  uploadService from './UploadService.js';
+
 var isRecordingStarted = false;
 var isStoppedRecording = false;
 
@@ -100,6 +102,8 @@ exports.stop = function() {
     audioRecorder.stop(function(aBlob) {
       currentAudioBlob = aBlob;
       document.getElementById('save').disabled = false;
+      //uploadService.uploadAudio(currentAudioBlob)
+
 
       console.log('VIDEO BLOB', currentVideoBlob);
       console.log('AUDIO BLOB', currentAudioBlob);
@@ -117,3 +121,8 @@ exports.save = function() {
   invokeSaveAsDialog(currentVideoBlob, 'DC ' + formatted + '.webm');
   invokeSaveAsDialog(currentAudioBlob, 'DC ' + formatted + '.wav');
 };
+
+exports.uploadBlobs = function(info) {//info is object with properties interviewee_name and folder_id
+  uploadService.uploadBlobToDrive(currentAudioBlob, info)
+  uploadService.uploadBlobToDrive(currentVideoBlob, info)
+}

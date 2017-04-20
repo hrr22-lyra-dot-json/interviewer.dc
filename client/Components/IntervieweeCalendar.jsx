@@ -34,7 +34,7 @@ const customStyles = {
 // ];
 
 var slotServ = new TimeslotService();
-const googleCalendarService = new googleCalendar()
+//const googleCalendarService = new googleCalendar()
 const userinfo = new newAuth()
 
 // a localizer for BigCalendar
@@ -48,22 +48,23 @@ class CalendarInterviewee extends React.Component {
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
     console.log('query', props.location.query);
     this.interviewer = Number(props.location.query.interviewer)
+    this.state.roomDetails = props.location.state
+    console.log('thestate', props.location.state)
     userinfo.getInfo(this.interviewer)
     userinfo.on('got_info', (info) => {
       console.log('got info:', info)
-      localStorage.setItem('googleUser', JSON.stringify({user: info.data}))
+      //localStorage.setItem('googleUser', JSON.stringify({user: info.data}))//this has to be removed and done a different way
 
     this.setState({interviewerInfo: info.data})
     })
     this.job_position = props.location.query.job_position
+    this.roomDbId = props.location.query.roomDbId
+
 
     slotServ.getThem(this.interviewer)
     //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
 
-    googleCalendarService.on('events_loaded', (evv) => {
-       this.setState({events: evv})
-       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
-     })
+
     slotServ.on('got_slots', (slots) => {
       console.log('slots',typeof slots.data[0].start)
       this.setState({availableSlots: slots.data})
@@ -116,9 +117,10 @@ class CalendarInterviewee extends React.Component {
       interviewer_name: this.state.interviewerInfo.username,
       roomid: this.job_position + this.interviewer,
       start: new Date(booking.start),
-      end: new Date(booking.end)
+      end: new Date(booking.end),
+      roomDbId: this.roomDbId
     }
-    slotServ.createEvent(eventor, booking);
+    slotServ.createEvent(eventor, booking, this.interviewer);
     Materialize.toast(`Appointment booked for ${eventor.job_position} on ${eventor.start.toDateString()} at ${eventor.start.toTimeString()}!`, 6000);
   }
 

@@ -4,8 +4,10 @@ import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} 
 import Calendar from './InterviewerCalendarContainer.jsx' //InterviewerCalendarContainer
 import CalendarAuth from './CalendarAuth.jsx'
 import Nav from './Nav.jsx'
-import newAuth from '../Services/newAuthenticationService.js'
 import Login from './Login.jsx'
+import RoomView from './RoomView.jsx'
+import newAuth from '../Services/newAuthenticationService.js'
+
 
 
 const googleLoginService = new newAuth()
@@ -13,7 +15,7 @@ const googleLoginService = new newAuth()
 export class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isIn: false, profile: {username: 'loading...'} }
+    this.state = {isIn: false, profile: {username: 'loading...'}, activeRoom: null }
     googleLoginService.isIn()
     googleLoginService.on('log_result', (result) => {
       if (result) {
@@ -34,6 +36,9 @@ export class Home extends React.Component {
     //   this.setState({profile: this.props.routes[1].auth.getProfile()})
     // })
   }
+  roomSelect(room) {
+    this.setState({activeRoom:room})
+  }
 
 
 
@@ -43,16 +48,30 @@ export class Home extends React.Component {
         <Login />
         )
     } else {
+      document.title = `Dashboard | Interviewer Direct Connection`;
 
-    document.title = `Dashboard | Interviewer Direct Connection`;
+      if (!this.state.activeRoom) {
+        return (
+          <div>
+            <Nav name={this.state.profile.username}  />
 
-    return (
-      <div>
-        <Nav name={this.state.profile.username}  />
+            <Calendar roomSelect={this.roomSelect.bind(this)}/>
 
-        <Calendar />
-      </div>
-    )
+          </div>
+        )
+
+      } else {
+        return (
+          <div>
+            <Nav name={this.state.profile.username}  />
+
+            <RoomView info={this.state.activeRoom} roomSelect={this.roomSelect.bind(this)}/>
+          </div>
+          )
+      }
+
+
+
   }
 }
 }
