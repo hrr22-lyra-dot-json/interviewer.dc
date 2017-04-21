@@ -6,6 +6,7 @@ import BigCalendar from 'react-big-calendar'
 import TimeslotService from '../Services/TimeslotService.js'
 import RoomService from '../Services/RoomService.js'
 import googleCalendar from '../Services/cService.js'
+<<<<<<< HEAD
 //import CalendarAuth from './CalendarAuth.jsx'
 import RoomList from './RoomList.jsx'
 import Modal from 'react-modal';
@@ -47,7 +48,6 @@ class Calendar extends React.Component {
     if (localStorage.getItem('googleUser')) {
       slotService.getThem(JSON.parse(localStorage.getItem('googleUser')).user.id)
     }
-    this.roomSelect = props.roomSelect;
 
     slotService.on('got_slots', (slots) => {
       console.log('slots', slots.data)
@@ -66,16 +66,6 @@ class Calendar extends React.Component {
     this.addAvailability = this.addAvailability.bind(this)
     this.logChange = this.logChange.bind(this)
 
-  }
-
-  componentDidMount() {
-    // Initialize collapse button
-    $(".button-collapse").sideNav({
-      menuWidth: 400,
-      closeOnClick: true
-    });
-    // Initialize collapsible (uncomment the line below if you use the dropdown variation)
-    //$('.collapsible').collapsible();
   }
 
   addInfo(slotInfo) {
@@ -151,19 +141,6 @@ class Calendar extends React.Component {
 
 
         <div className="row toggle-buttons">
-          <ul id="slide-out" className="side-nav">
-            <nav className="splash-nav blue darken-3">
-              <div className="nav-wrapper valign-wrapper">
-              </div>
-            </nav>
-            <RoomList roomSelect={this.roomSelect}/>
-            <footer className="center-align">
-            </footer>
-          </ul>
-
-          <a href="#" data-activates="slide-out" className="button-collapse btn waves-effect waves-light blue darken-3 view-cal-events-button left">
-            Toggle Room List
-          </a>
 
           <button id="authorize-button" className="btn waves-effect waves-light blue darken-3 view-cal-events-button right" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
             Toggle GCal Events

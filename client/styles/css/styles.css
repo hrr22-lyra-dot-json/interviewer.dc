@@ -162,17 +162,26 @@ a.powered-by-firepad {
   display: none;
 }
 
-/*******************************
-*                              *
+
+ /*******************************
+*       Intermediary Page      *
 ********************************/
 
-.breadcrumbs {
-  margin: .5rem 0;
+.intermediary-header {
+  margin: 3rem 0;
 }
 
-.intermediary-header {
-  margin-bottom: 3rem;
+/*******************************
+*           Room List          *
+********************************/
+
+.room-list {
+  color: black;
 }
+
+ /*******************************
+*                              *
+********************************/
 
 .clbtn {
   pointer-events: all !important;
