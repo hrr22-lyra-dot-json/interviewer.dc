@@ -90,16 +90,24 @@ const DrawableCanvas = React.createClass({
     let rect = this.state.canvas.getBoundingClientRect();
     this.state.context.beginPath();
     if(this.isMobile()){
+      let lastX = e.targetTouches[0].pageX - rect.left;
+      let lastY = e.targetTouches[0].pageY - rect.top;
       this.setState({
-        lastX: e.targetTouches[0].pageX - rect.left,
-        lastY: e.targetTouches[0].pageY - rect.top
+        lastX: lastX,
+        lastY: lastY
       });
+      trackingX.push(lastX);
+      trackingY.push(lastY);
     }
     else{
+      let lastX = e.clientX - rect.left;
+      let lastY = e.clientY - rect.top;
       this.setState({
         lastX: e.clientX - rect.left,
         lastY: e.clientY - rect.top
       });
+      trackingX.push(lastX);
+      trackingY.push(lastY);
     }
 
     this.setState({
