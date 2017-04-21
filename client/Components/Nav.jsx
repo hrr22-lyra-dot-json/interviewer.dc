@@ -7,12 +7,13 @@ const Nav = ({name}) => (
   <nav className="splash-nav blue darken-3">
     <div className="nav-wrapper">
 
-      <a href="/#">Hello, {name}!</a>
-      {/* <a href="/#" className="brand-logo center">Interviewer.DC</a> */}
-
       <ul className="right">
         <li>
-          <a href="/logout" className="btn waves-effect waves-light indigo darken-4">Sign Out</a>
+          <a className='dropdown-button' href='/#' data-activates='sign-out-dropdown' data-hover='true' data-belowOrigin='true'>Hello, {name}!</a>
+
+          <ul id='sign-out-dropdown' className='dropdown-content'>
+            <li><a href="/logout"><span className="glyphicons glyphicons-log-out"></span>Sign Out</a></li>
+          </ul>
         </li>
       </ul>
 

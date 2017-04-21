@@ -152,8 +152,15 @@ class Calendar extends React.Component {
 
         <div className="row toggle-buttons">
           <ul id="slide-out" className="side-nav">
+            <nav className="splash-nav blue darken-3">
+              <div className="nav-wrapper valign-wrapper">
+              </div>
+            </nav>
             <RoomList roomSelect={this.roomSelect}/>
+            <footer className="center-align">
+            </footer>
           </ul>
+
           <a href="#" data-activates="slide-out" className="button-collapse btn waves-effect waves-light blue darken-3 view-cal-events-button left">
             Toggle Room List
           </a>

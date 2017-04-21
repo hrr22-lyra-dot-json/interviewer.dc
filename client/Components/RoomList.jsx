@@ -87,7 +87,7 @@ class RoomList extends React.Component {
   render() {
     var roomSelect = this.roomSelect.bind(this);
     return (
-      <div>
+      <div className="room-list">
 
         <ul className="collection with-header">
           <li className="collection-header"><div><h4>Rooms<button id="add-room-button" onClick={ this.mboxPrompt.bind(this) } className="btn-floating btn-large waves-effect waves-light blue darken-3 secondary-content"><i className="glyphicons glyphicons-plus"></i></button></h4></div></li>

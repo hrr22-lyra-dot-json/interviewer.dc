@@ -54,7 +54,7 @@ export class Home extends React.Component {
           <div>
             <Nav name={this.state.profile.username}  />
 
-            <Calendar roomSelect={this.roomSelect.bind(this)}/>
+            <Calendar roomSelect={this.roomSelect.bind(this)} name={this.state.profile.username}/>
 
           </div>
         )
