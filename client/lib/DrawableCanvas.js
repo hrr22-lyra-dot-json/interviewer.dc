@@ -55,10 +55,10 @@ const DrawableCanvas = React.createClass({
     let context = this;
     this.props.webrtc.onmessage = function(event) {
       if (event.data.type === 'draw') {
-        let drawX = event.data.X;
-        let drawY = event.data.Y;
-        let otherWidth = event.data.width;
-        let otherHeight = event.data.height;
+        let drawX = event.data.data.X;
+        let drawY = event.data.data.Y;
+        let otherWidth = event.data.data.width;
+        let otherHeight = event.data.data.height;
 
         if (canvas.width !== otherWidth || canvas.height !== otherHeight) {
           let widthMultiplier = canvas.width / otherWidth;
