@@ -3,8 +3,8 @@ import React from 'react'
 import moment from 'moment'
 import events from '../events'
 import BigCalendar from 'react-big-calendar'
-import CalendarService from '../Services/CalendarService.js'
-import CalendarAuth from './CalendarAuth.jsx'
+//import CalendarService from '../Services/CalendarService.js'
+//import CalendarAuth from './CalendarAuth.jsx'
 import Modal from 'react-modal';
 import Select from 'react-select';
 import TimeslotService from '../Services/TimeslotService.js'
@@ -22,14 +22,6 @@ const customStyles = {
     bottom: 'auto'
   }
 };
-
-// const options = [
-//   { value: 15, label: '15 minutes' },
-//   { value: 20, label: '20 minutes' },
-//   { value: 30, label: '30 minutes' },
-//   { value: 45, label: '45 minutes' },
-//   { value: 60, label: '60 minutes' }
-// ];
 
 var slotServ = new TimeslotService();
 //const googleCalendarService = new googleCalendar()
@@ -64,7 +56,7 @@ class CalendarInterviewee extends React.Component {
 
 
     slotServ.on('got_slots', (slots) => {
-      console.log('slots',typeof slots.data[0].start)
+      //console.log('slots',typeof slots.data[0].start)
       this.setState({availableSlots: slots.data})
       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
     })

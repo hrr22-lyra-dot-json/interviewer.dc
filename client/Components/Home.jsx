@@ -1,8 +1,7 @@
 import React from 'react' //This page is the homepage of the portal, equivalent to app.jsx in our previous apps. App.jsx now holds the router
-import AuthService from '../Services/AuthService.js'
+//import AuthService from '../Services/AuthService.js'
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
 import Calendar from './InterviewerCalendarContainer.jsx' //InterviewerCalendarContainer
-import CalendarAuth from './CalendarAuth.jsx'
 import Nav from './Nav.jsx'
 import Login from './Login.jsx'
 import RoomView from './RoomView.jsx'

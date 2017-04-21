@@ -51,20 +51,18 @@ export default class TimeslotService extends EventEmitter {
       }
     })
     .then(function (response) {
+      if (response.data) {
      response.data.forEach(function(slot) {
         slot.start = new Date(slot.start)
         slot.end = new Date(slot.end)
       })
-     // var future = response.data.filter(function(slot) {
-     //    return slot.start.getTime() >= new Date().getTime();
-     //  })
 
       callback(response)
+    } else {
+      callback([])
+    }
+
       //this.gotthem(reponse).bind(this)
-      console.log('got slots', response);
-      console.log('got slots', response.data);
-
-
     })
     .catch(function (error) {
       console.log(error);
