@@ -34,6 +34,7 @@ export class Home extends React.Component {
     // })
   }
   roomSelect(room) {
+    $('.button-collapse').sideNav('hide');
     this.setState({activeRoom:room})
   }
 
@@ -60,7 +61,7 @@ export class Home extends React.Component {
         document.title = `${this.state.activeRoom.job_position} | Interviewer Direct Connection`;
         return (
           <div>
-            <Nav name={this.state.profile.username} room={this.state.activeRoom.job_position} roomSelect={this.roomSelect.bind(this)} />
+            <Nav name={this.state.profile.username} room={this.state.activeRoom.job_position} />
 
             <RoomView info={this.state.activeRoom} />
           </div>

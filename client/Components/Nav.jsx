@@ -41,7 +41,7 @@ export class Nav extends React.Component {
               </ul>
             </li>
           </ul>
-          <a href="#" data-activates="slide-out" className="button-collapse left">
+          <a href="#" data-activates="slide-out" className={ !this.props.room ? 'button-collapse left show' : 'hide' }>
             <span data-activates="slide-out" className="glyphicons glyphicons-menu-hamburger"></span>
           </a>
 
