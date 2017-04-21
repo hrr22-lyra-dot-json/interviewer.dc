@@ -56,6 +56,7 @@ export default class TimeslotService extends EventEmitter {
      response.data.forEach(function(slot) {
         slot.start = new Date(slot.start)
         slot.end = new Date(slot.end)
+        slot.description = 'timeSlot'
       })
 
       callback(response)

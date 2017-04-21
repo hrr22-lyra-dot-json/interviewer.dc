@@ -24,7 +24,7 @@ exports.createEvent = function(req, res, next) {
     end: new Date(req.body.end),
     interviewee_name: req.body.interviewee_name,
     interviewee_email: req.body.interviewee_email,
-    title: req.body.job_position,
+    title: req.body.job_position + ' interview for ' + req.body.interviewee_name,
     roomid: req.body.roomDbId,
     status: 'created'
   })

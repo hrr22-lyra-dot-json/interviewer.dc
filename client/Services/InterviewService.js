@@ -38,13 +38,16 @@ export default class InterviewService extends EventEmitter {
     });
   }
 
-  getInterviews(roomDbId, callback) {
+  // {
+  //       roomid: roomDbId,
+  //       owner_id: userid
+  //     }
+
+  getInterviews(params, callback) {
     var userid = JSON.parse(localStorage.getItem('googleUser')).user.id;
+    //var params = {owner_id: userid}
     axios.get('/api/Interviews', {
-      params: {
-        roomid: roomDbId,
-        owner_id: userid
-      }
+      params: params
     })
     .then(function(response) {
       callback(response.data)

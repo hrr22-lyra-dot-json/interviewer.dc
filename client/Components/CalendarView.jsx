@@ -31,6 +31,13 @@ var eventStyleGetter = function(event, start, end, isSelected) {
     if(event.description === 'Interview') {
       backgroundColor = 'orange'
     }
+    if(event.description === 'dbInterview') {
+      backgroundColor = 'red'
+    }
+    if(event.description === 'timeSlot') {
+      backgroundColor = 'green'
+    }
+
     var style = {
         backgroundColor: backgroundColor,
         //borderRadius: '0px',
@@ -54,7 +61,7 @@ var CalView = ({events, selectable, selectSlot, eventClick}) => (
       selectable={selectable}
         timeslots={8}
         style={{height: '75vh'}}
-        step={30}
+        step={15}
         events={events}
         scrollToTime={new Date(1970, 1, 1, 6)}
         defaultDate={new Date()}
