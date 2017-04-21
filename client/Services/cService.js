@@ -22,7 +22,7 @@ export default class googleCalendar extends EventEmitter {
   }
 
 
-  getItems(callback) {
+  getItems(callback) {//make this into a server post request which adds timeslots then returns them all, much better, more safe, guaranteed token
     var accessToken = JSON.parse(localStorage.getItem('googleUser')).token.token
     var calendarId = 'primary'
     var params = {'timeMin': (new Date()).toISOString(),

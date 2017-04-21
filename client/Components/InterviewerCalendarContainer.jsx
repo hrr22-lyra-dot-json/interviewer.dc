@@ -6,7 +6,7 @@ import BigCalendar from 'react-big-calendar'
 import TimeslotService from '../Services/TimeslotService.js'
 import RoomService from '../Services/RoomService.js'
 import googleCalendar from '../Services/cService.js'
-import CalendarAuth from './CalendarAuth.jsx'
+//import CalendarAuth from './CalendarAuth.jsx'
 import RoomList from './RoomList.jsx'
 import Modal from 'react-modal';
 import Select from 'react-select';

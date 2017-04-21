@@ -23,20 +23,20 @@ export default class newAuth extends EventEmitter {
       console.log(error);
     });
   }
-  loginner() {
-    //axios('/auth/google').then(console.log)
-    axios({
-      method: 'get',
-      url: '/auth/google',
-      headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS', 'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'}
-    })
-    .then(function (response) {
-      console.log('res',reponse);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
+  // loginner() {
+  //   //axios('/auth/google').then(console.log)
+  //   axios({
+  //     method: 'get',
+  //     url: '/auth/google',
+  //     headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS', 'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'}
+  //   })
+  //   .then(function (response) {
+  //     console.log('res',reponse);
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
+  // }
   isIn() {
     this.isLoggedIn(this.logmit.bind(this))
   }

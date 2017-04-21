@@ -6,7 +6,7 @@ import { browserHistory, hashHistory, Router, Route, Link, Redirect, withRouter}
 import Login from './Login.jsx'
 import Home from './Home.jsx'
 import CalendarInterviewee from './IntervieweeCalendar.jsx' // this is the page interviewees come too to book availabilities
-import AuthService from '../Services/AuthService.js'
+//import AuthService from '../Services/AuthService.js'
 import InterviewRoom from './InterviewRoom.jsx'
 import newAuth from '../Services/newAuthenticationService.js'
 //const googleLoginService = new newAuth()
