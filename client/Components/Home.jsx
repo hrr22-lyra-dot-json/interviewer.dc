@@ -19,10 +19,8 @@ export class Home extends React.Component {
     googleLoginService.on('log_result', (result) => {
       if (result) {
       this.setState({isIn: result, profile: JSON.parse(localStorage.getItem('googleUser')).user})
-    }
-    }
-    )
-
+      }
+    })
 
     //this.state = {  profile: this.props.routes[1].auth.getProfile() }
 
@@ -36,43 +34,41 @@ export class Home extends React.Component {
     // })
   }
   roomSelect(room) {
+    $('.button-collapse').sideNav('hide');
     this.setState({activeRoom:room})
   }
 
 
-
   render() {
     if (!this.state.isIn) {
+      document.title = `Login | Interviewer Direct Connection`;
       return (
         <Login />
-        )
+      )
     } else {
       document.title = `Dashboard | Interviewer Direct Connection`;
-
       if (!this.state.activeRoom) {
         return (
           <div>
-            <Nav name={this.state.profile.username}  />
+            <Nav name={this.state.profile.username} roomSelect={this.roomSelect.bind(this)} />
 
-            <Calendar roomSelect={this.roomSelect.bind(this)}/>
+            <Calendar name={this.state.profile.username} />
 
           </div>
         )
 
       } else {
+        document.title = `${this.state.activeRoom.job_position} | Interviewer Direct Connection`;
         return (
           <div>
-            <Nav name={this.state.profile.username}  />
+            <Nav name={this.state.profile.username} room={this.state.activeRoom.job_position} />
 
-            <RoomView info={this.state.activeRoom} roomSelect={this.roomSelect.bind(this)}/>
+            <RoomView info={this.state.activeRoom} />
           </div>
-          )
+        )
       }
-
-
-
+    }
   }
-}
 }
 
 export default Home;

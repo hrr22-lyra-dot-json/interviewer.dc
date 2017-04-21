@@ -66,19 +66,6 @@ class RoomView extends React.Component {
     var roomDatabaseId = this.state.roomDetails.id
     return (
       <div>
-        <div className="row breadcrumbs">
-          <div className="col s12">
-            <div className="left">
-              <a href="#!" onClick={this.goHome.bind(this)}>Home </a>
-              > Rooms > {this.state.roomDetails.job_position}
-            </div>
-            <div className="right">
-              <Link to={{ pathname: '/interviewee',  query: {interviewer: this.state.roomDetails.owner_id, job_position: this.state.roomDetails.job_position, roomDbId:this.state.roomDetails.id}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
-              <span className="glyphicons glyphicons-calendar rooms-section-icons"></span>
-              </Link>
-            </div>
-          </div>
-        </div>
 
         <div className="container">
           <h3 className="intermediary-header">{this.state.roomDetails.job_position}</h3>

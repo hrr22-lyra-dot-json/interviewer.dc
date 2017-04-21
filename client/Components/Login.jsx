@@ -11,7 +11,6 @@ export class Login extends React.Component {
   render() {
 
     console.log('props', this.props);
-    document.title = `Login | Interviewer Direct Connection`;
 
     return (
       <div className="splash">

@@ -24,7 +24,7 @@ var roomService = new RoomService()
 class RoomList extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {rooms:[{position: 'janitor'}], modalIsOpen: false}
+    this.state = {rooms:[{position: 'janitor'}] }
     this.roomSelect = props.roomSelect
 
     if (localStorage.getItem('googleUser')) {
@@ -37,35 +37,16 @@ class RoomList extends React.Component {
       this.setState({rooms: rooms.data})
     })
 
-    this.openModal = this.openModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
     this.addAvailability = this.addAvailability.bind(this)
 
   }
 
-
-
-  openModal() {
-    this.setState({modalIsOpen: true});
-    //this.setState({modalIsOpen: true});
-  }
-
-  afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    //this.refs.subtitle.style.color = '#f00';
-  }
-
-  closeModal() {
-    this.setState({modalIsOpen: false});
-  }
   addAvailability(slotLength, slotInfo) {
     //create room
     var room = {}
     room.userid = JSON.parse(localStorage.getItem('googleUser')).user.id
     room.position = this.state.position
     roomService.addRoom(room)
-    this.setState({modalIsOpen: false});
     Materialize.toast(`Room "${this.state.position}" created!`, 4000)
   }
 
@@ -87,7 +68,7 @@ class RoomList extends React.Component {
   render() {
     var roomSelect = this.roomSelect.bind(this);
     return (
-      <div>
+      <div className="room-list">
 
         <ul className="collection with-header">
           <li className="collection-header"><div><h4>Rooms<button id="add-room-button" onClick={ this.mboxPrompt.bind(this) } className="btn-floating btn-large waves-effect waves-light blue darken-3 secondary-content"><i className="glyphicons glyphicons-plus"></i></button></h4></div></li>

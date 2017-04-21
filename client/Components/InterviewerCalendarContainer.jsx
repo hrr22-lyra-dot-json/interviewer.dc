@@ -47,7 +47,6 @@ class Calendar extends React.Component {
     if (localStorage.getItem('googleUser')) {
       slotService.getThem(JSON.parse(localStorage.getItem('googleUser')).user.id)
     }
-    this.roomSelect = props.roomSelect;
 
     slotService.on('got_slots', (slots) => {
       console.log('slots', slots.data)
@@ -66,16 +65,6 @@ class Calendar extends React.Component {
     this.addAvailability = this.addAvailability.bind(this)
     this.logChange = this.logChange.bind(this)
 
-  }
-
-  componentDidMount() {
-    // Initialize collapse button
-    $(".button-collapse").sideNav({
-      menuWidth: 400,
-      closeOnClick: true
-    });
-    // Initialize collapsible (uncomment the line below if you use the dropdown variation)
-    //$('.collapsible').collapsible();
   }
 
   addInfo(slotInfo) {
@@ -149,14 +138,7 @@ class Calendar extends React.Component {
     return (
       <div className="container calendar-section">
 
-
         <div className="row toggle-buttons">
-          <ul id="slide-out" className="side-nav">
-            <RoomList roomSelect={this.roomSelect}/>
-          </ul>
-          <a href="#" data-activates="slide-out" className="button-collapse btn waves-effect waves-light blue darken-3 view-cal-events-button left">
-            Toggle Room List
-          </a>
 
           <button id="authorize-button" className="btn waves-effect waves-light blue darken-3 view-cal-events-button right" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
             Toggle GCal Events
