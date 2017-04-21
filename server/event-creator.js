@@ -11,15 +11,12 @@ const Meeting = require('./database/models').Meeting;
 
 
 
-// This is an express callback.
 exports.createEvent = function(req, res, next) {
-    console.log('hahaha had it all allong or did I', req.user)
-
+  console.log('logged in user:', req.user)
   var retries = 3;
-
-    var send401Response = function() {
-      return res.status(401).end();
-    };
+  var send401Response = function() {
+    return res.status(401).end();
+  };
 
   Interview.create({
     owner_id: req.body.interviewer_id,
@@ -27,7 +24,7 @@ exports.createEvent = function(req, res, next) {
     end: new Date(req.body.end),
     interviewee_name: req.body.interviewee_name,
     interviewee_email: req.body.interviewee_email,
-    title: req.body.job_position,
+    title: req.body.job_position + ' interview for ' + req.body.interviewee_name,
     roomid: req.body.roomDbId,
     status: 'created'
   })
@@ -40,20 +37,6 @@ exports.createEvent = function(req, res, next) {
         return send401Response();
       }
       var tokener = token;
-      // var makeRequest = function() {
-      //   retries--;
-      //   console.log('run number', (3 - retries))
-      //   if(!retries) {
-      //     console.log('error 2')// Couldn't refresh the access token.
-      //     return send401Response();
-      //   }
-
-      // var auth = new google.auth.OAuth2;
-      // auth.setCredentials({
-      //   access_token: token.token,
-      //   refresh_token: token.refreshToken
-      //   //expiry_date: true
-      // });
       Meeting.find({where:{id: req.body.roomDbId}})
       .then(function(room) {
         console.log('found room')
@@ -66,7 +49,7 @@ exports.createEvent = function(req, res, next) {
           retries--;
           console.log('run number', (3 - retries))
           if(!retries) {
-            console.log('error 2')// Couldn't refresh the access token.
+            console.log('Error creating google event and drive folder; could not refresh access token')// Couldn't refresh the access token.
             return send401Response();
           }
           var auth = new google.auth.OAuth2;
@@ -110,7 +93,7 @@ exports.createEvent = function(req, res, next) {
             "url": 'http://127.0.0.1:3000/#/interviewroom?roomid=' + interview.id,
             "title": 'Link to Interviewroom'
           },
-          'description': 'Your first inner-view',
+          'description': 'Interview',
           'start': {
             'dateTime': new Date(req.body.start),
             'timeZone': 'America/Los_Angeles'

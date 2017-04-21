@@ -19,11 +19,6 @@ var refresh = require('passport-oauth2-refresh');
 ** Expected response on database error: 500 Internal Server Error status
 */
 exports.createInterviewFolder = function(req, res) {
-  // req.body.interviewee
-  // req.body.room_folder_id
-  // req.body.interview_id
-  // req.body.owner_id
-
   var retries = 3;
   console.log('hahaha had it all allong or did I', req.user)
 
@@ -90,11 +85,6 @@ exports.createInterviewFolder = function(req, res) {
     })
   })
 }
-
-
-
-
-
 
 exports.addMeeting = function(req, res) {
     console.log('hahaha had it all allong should have it here', req.user)
@@ -164,9 +154,6 @@ exports.addMeeting = function(req, res) {
     })
   })
 }
-
-
-
 
 /*
 ** Expected request query: {owner_id(integer): 'owner id'}

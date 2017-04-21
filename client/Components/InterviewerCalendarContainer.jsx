@@ -10,6 +10,9 @@ import googleCalendar from '../Services/cService.js'
 import RoomList from './RoomList.jsx'
 import Modal from 'react-modal';
 import Select from 'react-select';
+import InterviewService from '../Services/InterviewService.js';
+
+const interviewService = new InterviewService()
 
 const customStyles = {
   overlay: {
@@ -40,7 +43,7 @@ var roomServ = new RoomService()
 class Calendar extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:new Date(), end:new Date()}, selectable:true, slotLength: 30};
+    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:new Date(), end:new Date()}, selectable:true, slotLength: 30, interviews:[]};
 
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
 
@@ -51,13 +54,43 @@ class Calendar extends React.Component {
     slotService.on('got_slots', (slots) => {
       console.log('slots', slots.data)
       this.setState({availableSlots: slots.data})
-      this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
+      this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots.concat(this.state.interviews))})
     })
 
     googleCalendarService.on('events_loaded', (evv) => {
        this.setState({events: evv})
-       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
+       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots.concat(this.state.interviews))})//.concat(this.state.interviews)
      })
+
+    interviewService.getThem({owner_id:JSON.parse(localStorage.getItem('googleUser')).user.id})
+
+    interviewService.on('got_interviews', (interviews) => {
+      if (interviews) {
+
+    interviews.forEach(function(slot) {
+        slot.start = new Date(slot.start)
+        slot.end = new Date(slot.end)
+        slot.description = 'dbInterview'
+      })
+
+
+        // var upcoming = interviews.filter(function(interview) {
+        //   return (new Date(interview.start)).getTime() >= (new Date()).getTime()
+        // }).sort(function(a, b) {
+        //   return (new Date(a.start)).getTime() - (new Date(b.start)).getTime()
+        // })
+
+        // console.log('upcoming', upcoming)
+
+        // var past = interviews.filter(function(interview) {
+        //   return (new Date(interview.start)).getTime() <= (new Date()).getTime()
+        // })
+        // console.log('past', past)
+        this.setState({interviews: interviews})
+        this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots.concat(this.state.interviews))})//.concat(this.state.interviews)
+      }
+    })
+
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);

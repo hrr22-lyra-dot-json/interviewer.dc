@@ -14,7 +14,8 @@ class RoomView extends React.Component {
     this.state = {roomDetails:props.info, questionList: [] , interviews:[], newQuestion:'', upcomingInterviews:[], pastInterviews:[]}
     console.log('roominfo', this.state.roomDetails)
     this.roomSelect = props.roomSelect;
-    interviewService.getThem(this.state.roomDetails.id)
+
+    interviewService.getThem({roomid:this.state.roomDetails.id, owner_id:JSON.parse(localStorage.getItem('googleUser')).user.id})
 
     interviewService.on('got_interviews', (interviews) => {
       if (interviews) {

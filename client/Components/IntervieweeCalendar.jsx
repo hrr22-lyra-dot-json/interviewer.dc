@@ -33,32 +33,38 @@ const userinfo = new newAuth()
 class CalendarInterviewee extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:false, slotLength: 30, booking:{start:'', end:''}, interviewerInfo:'', intervieweeName:'', intervieweeEmail:''};
+    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:false, slotLength: 30, booking:{start:'', end:''}, interviewerInfo:'', intervieweeName:'', intervieweeEmail:'', error:''};
+    this.state.error = ''
 
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
     console.log('query', props.location.query);
     this.interviewer = Number(props.location.query.interviewer)
+
     this.state.roomDetails = props.location.state
     console.log('thestate', props.location.state)
     userinfo.getInfo(this.interviewer)
     userinfo.on('got_info', (info) => {
       console.log('got info:', info)
-      //localStorage.setItem('googleUser', JSON.stringify({user: info.data}))//this has to be removed and done a different way
-
     this.setState({interviewerInfo: info.data})
     })
     this.job_position = props.location.query.job_position
     this.roomDbId = props.location.query.roomDbId
 
-
     slotServ.getThem(this.interviewer)
     //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
 
-
     slotServ.on('got_slots', (slots) => {
+      console.log('length', slots.data.length)
+      if (!slots.data.length) {
+        var errorMessage = 'Your interviewer has no availabilities, contact them directly.'
+        this.setState({error: errorMessage})
+      }
       //console.log('slots',typeof slots.data[0].start)
       this.setState({availableSlots: slots.data})
       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
+    })
+    slotServ.on('slot_error', (error) => {
+      this.setState({error: error})
     })
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
@@ -184,6 +190,7 @@ class CalendarInterviewee extends React.Component {
 
               </Modal>
             </div>
+            <p className="errorClass"> {this.state.error}</p>
           </div>
 
       </div>

@@ -64,6 +64,7 @@ export default class googleCalendar extends EventEmitter {
             evv.start = new Date(when);
             evv.end = new Date(end);
             evv.title = event.summary;
+            evv.description = event.description;
             evss.push(evv);
             //context.emit('events_loaded', evv);
             //module.exports.events.push(evv);
