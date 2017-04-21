@@ -65,7 +65,7 @@ exports.disableInputButtons = function() {
 exports.enableInputButtons = function() {
   document.getElementById('open-room').style.display = 'inline';
   // document.getElementById('join-room').disabled = false;
-  document.getElementById('room-id').disabled = false;
+  document.getElementById('room-id').disabled = true; // CHANGED SO IT ISN'T EDITABLE ANYMORE
 };
 
 // Helper function to change text of leave/close room based on role

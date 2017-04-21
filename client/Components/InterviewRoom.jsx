@@ -16,11 +16,7 @@ class InterviewRoom extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-        questionList: [
-            {question: 'Tell me about yourself'},
-            {question: 'Write a function that does nothing'},
-            {question: 'What is the difference between you, Potoooooooo, a potato, and a McDonalds French Fry?'}
-        ],
+        questionList: [],
         snapshots: [],
         interviewInfo:{}
     }
@@ -54,6 +50,8 @@ class InterviewRoom extends React.Component {
     // uploads both video and audio blob to google drive folder,
     // takes input object with properties interviewee_name and folder_id
     this.uploadBlobs = recorder.uploadBlobs
+    // checks state of recorder
+    this.isRecordingStarted = recorder.isRecordingStarted;
     // Basic Recorder Functions
     this.start = recorder.start;
     this.stop = recorder.stop;
@@ -100,13 +98,16 @@ class InterviewRoom extends React.Component {
     document.getElementById('prompt-text').innerHTML = '(No question selected)';
     document.getElementById('questionNote').value = '';
     this.codeMirror.setValue('');
-    // document.querySelector('#whiteboard button').click();
+    document.querySelector('#whiteboard button').click();
   }
 
   endInterview() {
     console.log(this);
-    // if recording is still playing, stop it
-    // Materialize.toast(`Session is still recording! Make sure to stop recording before saving session files`, 4000);
+
+    if (this.context.isRecordingStarted()) {
+        Materialize.toast(`Session is still recording! Make sure to stop recording before saving session files`, 2000);
+        return;
+    }
 
     var results = [];
     this.context.state.snapshots.forEach( (snapshot, index) => {
@@ -127,7 +128,7 @@ class InterviewRoom extends React.Component {
         this.context.state.snapshots.length > 0 ? this.context.uploadService(htmlblob, info) : Materialize.toast('No snapshots saved to upload', 2000);
     } else {
         // Save session summary html
-        this.context.state.snapshots.length > 0 ? invokeSaveAsDialog(htmlblob, 'Responses (' + this.context.roomid + ').html') : Materialize.toast('No snapshots saved to download', 2000);
+        this.context.state.snapshots.length > 0 ? invokeSaveAsDialog(htmlblob, 'Responses (Room ' + this.context.roomid + ').html') : Materialize.toast('No snapshots saved to download', 2000);
 
         // Save video/audio file
         this.context.save();

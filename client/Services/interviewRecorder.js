@@ -125,3 +125,7 @@ exports.uploadBlobs = function(info) {
   currentVideoBlob ? uploadService.uploadBlobToDrive(currentVideoBlob, info) : Materialize.toast('No video data available to upload', 2000);
   currentAudioBlob ? uploadService.uploadBlobToDrive(currentAudioBlob, info) : Materialize.toast('No audio data available to upload', 2000);
 };
+
+exports.isRecordingStarted = function() {
+  return isRecordingStarted;
+};
