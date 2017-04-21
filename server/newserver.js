@@ -77,9 +77,9 @@ passport.deserializeUser(function(obj, done) {
 // ));
 
 var strat = new GoogleStrategy({
-    clientID: '570801003952-9ss0c74s14sbjuof8qlmup8fd6dd4t3k.apps.googleusercontent.com',
-    clientSecret: 'nhrAFAbgiAP8eoPtJUAvtLd-',
-    callbackURL: 'http://localhost:3000/auth/google/callback',
+    clientID: process.env.clientID || '570801003952-9ss0c74s14sbjuof8qlmup8fd6dd4t3k.apps.googleusercontent.com',
+    clientSecret: process.env.clientSecret || 'nhrAFAbgiAP8eoPtJUAvtLd-',
+    callbackURL: process.callbackURL || 'http://localhost:3000/auth/google/callback',
     //grant_type: 'authorization_code',
     passReqToCallback   : true,
     accessType: 'offline'

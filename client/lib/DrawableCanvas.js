@@ -38,7 +38,7 @@ const DrawableCanvas = React.createClass({
     };
   },
   componentDidMount(){
-    let canvas = ReactDOM.findDOMNode(this);
+    let canvas = ReactDOM.findDOMNode(this).children[0];
 
     canvas.style.width = '100%';
     canvas.style.height = '100%';
@@ -52,13 +52,32 @@ const DrawableCanvas = React.createClass({
       context: ctx
     });
 
-    var context = this;
+    let context = this;
     this.props.webrtc.onmessage = function(event) {
-      var drawX = event.data.X;
-      var drawY = event.data.Y;
+      if (event.data.type === 'draw') {
+        let drawX = event.data.data.X;
+        let drawY = event.data.data.Y;
+        let otherWidth = event.data.data.width;
+        let otherHeight = event.data.data.height;
 
-      for (var i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
-        context.draw(drawX[i], drawY[i], drawX[i+1], drawY[i+1])
+        if (canvas.width !== otherWidth || canvas.height !== otherHeight) {
+          let widthMultiplier = canvas.width / otherWidth;
+          let heightMultiplier = canvas.height / otherHeight;
+          for (let i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
+            context.draw(
+              drawX[i] * widthMultiplier,
+              drawY[i] * heightMultiplier,
+              drawX[i+1] * widthMultiplier,
+              drawY[i+1] * heightMultiplier
+            );
+          }
+        } else {
+          for (let i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
+            context.draw(drawX[i], drawY[i], drawX[i+1], drawY[i+1]);
+          }
+        }
+      } else if (event.data.type === 'clear') {
+        context.resetCanvas();
       }
     };
   },
@@ -71,16 +90,24 @@ const DrawableCanvas = React.createClass({
     let rect = this.state.canvas.getBoundingClientRect();
     this.state.context.beginPath();
     if(this.isMobile()){
+      let lastX = e.targetTouches[0].pageX - rect.left;
+      let lastY = e.targetTouches[0].pageY - rect.top;
       this.setState({
-        lastX: e.targetTouches[0].pageX - rect.left,
-        lastY: e.targetTouches[0].pageY - rect.top
+        lastX: lastX,
+        lastY: lastY
       });
+      trackingX.push(lastX);
+      trackingY.push(lastY);
     }
     else{
+      let lastX = e.clientX - rect.left;
+      let lastY = e.clientY - rect.top;
       this.setState({
         lastX: e.clientX - rect.left,
         lastY: e.clientY - rect.top
       });
+      trackingX.push(lastX);
+      trackingY.push(lastY);
     }
 
     this.setState({
@@ -119,8 +146,13 @@ const DrawableCanvas = React.createClass({
       drawing: false
     });
     this.props.webrtc.send({
-      X: trackingX,
-      Y: trackingY
+      type: 'draw',
+      data: {
+        X: trackingX,
+        Y: trackingY,
+        width: ReactDOM.findDOMNode(this).children[0].width,
+        height: ReactDOM.findDOMNode(this).children[0].height
+      }
     });
     trackingX = [];
     trackingY = [];
@@ -131,6 +163,12 @@ const DrawableCanvas = React.createClass({
     this.state.context.moveTo(lX,lY);
     this.state.context.lineTo(cX,cY);
     this.state.context.stroke();
+  },
+  handleClear(){
+    this.props.webrtc.send({
+      type: 'clear'
+    });
+    this.resetCanvas();
   },
   resetCanvas(){
     let width = this.state.context.canvas.width;
@@ -156,15 +194,18 @@ const DrawableCanvas = React.createClass({
   },
   render() {
     return (
-      <canvas style = {this.canvasStyle()}
-        onMouseDown = {this.handleOnMouseDown}
-        onTouchStart = {this.handleOnMouseDown}
-        onMouseMove = {this.handleOnMouseMove}
-        onTouchMove = {this.handleOnMouseMove}
-        onMouseUp = {this.handleonMouseUp}
-        onTouchEnd = {this.handleonMouseUp}
-      >
-      </canvas>
+      <div style={{height: 100 + '%'}}>
+        <canvas style = {this.canvasStyle()}
+          onMouseDown = {this.handleOnMouseDown}
+          onTouchStart = {this.handleOnMouseDown}
+          onMouseMove = {this.handleOnMouseMove}
+          onTouchMove = {this.handleOnMouseMove}
+          onMouseUp = {this.handleonMouseUp}
+          onTouchEnd = {this.handleonMouseUp}
+        >
+        </canvas>
+        <button onClick={this.handleClear}>Clear</button>
+      </div>
     );
   }
 
