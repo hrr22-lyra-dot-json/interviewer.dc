@@ -139,7 +139,6 @@ class Calendar extends React.Component {
     return (
       <div className="container calendar-section">
 
-
         <div className="row toggle-buttons">
 
           <button id="authorize-button" className="btn waves-effect waves-light blue darken-3 view-cal-events-button right" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
