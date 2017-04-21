@@ -5,6 +5,7 @@ import * as lobby from '../Services/interviewLobby.js';
 import QuestionService from '../Services/QuestionService.js';
 import DrawableCanvas from '../lib/DrawableCanvas.js';
 import InterviewService from '../Services/InterviewService.js';
+import uploadService from '../Services/UploadService.js';
 
 const interviewService = new InterviewService()
 const questionService = new QuestionService()
@@ -50,20 +51,21 @@ class InterviewRoom extends React.Component {
         this.setState({questionList: questions})
     })
 
-    this.uploadBlobs = recorder.uploadBlobs //uploads both video and audio blob to google drive folder, takes input object with properties interviewee_name and folder_id
-
+    // uploads both video and audio blob to google drive folder,
+    // takes input object with properties interviewee_name and folder_id
+    this.uploadBlobs = recorder.uploadBlobs
+    // Basic Recorder Functions
     this.start = recorder.start;
     this.stop = recorder.stop;
     this.save = recorder.save;
+    // Lobby Controls
     this.openRoom = lobby.openRoom;
     this.joinRoom = lobby.joinRoom;
     this.closeRoom = lobby.closeRoom;
+    // Access to CodeMirror box in the current scope
     this.codeMirror;
-  }
 
-  uploadTheBlobs() {
-    var info = {interviewee_name: this.state.interviewInfo.interviewee_name, folder_id: this.state.interviewInfo.drive_link}
-    this.uploadBlobs(info)
+    this.uploadService = uploadService.uploadBlobToDrive;
   }
 
   addQuestion() {
@@ -99,38 +101,43 @@ class InterviewRoom extends React.Component {
     document.getElementById('questionNote').value = '';
     this.codeMirror.setValue('');
     // document.querySelector('#whiteboard button').click();
-
-    Materialize.toast(`Screen cleared`, 2000);
   }
 
   endInterview() {
-    //this.uploadTheBlobs()
     console.log(this);
     // if recording is still playing, stop it
+    // Materialize.toast(`Session is still recording! Make sure to stop recording before saving session files`, 4000);
+
+    var results = [];
+    this.context.state.snapshots.forEach( (snapshot, index) => {
+        var q = `<strong><u>Question #${index + 1}: ${snapshot.question}</u></strong>`;
+        var n = `<strong>Notes:</strong> ${snapshot.notes}`;
+        var c = `<strong>Code:</strong> <br /><pre>${snapshot.codeshare}</pre>`;
+        var wb = `<strong>Whiteboard:</strong> <br /><img src="${snapshot.whiteboard}" style="border-style: solid; border-width: 1px;">`;
+        results.push(q + '<br />' + n + '<br /><br />' + c + '<br />' + wb);
+    })
+    var html = '<!DOCTYPE html><html><head> <title>Interview Notes</title></head><body><h1>Interview Notes for session ' + this.context.roomid + '</h2>';
+    html += results.join('<hr>');
+    var htmlblob = new Blob([html], {type: "text/plain;charset=utf-8"});
 
     if (this.type === 'ul') {
-
+        var info = {interviewee_name: this.context.state.interviewInfo.interviewee_name, folder_id: this.context.state.interviewInfo.drive_link}
+        this.context.uploadBlobs(info)
+        // upload html files also
+        this.context.state.snapshots.length > 0 ? this.context.uploadService(htmlblob, info) : Materialize.toast('No snapshots saved to upload', 2000);
     } else {
-        var results = [];
-        this.context.state.snapshots.forEach( (snapshot, index) => {
-            var q = `<strong><u>Question #${index + 1}: ${snapshot.question}</u></strong>`;
-            var n = `<strong>Notes:</strong> ${snapshot.notes}`;
-            var c = `<strong>Code:</strong> <br /><pre>${snapshot.codeshare}</pre>`;
-            var wb = `<strong>Whiteboard:</strong> <br /><img src="${snapshot.whiteboard}" style="border-style: solid; border-width: 1px;">`;
-            results.push(q + '<br />' + n + '<br /><br />' + c + '<br />' + wb);
-        })
-        var html = '<!DOCTYPE html><html><head> <title>Interview Notes</title></head><body><h1>Interview Notes for session ' + this.context.roomid + '</h2>';
-        html += results.join('<hr>');
+        // Save session summary html
+        this.context.state.snapshots.length > 0 ? invokeSaveAsDialog(htmlblob, 'Responses (' + this.context.roomid + ').html') : Materialize.toast('No snapshots saved to download', 2000);
 
-        var blob = new Blob([html], {type: "text/plain;charset=utf-8"});
-        invokeSaveAsDialog(blob, 'Responses (' + this.context.roomid + ').html');
+        // Save video/audio file
+        this.context.save();
     }
   }
 
   componentDidMount() {
     // Set initial button states
+    // document.getElementById('save').disabled = true;
     document.getElementById('stop').style.display = 'none';
-    document.getElementById('save').disabled = true;
     document.getElementById('close-room').style.display = 'none';
 
     // Initialize Recorder functionality and Socket.io connection server
@@ -245,7 +252,7 @@ class InterviewRoom extends React.Component {
                         <a id="urlButton" className="col s3 btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
                         <button id="start" className="col s3 btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
                         <button id="stop" className="col s3 btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
-                        <button id="save" className="col s3 btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button>
+                        {/*<button id="save" className="col s3 btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button>*/}
                     </div>
                     <hr></hr>
                     <form className="col s12">
@@ -268,7 +275,7 @@ class InterviewRoom extends React.Component {
                             <ul id='endInterview' className='dropdown-content'>
                                 <li><a onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
                                 <li className="divider"></li>
-                                <li><a onClick={this.endInterview.bind({ context: this, type: 'ul' })}><span className="social social-google-drive"></span>Upload to Drive</a></li>
+                                <li><a onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a></li>
                             </ul>
                         </div>
                     </form>

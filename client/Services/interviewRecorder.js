@@ -2,7 +2,7 @@
 //////////////////////   RECORDER Code   //////////////////////
 ///////////////////////////////////////////////////////////////
 // State variables
-import  uploadService from './UploadService.js';
+import uploadService from './UploadService.js';
 
 var isRecordingStarted = false;
 var isStoppedRecording = false;
@@ -75,7 +75,7 @@ exports.initializeRecorder = function() {
 exports.start = function() {
   document.getElementById('start').style.display = 'none';
   document.getElementById('stop').style.display = 'inline';
-  document.getElementById('save').disabled = true;
+  // document.getElementById('save').disabled = true;
 
   // Set states
   isStoppedRecording = false;
@@ -101,9 +101,7 @@ exports.stop = function() {
     currentVideoBlob = vBlob;
     audioRecorder.stop(function(aBlob) {
       currentAudioBlob = aBlob;
-      document.getElementById('save').disabled = false;
-      //uploadService.uploadAudio(currentAudioBlob)
-
+      // document.getElementById('save').disabled = false;
 
       console.log('VIDEO BLOB', currentVideoBlob);
       console.log('AUDIO BLOB', currentAudioBlob);
@@ -118,11 +116,12 @@ exports.save = function() {
   var date = new Date();
   var formatted = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} (${date.getTime()})`;
 
-  invokeSaveAsDialog(currentVideoBlob, 'DC ' + formatted + '.webm');
-  invokeSaveAsDialog(currentAudioBlob, 'DC ' + formatted + '.wav');
+  currentVideoBlob ? invokeSaveAsDialog(currentVideoBlob, 'DC ' + formatted + '.webm') : Materialize.toast('No video data saved to download', 2000);
+  currentAudioBlob ? invokeSaveAsDialog(currentAudioBlob, 'DC ' + formatted + '.wav') : Materialize.toast('No audio data saved to download', 2000);
 };
 
-exports.uploadBlobs = function(info) {//info is object with properties interviewee_name and folder_id
-  uploadService.uploadBlobToDrive(currentAudioBlob, info)
-  uploadService.uploadBlobToDrive(currentVideoBlob, info)
-}
+exports.uploadBlobs = function(info) {
+  //info is object with properties interviewee_name and folder_id
+  currentVideoBlob ? uploadService.uploadBlobToDrive(currentVideoBlob, info) : Materialize.toast('No video data available to upload', 2000);
+  currentAudioBlob ? uploadService.uploadBlobToDrive(currentAudioBlob, info) : Materialize.toast('No audio data available to upload', 2000);
+};
