@@ -17,7 +17,7 @@ export default class TimeslotService extends EventEmitter {
   }
 
   createEvent(eventor, slot, owner_id) {
-    this.createAnEvent(eventor, this.deleteSlot.bind(this), slot, this.getThem.bind(this), owner_id)
+    this.createAnEvent(eventor, this.deleteSlot.bind(this), slot, this.getThem.bind(this), owner_id, this.gotError.bind(this))
   }
 
   deleteSlot(slotId, callback, owner_id) {
@@ -45,6 +45,7 @@ export default class TimeslotService extends EventEmitter {
     });
   }
   getSlots(userid, callback) {
+    var errorCallback = this.gotError.bind(this)
     axios.get('/api/Timeslots', {
       params: {
         owner_id: userid
@@ -59,13 +60,15 @@ export default class TimeslotService extends EventEmitter {
 
       callback(response)
     } else {
-      callback([])
+      callback({data:[]})
     }
 
       //this.gotthem(reponse).bind(this)
     })
     .catch(function (error) {
       console.log(error);
+      errorCallback(error)
+
     });
   }
   hasBeenAdded(slots) {
@@ -74,7 +77,10 @@ export default class TimeslotService extends EventEmitter {
   gotthem(slots) {
     this.emit('got_slots', slots)
   }
-  createAnEvent (event, callback, slot, callback2, owner_id) {
+  gotError(error) {
+    this.emit('slot_error', error)
+  }
+  createAnEvent (event, callback, slot, callback2, owner_id, errorCallback) {
     axios.post('/api/Event', event)
     .then(function (response) {
       console.log('added event', response);
@@ -82,6 +88,7 @@ export default class TimeslotService extends EventEmitter {
     })
     .catch(function (error) {
       console.log(error);
+      errorCallback(error);
     });
   }
 
