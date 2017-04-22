@@ -43,8 +43,8 @@ export default class RoomService extends EventEmitter {
     .then(function (response) {
       callback(response)
       //this.gotthem(reponse).bind(this)
-      console.log('got rooms', response);
-      console.log('got rooms', response.data);
+      // console.log('got rooms', response);
+      // console.log('got rooms', response.data);
     })
     .catch(function (error) {
       console.log(error);

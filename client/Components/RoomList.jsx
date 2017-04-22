@@ -82,7 +82,7 @@ class RoomList extends React.Component {
 
                     <div className="secondary-content" onClick={() => roomSelect(room)}>
                     <span className="glyphicons glyphicons-exit rooms-section-icons"></span></div>
-                    <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position, roomDbId:room.id}/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="secondary-content">
+                    <Link to={{ pathname: '/interviewee', query: {interviewer: room.owner_id, job_position: room.job_position, roomDbId:room.id} }} className="secondary-content">
                       <span className="glyphicons glyphicons-calendar rooms-section-icons"></span>
                     </Link>
                   </div>
