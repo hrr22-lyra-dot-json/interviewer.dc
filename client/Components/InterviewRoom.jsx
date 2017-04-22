@@ -365,15 +365,18 @@ class InterviewRoom extends React.Component {
 
                             <li className="divider"></li>
 
-                            <a className="col s12 btn waves-effect waves-light green" onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a>
-                            <a className="col s12 btn waves-effect waves-light yellow darken-3" onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a>
-                            <a className="col s12 btn waves-effect waves-light yellow darken-4" href={"https://drive.google.com/drive/folders/" + this.state.interviewInfo.drive_link} target="_blank">Open Drive</a>
+                            <a className='dropdown-button btn col s12 green' data-activates='sessionFileDropdown' data-hover='true' data-stopPropagation='true' data-outDuration='100' data-inDuration='100'><span className="glyphicons glyphicons-handshake"></span>Session Files</a>
+                            <ul id='sessionFileDropdown' className='dropdown-content'>
+                                <li className="col s12 green" ><a className="white-text" onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
+                                <li className="col s12 yellow darken-3"><a className="white-text" onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a></li>
+                                <li className="col s12 yellow darken-4"><a className="white-text" href={"https://drive.google.com/drive/folders/" + this.state.interviewInfo.drive_link} target="_blank">Open Drive</a></li>
                             {/*<a className="dropdown-button btn col s12 green" href="#" data-activates="endInterview"><span className="glyphicons glyphicons-handshake"></span>End Interview</a>
                             <ul id='endInterview' className='dropdown-content'>
                                 <li><a onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
                                 <li className="divider"></li>
                                 <li><a onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a></li>
                             </ul>*/}
+                            </ul>
                         </div>
                     </form>
                 </div>
