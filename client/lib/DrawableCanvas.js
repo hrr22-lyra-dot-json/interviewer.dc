@@ -34,6 +34,8 @@ class DrawableCanvas extends React.Component {
     canvas.height = canvas.offsetHeight;
 
     let ctx = canvas.getContext('2d');
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'butt';
 
     this.setState({
       canvas: canvas,
@@ -45,7 +47,6 @@ class DrawableCanvas extends React.Component {
       if (event.data.type === 'draw') {
         let data = event.data.data;
 
-        context.state.context.beginPath();
         if (canvas.width !== data.width || canvas.height !== data.height) {
           let widthMultiplier = canvas.width / data.width;
           let heightMultiplier = canvas.height / data.height;
@@ -85,7 +86,6 @@ class DrawableCanvas extends React.Component {
 
   handleOnMouseDown(e) {
     let rect = this.state.canvas.getBoundingClientRect();
-    this.state.context.beginPath();
     if(this.isMobile()){
       let lastX = e.targetTouches[0].pageX - rect.left;
       let lastY = e.targetTouches[0].pageY - rect.top;
@@ -159,10 +159,12 @@ class DrawableCanvas extends React.Component {
   }
 
   draw(lX, lY, cX, cY, brushColor, lineWidth) {
+    this.state.context.beginPath();
     this.state.context.strokeStyle = brushColor || this.brushColor;
     this.state.context.lineWidth = lineWidth || this.lineWidth;
     this.state.context.moveTo(lX,lY);
     this.state.context.lineTo(cX,cY);
+    this.state.context.closePath();
     this.state.context.stroke();
   }
 
