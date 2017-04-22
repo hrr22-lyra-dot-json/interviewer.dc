@@ -13,6 +13,23 @@ const questionService = new QuestionService()
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
 
 window.isRecording = recorder.isRecordingStarted;
+window.getBrowser = function() {
+    var ua=navigator.userAgent,tem,M=ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if(/trident/i.test(M[1])){
+        tem=/\brv[ :]+(\d+)/g.exec(ua) || [];
+        return {name:'IE',version:(tem[1]||'')};
+        }
+    if(M[1]==='Chrome'){
+        tem=ua.match(/\bOPR|Edge\/(\d+)/)
+        if(tem!=null)   {return {name:'Opera', version:tem[1]};}
+        }
+    M=M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+    if((tem=ua.match(/version\/(\d+)/i))!=null) {M.splice(1,1,tem[1]);}
+    return {
+      name: M[0],
+      version: M[1]
+    };
+}
 
 class InterviewRoom extends React.Component {
   constructor (props) {
@@ -194,20 +211,17 @@ class InterviewRoom extends React.Component {
   }
 
   componentDidMount() {
+    // Detect browser
+    var browser = window.getBrowser();
+    if (browser.name === 'Chrome' && browser.version === '58') {
+        document.getElementById('browserWarning').style.display = 'none';
+    }
+
     // If you click the browser's back button, it will usually cause errors
     // This will act like you are clicking the "home" button
     window.onpopstate = function() {
         window.location.replace(window.location.origin);
     }
-    // window.onbeforeunload = function(e) {
-    //     console.log(this);
-    //     if (window.isRecording()) {
-    //         Materialize.toast(`Session is still recording! Stop recording before navigating away from the interview room`, 2000);
-    //         var message = 'whatev';
-    //         e.returnValue = message;
-    //         return message;
-    //     }
-    // }
 
     // Set initial button states
     document.getElementById('stop').style.display = 'none';
@@ -235,7 +249,6 @@ class InterviewRoom extends React.Component {
 
     var context = this; //for firepad / codeshare
     $(document).ready(function(){
-
         // Make sure tabs and side-nav function properly after rendered
         $('ul.tabs').tabs();
         $(".button-collapse").sideNav({
@@ -329,6 +342,9 @@ class InterviewRoom extends React.Component {
                         <a id="urlButton" className="col s4 btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
                         <button id="start" className="col s4 btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
                         <button id="stop" className="col s4 btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
+                    </div>
+                    <div id="browserWarning" className="row">
+                        Video session recording is only compatible with Chrome 58 and above!
                     </div>
                     <hr></hr>
                     <form className="col s12">
