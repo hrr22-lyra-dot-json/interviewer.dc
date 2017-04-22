@@ -1,7 +1,6 @@
 'use strict';
 const React = require('react');
 const ReactDOM = require('react-dom');
-const PropTypes = React.PropTypes;
 
 class DrawableCanvas extends React.Component {
   constructor(props) {
@@ -44,28 +43,32 @@ class DrawableCanvas extends React.Component {
     let context = this;
     this.props.webrtc.onmessage = function(event) {
       if (event.data.type === 'draw') {
-        let brushColor = event.data.data.brushColor;
-        let drawX = event.data.data.X;
-        let drawY = event.data.data.Y;
-        let otherWidth = event.data.data.width;
-        let otherHeight = event.data.data.height;
+        let data = event.data.data;
 
         context.state.context.beginPath();
-        if (canvas.width !== otherWidth || canvas.height !== otherHeight) {
-          let widthMultiplier = canvas.width / otherWidth;
-          let heightMultiplier = canvas.height / otherHeight;
-          for (let i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
+        if (canvas.width !== data.width || canvas.height !== data.height) {
+          let widthMultiplier = canvas.width / data.width;
+          let heightMultiplier = canvas.height / data.height;
+          for (let i = 0; i < data.X.length-1 && i < data.Y.length-1; i++) {
             context.draw(
-              drawX[i] * widthMultiplier,
-              drawY[i] * heightMultiplier,
-              drawX[i+1] * widthMultiplier,
-              drawY[i+1] * heightMultiplier,
-              brushColor
+              data.X[i] * widthMultiplier,
+              data.Y[i] * heightMultiplier,
+              data.X[i+1] * widthMultiplier,
+              data.Y[i+1] * heightMultiplier,
+              data.brushColor,
+              data.lineWidth
             );
           }
         } else {
-          for (let i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
-            context.draw(drawX[i], drawY[i], drawX[i+1], drawY[i+1], brushColor);
+          for (let i = 0; i < data.X.length-1 && i < data.Y.length-1; i++) {
+            context.draw(
+              data.X[i],
+              data.Y[i],
+              data.X[i+1],
+              data.Y[i+1],
+              data.brushColor,
+              data.lineWidth
+            );
           }
         }
       } else if (event.data.type === 'clear') {
@@ -147,16 +150,17 @@ class DrawableCanvas extends React.Component {
         Y: this.trackingY,
         width: ReactDOM.findDOMNode(this).children[0].width,
         height: ReactDOM.findDOMNode(this).children[0].height,
-        brushColor: this.brushColor
+        brushColor: this.brushColor,
+        lineWidth: this.lineWidth
       }
     });
     this.trackingX = [];
     this.trackingY = [];
   }
 
-  draw(lX, lY, cX, cY, brushColor) {
+  draw(lX, lY, cX, cY, brushColor, lineWidth) {
     this.state.context.strokeStyle = brushColor || this.brushColor;
-    this.state.context.lineWidth = this.lineWidth;
+    this.state.context.lineWidth = lineWidth || this.lineWidth;
     this.state.context.moveTo(lX,lY);
     this.state.context.lineTo(cX,cY);
     this.state.context.stroke();
@@ -169,12 +173,19 @@ class DrawableCanvas extends React.Component {
     this.resetCanvas();
   }
 
-  changeToBrush() {
-    this.brushColor = '#000000';
+  changePointer(id, option) {
+    if (id === 'brushButton') {
+      this.brushColor = '#000000';
+    } else if (id === 'eraserButton') {
+      this.brushColor = this.canvasStyle.backgroundColor;
+    } else if (id === 'widthSelector') {
+      this.lineWidth = option;
+    }
   }
 
-  changeToEraser() {
-    this.brushColor = this.canvasStyle.backgroundColor;
+  onSelectChange(id, event) {
+    this.changePointer(id, event.target.value);
+    document.getElementById(id).value = event.target.value;
   }
 
   resetCanvas() {
@@ -215,8 +226,15 @@ class DrawableCanvas extends React.Component {
           onTouchEnd = {this.handleonMouseUp.bind(this)}
         >
         </canvas>
-        <button onClick={this.changeToBrush.bind(this)}>Brush</button>
-        <button onClick={this.changeToEraser.bind(this)}>Eraser</button>
+        <button onClick={this.changePointer.bind(this, 'brushButton')}>Brush</button>
+        <button onClick={this.changePointer.bind(this, 'eraserButton')}>Eraser</button>
+        <select id="widthSelector" defaultValue="4" style={{display: 'inline'}} onChange={this.onSelectChange.bind(this, 'widthSelector')}>
+          <option value="1">1</option>
+          <option value="4">4</option>
+          <option value="8">8</option>
+          <option value="16">16</option>
+          <option value="32">32</option>
+        </select>
         <button id="clearButton" onClick={this.handleClear.bind(this)}>Clear</button>
       </div>
     );
