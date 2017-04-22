@@ -3,32 +3,11 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const PropTypes = React.PropTypes;
 
-var trackingX = [];
-var trackingY = [];
+class DrawableCanvas extends React.Component {
+  constructor(props) {
+    super(props);
 
-const DrawableCanvas = React.createClass({
-  propTypes: {
-    brushColor: PropTypes.string,
-    lineWidth: PropTypes.number,
-    canvasStyle: PropTypes.shape({
-      backgroundColor: PropTypes.string,
-      cursor: PropTypes.string
-    }),
-    clear: PropTypes.bool
-  },
-  getDefaultProps() {
-    return {
-      brushColor: '#000000',
-      lineWidth: 4,
-      canvasStyle: {
-        backgroundColor: '#FFFFFF',
-        cursor: 'pointer'
-      },
-      clear: false
-    };
-  },
-  getInitialState(){
-    return {
+    this.state = {
       canvas: null,
       context: null,
       drawing: false,
@@ -36,8 +15,19 @@ const DrawableCanvas = React.createClass({
       lastY: 0,
       history: []
     };
-  },
-  componentDidMount(){
+
+    this.brushColor = '#000000';
+    this.lineWidth = 4;
+    this.canvasStyle = {
+      backgroundColor: '#FFFFFF',
+      cursor: 'pointer'
+    };
+    this.clear = false;
+    this.trackingX = [];
+    this.trackingY = [];
+  }
+
+  componentDidMount() {
     let canvas = ReactDOM.findDOMNode(this).children[0];
 
     canvas.style.width = '100%';
@@ -80,13 +70,15 @@ const DrawableCanvas = React.createClass({
         context.resetCanvas();
       }
     };
-  },
-  componentWillReceiveProps: function(nextProps) {
+  }
+
+  componentWillReceiveProps(nextProps) {
     if(nextProps.clear){
       this.resetCanvas();
     }
-  },
-  handleOnMouseDown(e){
+  }
+
+  handleOnMouseDown(e) {
     let rect = this.state.canvas.getBoundingClientRect();
     this.state.context.beginPath();
     if(this.isMobile()){
@@ -96,8 +88,8 @@ const DrawableCanvas = React.createClass({
         lastX: lastX,
         lastY: lastY
       });
-      trackingX.push(lastX);
-      trackingY.push(lastY);
+      this.trackingX.push(lastX);
+      this.trackingY.push(lastY);
     }
     else{
       let lastX = e.clientX - rect.left;
@@ -106,15 +98,16 @@ const DrawableCanvas = React.createClass({
         lastX: e.clientX - rect.left,
         lastY: e.clientY - rect.top
       });
-      trackingX.push(lastX);
-      trackingY.push(lastY);
+      this.trackingX.push(lastX);
+      this.trackingY.push(lastY);
     }
 
     this.setState({
       drawing: true
     });
-  },
-  handleOnMouseMove(e){
+  }
+
+  handleOnMouseMove(e) {
 
     if(this.state.drawing){
       let rect = this.state.canvas.getBoundingClientRect();
@@ -137,78 +130,86 @@ const DrawableCanvas = React.createClass({
         lastX: currentX,
         lastY: currentY,
       });
-      trackingX.push(currentX);
-      trackingY.push(currentY);
+      this.trackingX.push(currentX);
+      this.trackingY.push(currentY);
     }
-  },
-  handleonMouseUp(){
+  }
+
+  handleonMouseUp() {
     this.setState({
       drawing: false
     });
     this.props.webrtc.send({
       type: 'draw',
       data: {
-        X: trackingX,
-        Y: trackingY,
+        X: this.trackingX,
+        Y: this.trackingY,
         width: ReactDOM.findDOMNode(this).children[0].width,
         height: ReactDOM.findDOMNode(this).children[0].height
       }
     });
-    trackingX = [];
-    trackingY = [];
-  },
-  draw(lX, lY, cX, cY){
-    this.state.context.strokeStyle = this.props.brushColor;
-    this.state.context.lineWidth = this.props.lineWidth;
+    this.trackingX = [];
+    this.trackingY = [];
+  }
+
+  draw(lX, lY, cX, cY) {
+    this.state.context.strokeStyle = this.brushColor;
+    this.state.context.lineWidth = this.lineWidth;
     this.state.context.moveTo(lX,lY);
     this.state.context.lineTo(cX,cY);
     this.state.context.stroke();
-  },
+  }
+
   handleClear(){
     this.props.webrtc.send({
       type: 'clear'
     });
     this.resetCanvas();
-  },
-  resetCanvas(){
+  }
+
+  resetCanvas() {
     let width = this.state.context.canvas.width;
     let height = this.state.context.canvas.height;
     this.state.context.clearRect(0, 0, width, height);
-  },
-  getDefaultStyle(){
+  }
+
+  getDefaultStyle() {
     return {
       backgroundColor: '#FFFFFF',
       cursor: 'pointer'
     };
-  },
-  canvasStyle(){
+  }
+
+  canvasStyle() {
     let defaults =  this.getDefaultStyle();
-    let custom = this.props.canvasStyle;
+    let custom = this.canvasStyle;
     return Object.assign({}, defaults, custom);
-  },
-  isMobile(){
+  }
+
+  isMobile() {
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
       return true;
     }
     return false;
-  },
+  }
+
   render() {
     return (
       <div style={{height: 100 + '%'}}>
-        <canvas style = {this.canvasStyle()}
-          onMouseDown = {this.handleOnMouseDown}
-          onTouchStart = {this.handleOnMouseDown}
-          onMouseMove = {this.handleOnMouseMove}
-          onTouchMove = {this.handleOnMouseMove}
-          onMouseUp = {this.handleonMouseUp}
-          onTouchEnd = {this.handleonMouseUp}
+        <canvas style = {this.canvasStyle}
+          onMouseDown = {this.handleOnMouseDown.bind(this)}
+          onTouchStart = {this.handleOnMouseDown.bind(this)}
+          onMouseMove = {this.handleOnMouseMove.bind(this)}
+          onTouchMove = {this.handleOnMouseMove.bind(this)}
+          onMouseUp = {this.handleonMouseUp.bind(this)}
+          onTouchEnd = {this.handleonMouseUp.bind(this)}
         >
         </canvas>
-        <button onClick={this.handleClear}>Clear</button>
+        <button onClick={this.handleClear.bind(this)}>Clear</button>
       </div>
     );
   }
 
-});
+};
 
 module.exports = DrawableCanvas;
