@@ -130,7 +130,7 @@ app.use(express.static(path.join(__dirname, '../')));
 //     saveUninitialized: true
 // }));
 
-/
+//
 
 
 app.get('/auth/google', passport.authenticate('google', { scope: [
