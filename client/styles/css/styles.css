@@ -16,6 +16,10 @@ main {
   flex: 1 0 auto;
 }
 
+.show {
+  display: inherit !important;
+}
+
 .preloader-wrapper {
   position: absolute;
   top: 0;
@@ -146,9 +150,9 @@ main {
   height: 650px;
 }
 
-#interview-side-panel {
-  /*width: 400px;*/
-}
+/*#interview-side-panel {
+  width: 400px;
+}*/
 
 #interviewerControls {
   padding: 15px 15px 0px 15px;
