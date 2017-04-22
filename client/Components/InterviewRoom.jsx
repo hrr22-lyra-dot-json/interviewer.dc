@@ -95,7 +95,8 @@ class InterviewRoom extends React.Component {
         question: document.getElementById('prompt-text').innerHTML,
         notes: document.getElementById('questionNote').value,
         codeshare: this.codeMirror.getValue(),
-        whiteboard: document.querySelector('#whiteboard canvas').toDataURL()
+        whiteboard: document.querySelector('#whiteboard canvas').toDataURL(),
+        time: document.getElementById('timeElapsed').innerHTML
     };
     console.log(snapshot);
     this.state.snapshots.push(snapshot);
@@ -113,7 +114,7 @@ class InterviewRoom extends React.Component {
   }
 
   endInterview() {
-    console.log(this);
+    // console.log(this);
 
     var _context = this.context;
     var _type = this.type;
@@ -129,10 +130,14 @@ class InterviewRoom extends React.Component {
     doc.font('Times-Bold', 20)
        .text(`Interview Notes for session ${_context.roomid}`, {
             align: 'center'
-       });
+       })
+       .moveDown();
+    doc.font('Times-Roman', 12)
+        .text(`Interview duration: ${document.getElementById('timeElapsed').innerHTML} (Minutes:Seconds)`)
+        .moveDown();
     _context.state.snapshots.forEach( (snapshot) => {
         doc.font('Times-Roman', 12)
-            .text(`Question: ${snapshot.question}`, {
+            .text(`Question: ${snapshot.question} (at ${snapshot.time})`, {
                 align: 'left',
                 underline: true
             })
@@ -173,9 +178,12 @@ class InterviewRoom extends React.Component {
         // DOWNLOAD or UPLOAD option routes
         if (_type === 'ul') {
             var info = {interviewee_name: _context.state.interviewInfo.interviewee_name, folder_id: _context.state.interviewInfo.drive_link}
+            // Upload video/audio blobs
             _context.uploadBlobs(info)
             // upload pdf files also
             _context.state.snapshots.length > 0 ? _context.uploadService(pdfblob, info) : Materialize.toast('No snapshots saved to upload (PDF)', 2000);
+
+            Materialize.toast('Upload success!', 2000);
         } else {
             // Save session summary pdf
             _context.state.snapshots.length > 0 ? invokeSaveAsDialog(pdfblob, 'Responses (Room ' + _context.roomid + ').pdf') : Materialize.toast('No snapshots saved to download (PDF)', 2000);
@@ -291,7 +299,7 @@ class InterviewRoom extends React.Component {
                 {/* Room info, webcam, roles, participants, session buttons */}
                 <div className="col s12 card blue-grey darken-1">
                     <div className="card-content white-text">
-                        <span className="card-title">Interview Session <span className="new badge red" data-badge-caption="">00:00</span></span>
+                        <span className="card-title">Interview Session <span id="timeElapsed" className="new badge red" data-badge-caption="">00:00</span></span>
                         <div id="room-name-container" className="input-field col s12">
                             <input type="text" id="room-id"></input>
                             <label htmlFor="room-id">Room Number</label>
@@ -342,8 +350,8 @@ class InterviewRoom extends React.Component {
                             <li className="divider"></li>
 
                             <a className="col s12 btn waves-effect waves-light green" onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a>
-                            <a className="col s12 btn waves-effect waves-light yellow darken-3" onClick={this.endInterview.bind({ context: this, type: 'ul' })}><span className="social social-google-drive"></span>Upload to Drive</a>
-
+                            <a className="col s12 btn waves-effect waves-light yellow darken-3" onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a>
+                            <a className="col s12 btn waves-effect waves-light yellow darken-4" href={"https://drive.google.com/drive/folders/" + this.state.interviewInfo.drive_link} target="_blank">Open Drive</a>
                             {/*<a className="dropdown-button btn col s12 green" href="#" data-activates="endInterview"><span className="glyphicons glyphicons-handshake"></span>End Interview</a>
                             <ul id='endInterview' className='dropdown-content'>
                                 <li><a onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
