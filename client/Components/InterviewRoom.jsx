@@ -81,7 +81,9 @@ class InterviewRoom extends React.Component {
     document.getElementById('prompt-text').innerHTML = this.q.question;
   }
 
-  takeScreenSnapshot() {
+  takeScreenSnapshot(e) {
+    e.preventDefault();
+
     var snapshot = {
         question: document.getElementById('prompt-text').innerHTML,
         notes: document.getElementById('questionNote').value,
@@ -94,45 +96,105 @@ class InterviewRoom extends React.Component {
     Materialize.toast(`Screen saved!`, 2000);
   }
 
-  clearScreen() {
+  clearScreen(e) {
+    e.preventDefault();
+
+    console.log('event: ', e)
     document.getElementById('prompt-text').innerHTML = '(No question selected)';
     document.getElementById('questionNote').value = '';
     this.codeMirror.setValue('');
     document.querySelector('#whiteboard button').click();
   }
 
-  endInterview() {
+  endInterview(e) {
     console.log(this);
 
-    if (this.context.isRecordingStarted()) {
+    var _context = this.context;
+    var _type = this.type;
+
+    if (_context.isRecordingStarted()) {
         Materialize.toast(`Session is still recording! Make sure to stop recording before saving session files`, 2000);
         return;
     }
 
-    var results = [];
-    this.context.state.snapshots.forEach( (snapshot, index) => {
-        var q = `<strong><u>Question #${index + 1}: ${snapshot.question}</u></strong>`;
-        var n = `<strong>Notes:</strong> ${snapshot.notes}`;
-        var c = `<strong>Code:</strong> <br /><pre>${snapshot.codeshare}</pre>`;
-        var wb = `<strong>Whiteboard:</strong> <br /><img src="${snapshot.whiteboard}" style="border-style: solid; border-width: 1px;">`;
-        results.push(q + '<br />' + n + '<br /><br />' + c + '<br />' + wb);
-    })
-    var html = '<!DOCTYPE html><html><head> <title>Interview Notes</title></head><body><h1>Interview Notes for session ' + this.context.roomid + '</h2>';
-    html += results.join('<hr>');
-    var htmlblob = new Blob([html], {type: "text/plain;charset=utf-8"});
+    // Create HTML from our snapshot data
+    // var results = [];
+    // _context.state.snapshots.forEach( (snapshot, index) => {
+    //     var q = `<strong><u>Question #${index + 1}: ${snapshot.question}</u></strong>`;
+    //     var n = `<strong>Notes:</strong> ${snapshot.notes}`;
+    //     var c = `<strong>Code:</strong> <br /><pre>${snapshot.codeshare}</pre>`;
+    //     var wb = `<strong>Whiteboard:</strong> <br /><img src="${snapshot.whiteboard}" style="border-style: solid; border-width: 1px;">`;
+    //     results.push(q + '<br />' + n + '<br /><br />' + c + '<br />' + wb);
+    // })
+    // var html = '<!DOCTYPE html><html><head> <title>Interview Notes</title></head><body><h1>Interview Notes for session ' + _context.roomid + '</h2>';
+    // html += results.join('<hr>');
+    // var htmlblob = new Blob([html], {type: "text/plain;charset=utf-8"});
 
-    if (this.type === 'ul') {
-        var info = {interviewee_name: this.context.state.interviewInfo.interviewee_name, folder_id: this.context.state.interviewInfo.drive_link}
-        this.context.uploadBlobs(info)
-        // upload html files also
-        this.context.state.snapshots.length > 0 ? this.context.uploadService(htmlblob, info) : Materialize.toast('No snapshots saved to upload', 2000);
-    } else {
-        // Save session summary html
-        this.context.state.snapshots.length > 0 ? invokeSaveAsDialog(htmlblob, 'Responses (Room ' + this.context.roomid + ').html') : Materialize.toast('No snapshots saved to download', 2000);
+    // Create PDF from our snapshot data
+    var doc = new PDFDocument();
+    var stream = doc.pipe(blobStream());
+    doc.font('Times-Bold', 20)
+       .text(`Interview Notes for session ${_context.roomid}`, {
+            align: 'center'
+       });
+    _context.state.snapshots.forEach( (snapshot) => {
+        doc.font('Times-Roman', 12)
+            .text(`Question: ${snapshot.question}`, {
+                align: 'left',
+                underline: true
+            })
+            .moveDown();
+        doc.font('Times-Roman', 12)
+            .text(`Notes: ${snapshot.notes}`)
+            .moveDown();
+        doc.font('Times-Roman', 12)
+            .text('Code:')
+            .moveDown();
+        doc.font('Courier', 10)
+            .text(`${snapshot.codeshare}`, {
+                indent: 30
+            })
+            .moveDown();
+        doc.addPage();
+        doc.font('Times-Roman', 12)
+            .text(`Whiteboard for question "${snapshot.question}"`, {
+                align: 'left',
+                underline: true
+            })
+            .moveDown();
+        doc.image(snapshot.whiteboard, {
+            fit: [400, 400]
+        })
+            .moveDown();
+        doc.addPage();
+    });
+    doc.font('Times-Bold', 30)
+       .text('(End of interview document)', {
+            align: 'center'
+       });
+    doc.end();
 
-        // Save video/audio file
-        this.context.save();
-    }
+    stream.on('finish', function() {
+        var pdfblob = stream.toBlob('application/pdf');
+
+        // DOWNLOAD or UPLOAD option routes
+        if (_type === 'ul') {
+            var info = {interviewee_name: _context.state.interviewInfo.interviewee_name, folder_id: _context.state.interviewInfo.drive_link}
+            _context.uploadBlobs(info)
+            // upload html files also
+            // _context.state.snapshots.length > 0 ? _context.uploadService(htmlblob, info) : Materialize.toast('No snapshots saved to upload (HTML)', 2000);
+            // upload pdf files also
+            _context.state.snapshots.length > 0 ? _context.uploadService(pdfblob, info) : Materialize.toast('No snapshots saved to upload (PDF)', 2000);
+        } else {
+            // Save session summary html
+            // _context.state.snapshots.length > 0 ? invokeSaveAsDialog(htmlblob, 'Responses (Room ' + _context.roomid + ').html') : Materialize.toast('No snapshots saved to download (HTML)', 2000);
+            // Save session summary pdf
+            _context.state.snapshots.length > 0 ? invokeSaveAsDialog(pdfblob, 'Responses (Room ' + _context.roomid + ').pdf') : Materialize.toast('No snapshots saved to download (PDF)', 2000);
+            // Save video/audio file
+            _context.save();
+        }
+    });
+
   }
 
   componentDidMount() {
