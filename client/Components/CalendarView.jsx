@@ -26,7 +26,7 @@ function Event({ event }) {
   }
 }
 var eventStyleGetter = function(event, start, end, isSelected) {
-    console.log(event);
+    // console.log(event);
     var backgroundColor = '#' + event.hexColor;
     if(event.description === 'Interview') {
       backgroundColor = 'orange'

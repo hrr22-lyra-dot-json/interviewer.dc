@@ -76,8 +76,14 @@ class InterviewRoom extends React.Component {
 
   showQuestion() {
     console.log(this);
-    this.context.clearScreen();
-    this.context.codeMirror.setValue('/* \n' + this.q.question + '\n*/');
+    var currContent = this.context.codeMirror.getValue();
+    var preLines = '';
+    if (currContent) {
+        preLines = '\n\n'
+    }
+    var newContent = currContent + preLines + '/* \n' + this.q.question + '\n*/\n'
+    this.context.codeMirror.setValue(newContent);
+
     document.getElementById('prompt-text').innerHTML = this.q.question;
   }
 
@@ -107,6 +113,7 @@ class InterviewRoom extends React.Component {
   }
 
   endInterview(e) {
+    console.log('endinterview', e);
     console.log(this);
 
     var _context = this.context;
@@ -311,7 +318,7 @@ class InterviewRoom extends React.Component {
                 {/* Home, URL, Record buttons */}
                 <div id="interviewerControls" className="col s12 blue-grey darken-1">
                     <div className="row">
-                        <Link to='/home'><button id="back" className="col s3 btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></button></Link>
+                        <a href="/" className="col s3 btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></a>
                         <a id="urlButton" className="col s3 btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
                         <button id="start" className="col s3 btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
                         <button id="stop" className="col s3 btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
