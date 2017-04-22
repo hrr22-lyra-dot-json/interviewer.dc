@@ -130,10 +130,7 @@ app.use(express.static(path.join(__dirname, '../')));
 //     saveUninitialized: true
 // }));
 
-// // // Initialize Passport and restore authentication state, if any, from the
-// // // session.
-// app.use(passport.initialize());
-// app.use(passport.session());
+/
 
 
 app.get('/auth/google', passport.authenticate('google', { scope: [
