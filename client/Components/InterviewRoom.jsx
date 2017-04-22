@@ -105,7 +105,6 @@ class InterviewRoom extends React.Component {
   clearScreen(e) {
     e.preventDefault();
 
-    console.log('event: ', e)
     document.getElementById('prompt-text').innerHTML = '(No question selected)';
     document.getElementById('questionNote').value = '';
     this.codeMirror.setValue('');
@@ -113,7 +112,6 @@ class InterviewRoom extends React.Component {
   }
 
   endInterview(e) {
-    console.log('endinterview', e);
     console.log(this);
 
     var _context = this.context;
@@ -206,17 +204,18 @@ class InterviewRoom extends React.Component {
 
   componentDidMount() {
     // Set initial button states
-    // document.getElementById('save').disabled = true;
     document.getElementById('stop').style.display = 'none';
     document.getElementById('close-room').style.display = 'none';
+
+    // Auto-fill room name and focus fields temporarily
+    document.getElementById('room-id').value = this.roomid;
+    document.getElementById('room-id').focus();
+    document.getElementById("questionNote").focus();
 
     // Initialize Recorder functionality and Socket.io connection server
     recorder.initializeRecorder();
     rtc.initializeConnection();
     lobby.initializeLobby();
-
-    // Auto-fill room name
-    document.getElementById('room-id').value = this.roomid;
 
     // set page title
     document.title = `Room ${this.roomid} | Interviewer Direct Connection`;
@@ -230,6 +229,7 @@ class InterviewRoom extends React.Component {
 
     var context = this; //for firepad / codeshare
     $(document).ready(function(){
+
         // Make sure tabs and side-nav function properly after rendered
         $('ul.tabs').tabs();
         $(".button-collapse").sideNav({
@@ -296,7 +296,7 @@ class InterviewRoom extends React.Component {
                         <span className="card-title">Interview Session <span className="new badge red" data-badge-caption="">00:00</span></span>
                         <div id="room-name-container" className="input-field col s12">
                             <input type="text" id="room-id"></input>
-                            <label htmlFor="room-id">Room Name</label>
+                            <label htmlFor="room-id">Room Number</label>
                         </div>
 
                         <div className="chip">
@@ -318,10 +318,10 @@ class InterviewRoom extends React.Component {
                 {/* Home, URL, Record buttons */}
                 <div id="interviewerControls" className="col s12 blue-grey darken-1">
                     <div className="row">
-                        <a href="/" className="col s3 btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></a>
-                        <a id="urlButton" className="col s3 btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
-                        <button id="start" className="col s3 btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
-                        <button id="stop" className="col s3 btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
+                        <a href="/" className="col s4 btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></a>
+                        <a id="urlButton" className="col s4 btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
+                        <button id="start" className="col s4 btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
+                        <button id="stop" className="col s4 btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
                         {/*<button id="save" className="col s3 btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button>*/}
                     </div>
                     <hr></hr>
