@@ -12,6 +12,8 @@ const questionService = new QuestionService()
 
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
 
+window.isRecording = recorder.isRecordingStarted;
+
 class InterviewRoom extends React.Component {
   constructor (props) {
     super(props);
@@ -23,6 +25,7 @@ class InterviewRoom extends React.Component {
 
     console.log('this', this)
     console.log('props', props.location);
+    console.log('window', window);
 
     this.search = props.location.search;
     if (props.location.state === null) {
@@ -50,8 +53,6 @@ class InterviewRoom extends React.Component {
     // uploads both video and audio blob to google drive folder,
     // takes input object with properties interviewee_name and folder_id
     this.uploadBlobs = recorder.uploadBlobs
-    // checks state of recorder
-    this.isRecordingStarted = recorder.isRecordingStarted;
     // Basic Recorder Functions
     this.start = recorder.start;
     this.stop = recorder.stop;
@@ -111,33 +112,16 @@ class InterviewRoom extends React.Component {
     document.querySelector('#whiteboard button').click();
   }
 
-  endInterviewDropdown(e) {
-    e.preventDefault();
-  }
-
   endInterview() {
     console.log(this);
 
     var _context = this.context;
     var _type = this.type;
 
-    if (_context.isRecordingStarted()) {
+    if (window.isRecording()) {
         Materialize.toast(`Session is still recording! Make sure to stop recording before saving session files`, 2000);
         return;
     }
-
-    // Create HTML from our snapshot data
-    // var results = [];
-    // _context.state.snapshots.forEach( (snapshot, index) => {
-    //     var q = `<strong><u>Question #${index + 1}: ${snapshot.question}</u></strong>`;
-    //     var n = `<strong>Notes:</strong> ${snapshot.notes}`;
-    //     var c = `<strong>Code:</strong> <br /><pre>${snapshot.codeshare}</pre>`;
-    //     var wb = `<strong>Whiteboard:</strong> <br /><img src="${snapshot.whiteboard}" style="border-style: solid; border-width: 1px;">`;
-    //     results.push(q + '<br />' + n + '<br /><br />' + c + '<br />' + wb);
-    // })
-    // var html = '<!DOCTYPE html><html><head> <title>Interview Notes</title></head><body><h1>Interview Notes for session ' + _context.roomid + '</h2>';
-    // html += results.join('<hr>');
-    // var htmlblob = new Blob([html], {type: "text/plain;charset=utf-8"});
 
     // Create PDF from our snapshot data
     var doc = new PDFDocument();
@@ -190,23 +174,33 @@ class InterviewRoom extends React.Component {
         if (_type === 'ul') {
             var info = {interviewee_name: _context.state.interviewInfo.interviewee_name, folder_id: _context.state.interviewInfo.drive_link}
             _context.uploadBlobs(info)
-            // upload html files also
-            // _context.state.snapshots.length > 0 ? _context.uploadService(htmlblob, info) : Materialize.toast('No snapshots saved to upload (HTML)', 2000);
             // upload pdf files also
             _context.state.snapshots.length > 0 ? _context.uploadService(pdfblob, info) : Materialize.toast('No snapshots saved to upload (PDF)', 2000);
         } else {
-            // Save session summary html
-            // _context.state.snapshots.length > 0 ? invokeSaveAsDialog(htmlblob, 'Responses (Room ' + _context.roomid + ').html') : Materialize.toast('No snapshots saved to download (HTML)', 2000);
             // Save session summary pdf
             _context.state.snapshots.length > 0 ? invokeSaveAsDialog(pdfblob, 'Responses (Room ' + _context.roomid + ').pdf') : Materialize.toast('No snapshots saved to download (PDF)', 2000);
             // Save video/audio file
             _context.save();
         }
     });
-
   }
 
   componentDidMount() {
+    // If you click the browser's back button, it will usually cause errors
+    // This will act like you are clicking the "home" button
+    window.onpopstate = function() {
+        window.location.replace(window.location.origin);
+    }
+    // window.onbeforeunload = function(e) {
+    //     console.log(this);
+    //     if (window.isRecording()) {
+    //         Materialize.toast(`Session is still recording! Stop recording before navigating away from the interview room`, 2000);
+    //         var message = 'whatev';
+    //         e.returnValue = message;
+    //         return message;
+    //     }
+    // }
+
     // Set initial button states
     document.getElementById('stop').style.display = 'none';
     document.getElementById('close-room').style.display = 'none';
@@ -322,7 +316,8 @@ class InterviewRoom extends React.Component {
                 {/* Home, URL, Record buttons */}
                 <div id="interviewerControls" className="col s12 blue-grey darken-1">
                     <div className="row">
-                        <a href="/" className="col s4 btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></a>
+                        {/*<button id="homeButton" className="col s4 btn waves-effect waves-light" onClick={this.goHome.bind(this)}><span className="glyphicons glyphicons-home"></span></button>*/}
+                        <a id="homeButton" href="/" className="col s4 btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></a>
                         <a id="urlButton" className="col s4 btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
                         <button id="start" className="col s4 btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
                         <button id="stop" className="col s4 btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
@@ -341,7 +336,7 @@ class InterviewRoom extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <button id="saveScreen" className="col s6 btn waves-effect waves-light blue" onClick={this.takeScreenSnapshot.bind(this)}><span className="glyphicons glyphicons-log-book"></span>Save Screen</button>
+                            <button id="saveScreen" className="col s6 btn waves-effect waves-light blue" onClick={this.takeScreenSnapshot.bind(this)}><span className="glyphicons glyphicons-log-book"></span>Screenshot</button>
                             <button id="clearScreen" className="col s6 btn waves-effect waves-light blue lighten-2" onClick={this.clearScreen.bind(this)}><span className="glyphicons glyphicons-ban-circle"></span>Clear Screen</button>
 
                             <li className="divider"></li>
