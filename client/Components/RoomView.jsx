@@ -86,7 +86,7 @@ class RoomView extends React.Component {
               </div>
               {
                 this.state.questionList.map(function(q, key) {
-                  return (<div className="row"><div className="col s12"><a className="collection-item" key={key} >{q.question}</a></div></div>)
+                  return (<div className="row" key={key}><div className="col s12"><a className="collection-item" >{q.question}</a></div></div>)
                 })
               }
             </div>
@@ -99,9 +99,8 @@ class RoomView extends React.Component {
               </div>
               {
                 this.state.upcomingInterviews.map(function(interview, key) {
-                  console.log('interview', interview)
                   return (
-                    <div className="collection-item" >
+                    <div className="collection-item" key={key}>
 
                       <a   >{interview.start}</a>
                       <a   >{interview.interviewee_name}</a>
