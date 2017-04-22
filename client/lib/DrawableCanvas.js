@@ -22,7 +22,6 @@ class DrawableCanvas extends React.Component {
       backgroundColor: '#FFFFFF',
       cursor: 'pointer'
     };
-    this.clear = false;
     this.trackingX = [];
     this.trackingY = [];
   }
@@ -45,11 +44,13 @@ class DrawableCanvas extends React.Component {
     let context = this;
     this.props.webrtc.onmessage = function(event) {
       if (event.data.type === 'draw') {
+        let brushColor = event.data.data.brushColor;
         let drawX = event.data.data.X;
         let drawY = event.data.data.Y;
         let otherWidth = event.data.data.width;
         let otherHeight = event.data.data.height;
 
+        context.state.context.beginPath();
         if (canvas.width !== otherWidth || canvas.height !== otherHeight) {
           let widthMultiplier = canvas.width / otherWidth;
           let heightMultiplier = canvas.height / otherHeight;
@@ -58,12 +59,13 @@ class DrawableCanvas extends React.Component {
               drawX[i] * widthMultiplier,
               drawY[i] * heightMultiplier,
               drawX[i+1] * widthMultiplier,
-              drawY[i+1] * heightMultiplier
+              drawY[i+1] * heightMultiplier,
+              brushColor
             );
           }
         } else {
           for (let i = 0; i < drawX.length-1 && i < drawY.length-1; i++) {
-            context.draw(drawX[i], drawY[i], drawX[i+1], drawY[i+1]);
+            context.draw(drawX[i], drawY[i], drawX[i+1], drawY[i+1], brushColor);
           }
         }
       } else if (event.data.type === 'clear') {
@@ -108,7 +110,6 @@ class DrawableCanvas extends React.Component {
   }
 
   handleOnMouseMove(e) {
-
     if(this.state.drawing){
       let rect = this.state.canvas.getBoundingClientRect();
       let lastX = this.state.lastX;
@@ -145,26 +146,35 @@ class DrawableCanvas extends React.Component {
         X: this.trackingX,
         Y: this.trackingY,
         width: ReactDOM.findDOMNode(this).children[0].width,
-        height: ReactDOM.findDOMNode(this).children[0].height
+        height: ReactDOM.findDOMNode(this).children[0].height,
+        brushColor: this.brushColor
       }
     });
     this.trackingX = [];
     this.trackingY = [];
   }
 
-  draw(lX, lY, cX, cY) {
-    this.state.context.strokeStyle = this.brushColor;
+  draw(lX, lY, cX, cY, brushColor) {
+    this.state.context.strokeStyle = brushColor || this.brushColor;
     this.state.context.lineWidth = this.lineWidth;
     this.state.context.moveTo(lX,lY);
     this.state.context.lineTo(cX,cY);
     this.state.context.stroke();
   }
 
-  handleClear(){
+  handleClear() {
     this.props.webrtc.send({
       type: 'clear'
     });
     this.resetCanvas();
+  }
+
+  changeToBrush() {
+    this.brushColor = '#000000';
+  }
+
+  changeToEraser() {
+    this.brushColor = this.canvasStyle.backgroundColor;
   }
 
   resetCanvas() {
@@ -205,7 +215,9 @@ class DrawableCanvas extends React.Component {
           onTouchEnd = {this.handleonMouseUp.bind(this)}
         >
         </canvas>
-        <button onClick={this.handleClear.bind(this)}>Clear</button>
+        <button onClick={this.changeToBrush.bind(this)}>Brush</button>
+        <button onClick={this.changeToEraser.bind(this)}>Eraser</button>
+        <button id="clearButton" onClick={this.handleClear.bind(this)}>Clear</button>
       </div>
     );
   }
