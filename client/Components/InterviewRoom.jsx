@@ -111,7 +111,11 @@ class InterviewRoom extends React.Component {
     document.querySelector('#whiteboard button').click();
   }
 
-  endInterview(e) {
+  endInterviewDropdown(e) {
+    e.preventDefault();
+  }
+
+  endInterview() {
     console.log(this);
 
     var _context = this.context;
@@ -322,7 +326,6 @@ class InterviewRoom extends React.Component {
                         <a id="urlButton" className="col s4 btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
                         <button id="start" className="col s4 btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
                         <button id="stop" className="col s4 btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
-                        {/*<button id="save" className="col s3 btn green darken-4 waves-effect waves-light" onClick={this.save}><span className="glyphicons glyphicons-disk-save"></span></button>*/}
                     </div>
                     <hr></hr>
                     <form className="col s12">
@@ -341,12 +344,17 @@ class InterviewRoom extends React.Component {
                             <button id="saveScreen" className="col s6 btn waves-effect waves-light blue" onClick={this.takeScreenSnapshot.bind(this)}><span className="glyphicons glyphicons-log-book"></span>Save Screen</button>
                             <button id="clearScreen" className="col s6 btn waves-effect waves-light blue lighten-2" onClick={this.clearScreen.bind(this)}><span className="glyphicons glyphicons-ban-circle"></span>Clear Screen</button>
 
-                            <a className="dropdown-button btn col s12 green" href="#" data-activates="endInterview"><span className="glyphicons glyphicons-handshake"></span>End Interview</a>
+                            <li className="divider"></li>
+
+                            <a className="col s12 btn waves-effect waves-light green" onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a>
+                            <a className="col s12 btn waves-effect waves-light yellow darken-3" onClick={this.endInterview.bind({ context: this, type: 'ul' })}><span className="social social-google-drive"></span>Upload to Drive</a>
+
+                            {/*<a className="dropdown-button btn col s12 green" href="#" data-activates="endInterview"><span className="glyphicons glyphicons-handshake"></span>End Interview</a>
                             <ul id='endInterview' className='dropdown-content'>
                                 <li><a onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
                                 <li className="divider"></li>
                                 <li><a onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a></li>
-                            </ul>
+                            </ul>*/}
                         </div>
                     </form>
                 </div>
