@@ -162,6 +162,9 @@ exports.addMeeting = function(req, res) {
             meetingObj.folder_id = file.id;
             Meeting.create(meetingObj)
             .then(function(newMeeting) {
+              mixpanel.people.append(req.user.user.googleId, 'Rooms', {folderId: newMeeting.folder_id,
+                jobPosition: newMeeting.job_position});
+
               mixpanel.track('Added_room', {
                 distinct_id: req.user.user.googleId,
                 folderId: newMeeting.folder_id,
