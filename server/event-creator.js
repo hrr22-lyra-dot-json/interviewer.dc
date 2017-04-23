@@ -88,9 +88,9 @@ exports.createEvent = function(req, res, next) {
         }
         var event = {
           'summary': req.body.job_position + ' interview for ' + req.body.interviewee_name,
-          'location': 'http://127.0.0.1:3000/#/interviewroom?roomid=' + interview.id,
+          'location': 'http://interviewer-dc.herokuapp.com/#/interviewroom?roomid=' + interview.id,
           "source": {
-            "url": 'http://127.0.0.1:3000/#/interviewroom?roomid=' + interview.id,
+            "url": 'http://interviewer-dc.herokuapp.com/#/interviewroom?roomid=' + interview.id,
             "title": 'Link to Interviewroom'
           },
           'description': 'Interview',
