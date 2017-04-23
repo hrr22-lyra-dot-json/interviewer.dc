@@ -183,6 +183,24 @@ a.powered-by-firepad {
   color: black;
 }
 
+/*******************************
+*          Whiteboard          *
+********************************/
+
+#whiteboard {
+  height: 82%;
+}
+
+#whiteboardOptions {
+  width: 100%;
+}
+
+#whiteboardOptions button, #whiteboardOptions select {
+  height: 3rem;
+  width: 4em;
+  display: inline;
+}
+
  /*******************************
 *                              *
 ********************************/

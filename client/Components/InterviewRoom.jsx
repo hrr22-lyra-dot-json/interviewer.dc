@@ -302,9 +302,7 @@ class InterviewRoom extends React.Component {
                     </div>
                     <div id="codeshare" className="col s12" style={{height: 90 + '%'}}>
                     </div>
-                    <div id="whiteboard" className="col s12" style={{height: 90 + '%'}}>
-                      <DrawableCanvas webrtc={rtc.getConnection()} />
-                    </div>
+                    <DrawableCanvas webrtc={rtc.getConnection()} />
                 </div>
             </div>
 
