@@ -10,6 +10,10 @@ const Token = require('./database/models').Token;
 const refresh = require('passport-oauth2-refresh')
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
+var Mixpanel = require('mixpanel');
+
+// create an instance of the mixpanel client
+var mixpanel = Mixpanel.init('be1a32b66209f5dda2d8b0e853bfefb9');
 
 
 //////////////////////
@@ -32,6 +36,34 @@ var strat = new GoogleStrategy({
     //   prompt: 'consent',
   },
 
+//   mixpanel.people.set('billybob', {
+//     $first_name: 'Billy',
+//     $last_name: 'Bob',
+//     $created: (new Date('jan 1 2013')).toISOString(),
+//     plan: 'premium',
+//     games_played: 1,
+//     points: 0},
+//     {
+//     $ip: '127.0.0.1'
+// });
+
+// // create or update a user in Mixpanel Engage without altering $last_seen
+// // - pass option $ignore_time: true to prevent the $last_seen property from being updated
+// mixpanel.people.set('billybob', {
+//     plan: 'premium',
+//     games_played: 1
+// }, {
+//     $ignore_time: true
+// });
+
+// // set a user profile's IP address to get automatic geolocation info
+// mixpanel.people.set('billybob', {
+//     plan: 'premium',
+//     games_played: 1
+// }, {
+//     $ip: '127.0.0.1'
+// });
+
 
 
 
@@ -49,12 +81,20 @@ var strat = new GoogleStrategy({
           email: profile.email
         })
         .then(function(newUser) {
+          mixpanel.people.set(profile.id, {
+            $first_name: profile.displayName,
+            $created: (new Date()).toISOString(),
+            $email: profile.email},
+            {
+            $ip: '127.0.0.1'
+          });
           Token.create({
             owner_id: newUser.id,
             token: accessToken,
             refreshToken: refreshToken
           })
           .then(function(newToken) {
+            mixpanel.people.set(profile.id, 'token', 'true');
             var auth = new google.auth.OAuth2;
             auth.setCredentials({
               access_token: newToken.token,
@@ -75,6 +115,7 @@ var strat = new GoogleStrategy({
               } else {
                 newUser.update({drive_folder_id:file.id})
                 .then(function(UpdatedUser) {
+                  mixpanel.people.set(profile.id, 'folder_id', UpdatedUser.drive_folder_id);
                   done(null, {user: UpdatedUser, token: newToken })
                 })
               }
@@ -86,6 +127,12 @@ var strat = new GoogleStrategy({
         .then(function(foundToken) {
           foundToken.update({token: accessToken, refreshToken: refreshToken})
           .then(function(updatedToken) {
+            mixpanel.people.set(profile.id, {
+              $first_name: profile.displayName,
+              $last_login: (new Date()).toISOString(),
+              $email: profile.email},                  {
+                $ip: '127.0.0.1'
+            });
             console.log('newtok', updatedToken)
             var tokenToSend = {token: updatedToken.token}
             done(null, {user: foundUser, token: tokenToSend })
