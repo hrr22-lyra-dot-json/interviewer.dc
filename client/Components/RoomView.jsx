@@ -68,10 +68,10 @@ class RoomView extends React.Component {
     return (
       <div>
 
-        <div className="container">
+        <div className="container intermediary-section">
           <h3 className="intermediary-header">{this.state.roomDetails.job_position}</h3>
 
-          <div className="row">
+          <section className="row">
             <div className="col s12 collection with-header">
               <div className="row">
                 <div className="collection-header white-text blue-grey darken-1"><strong>Questions / Prompts</strong></div>
@@ -90,9 +90,9 @@ class RoomView extends React.Component {
                 })
               }
             </div>
-          </div>
+          </section>
 
-          <div className="row">
+          <section className="row">
             <div className="col s12 collection with-header">
               <div className="row">
                 <div className="collection-header white-text blue-grey darken-1"><strong>Upcoming Interviews</strong></div>
@@ -114,9 +114,9 @@ class RoomView extends React.Component {
                 })
               }
             </div>
-          </div>
+          </section>
 
-          <div className="row">
+          <section className="row">
             <div className="col s12 collection with-header">
               <div className="row">
                 <div className="collection-header white-text blue-grey darken-1"><strong>Past Interviews</strong></div>
@@ -139,7 +139,7 @@ class RoomView extends React.Component {
                 })
               }
             </div>
-          </div>
+          </section>
 
         </div>
       </div>
