@@ -18,6 +18,21 @@ var canvasRecorder;
 var audioRecorder;
 var currentAudioBlob;
 
+// Timer
+var timeElapsed = 0;
+var t;
+var timer = function() {
+  t = setTimeout(incrementTimer, 1000);
+};
+var incrementTimer = function() {
+  ++timeElapsed;
+  document.getElementById('timeElapsed').innerHTML = `${padDigit(parseInt(timeElapsed / 60))}:${padDigit(timeElapsed % 60)}`;
+  timer();
+};
+var padDigit = function(val) {
+  return val < 10 ? '0' + val : val;
+};
+
 // Constantly checks state of recording/not-recording
 var looper = function() {
   if (!isRecordingStarted) {
@@ -73,6 +88,7 @@ exports.initializeRecorder = function() {
 
 // Button action for "START"
 exports.start = function() {
+  // Buttons
   document.getElementById('start').style.display = 'none';
   document.getElementById('stop').style.display = 'inline';
   // document.getElementById('save').disabled = true;
@@ -87,6 +103,10 @@ exports.start = function() {
   // Start recording
   canvasRecorder.record();
   audioRecorder.record();
+
+  // Start Timer
+  timeElapsed = 0;
+  timer();
 };
 
 // Button action "STOP"
@@ -109,6 +129,9 @@ exports.stop = function() {
   });
 
   looper();
+
+  // Stop Timer
+  clearTimeout(t);
 };
 
 // Button action for "SAVE"

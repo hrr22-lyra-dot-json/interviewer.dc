@@ -12,6 +12,25 @@ const questionService = new QuestionService()
 
 import { hashHistory, Router, Route, Link, IndexRedirect, Redirect, withRouter} from 'react-router'
 
+window.isRecording = recorder.isRecordingStarted;
+window.getBrowser = function() {
+    var ua=navigator.userAgent,tem,M=ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if(/trident/i.test(M[1])){
+        tem=/\brv[ :]+(\d+)/g.exec(ua) || [];
+        return {name:'IE',version:(tem[1]||'')};
+        }
+    if(M[1]==='Chrome'){
+        tem=ua.match(/\bOPR|Edge\/(\d+)/)
+        if(tem!=null)   {return {name:'Opera', version:tem[1]};}
+        }
+    M=M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+    if((tem=ua.match(/version\/(\d+)/i))!=null) {M.splice(1,1,tem[1]);}
+    return {
+      name: M[0],
+      version: M[1]
+    };
+}
+
 class InterviewRoom extends React.Component {
   constructor (props) {
     super(props);
@@ -23,6 +42,7 @@ class InterviewRoom extends React.Component {
 
     console.log('this', this)
     console.log('props', props.location);
+    console.log('window', window);
 
     this.search = props.location.search;
     if (props.location.state === null) {
@@ -50,8 +70,6 @@ class InterviewRoom extends React.Component {
     // uploads both video and audio blob to google drive folder,
     // takes input object with properties interviewee_name and folder_id
     this.uploadBlobs = recorder.uploadBlobs
-    // checks state of recorder
-    this.isRecordingStarted = recorder.isRecordingStarted;
     // Basic Recorder Functions
     this.start = recorder.start;
     this.stop = recorder.stop;
@@ -94,7 +112,8 @@ class InterviewRoom extends React.Component {
         question: document.getElementById('prompt-text').innerHTML,
         notes: document.getElementById('questionNote').value,
         codeshare: this.codeMirror.getValue(),
-        whiteboard: document.querySelector('#whiteboard canvas').toDataURL()
+        whiteboard: document.querySelector('#whiteboard canvas').toDataURL(),
+        time: document.getElementById('timeElapsed').innerHTML
     };
     console.log(snapshot);
     this.state.snapshots.push(snapshot);
@@ -111,33 +130,16 @@ class InterviewRoom extends React.Component {
     document.querySelector('#whiteboard button').click();
   }
 
-  endInterviewDropdown(e) {
-    e.preventDefault();
-  }
-
   endInterview() {
-    console.log(this);
+    // console.log(this);
 
     var _context = this.context;
     var _type = this.type;
 
-    if (_context.isRecordingStarted()) {
+    if (window.isRecording()) {
         Materialize.toast(`Session is still recording! Make sure to stop recording before saving session files`, 2000);
         return;
     }
-
-    // Create HTML from our snapshot data
-    // var results = [];
-    // _context.state.snapshots.forEach( (snapshot, index) => {
-    //     var q = `<strong><u>Question #${index + 1}: ${snapshot.question}</u></strong>`;
-    //     var n = `<strong>Notes:</strong> ${snapshot.notes}`;
-    //     var c = `<strong>Code:</strong> <br /><pre>${snapshot.codeshare}</pre>`;
-    //     var wb = `<strong>Whiteboard:</strong> <br /><img src="${snapshot.whiteboard}" style="border-style: solid; border-width: 1px;">`;
-    //     results.push(q + '<br />' + n + '<br /><br />' + c + '<br />' + wb);
-    // })
-    // var html = '<!DOCTYPE html><html><head> <title>Interview Notes</title></head><body><h1>Interview Notes for session ' + _context.roomid + '</h2>';
-    // html += results.join('<hr>');
-    // var htmlblob = new Blob([html], {type: "text/plain;charset=utf-8"});
 
     // Create PDF from our snapshot data
     var doc = new PDFDocument();
@@ -145,10 +147,14 @@ class InterviewRoom extends React.Component {
     doc.font('Times-Bold', 20)
        .text(`Interview Notes for session ${_context.roomid}`, {
             align: 'center'
-       });
+       })
+       .moveDown();
+    doc.font('Times-Roman', 12)
+        .text(`Interview duration: ${document.getElementById('timeElapsed').innerHTML} (Minutes:Seconds)`)
+        .moveDown();
     _context.state.snapshots.forEach( (snapshot) => {
         doc.font('Times-Roman', 12)
-            .text(`Question: ${snapshot.question}`, {
+            .text(`Question: ${snapshot.question} (at ${snapshot.time})`, {
                 align: 'left',
                 underline: true
             })
@@ -189,24 +195,34 @@ class InterviewRoom extends React.Component {
         // DOWNLOAD or UPLOAD option routes
         if (_type === 'ul') {
             var info = {interviewee_name: _context.state.interviewInfo.interviewee_name, folder_id: _context.state.interviewInfo.drive_link}
+            // Upload video/audio blobs
             _context.uploadBlobs(info)
-            // upload html files also
-            // _context.state.snapshots.length > 0 ? _context.uploadService(htmlblob, info) : Materialize.toast('No snapshots saved to upload (HTML)', 2000);
             // upload pdf files also
             _context.state.snapshots.length > 0 ? _context.uploadService(pdfblob, info) : Materialize.toast('No snapshots saved to upload (PDF)', 2000);
+
+            Materialize.toast('Upload success!', 2000);
         } else {
-            // Save session summary html
-            // _context.state.snapshots.length > 0 ? invokeSaveAsDialog(htmlblob, 'Responses (Room ' + _context.roomid + ').html') : Materialize.toast('No snapshots saved to download (HTML)', 2000);
             // Save session summary pdf
             _context.state.snapshots.length > 0 ? invokeSaveAsDialog(pdfblob, 'Responses (Room ' + _context.roomid + ').pdf') : Materialize.toast('No snapshots saved to download (PDF)', 2000);
             // Save video/audio file
             _context.save();
         }
     });
-
   }
 
   componentDidMount() {
+    // Detect browser
+    var browser = window.getBrowser();
+    if (browser.name === 'Chrome' && browser.version === '58') {
+        document.getElementById('browserWarning').style.display = 'none';
+    }
+
+    // If you click the browser's back button, it will usually cause errors
+    // This will act like you are clicking the "home" button
+    window.onpopstate = function() {
+        window.location.replace(window.location.origin);
+    }
+
     // Set initial button states
     document.getElementById('stop').style.display = 'none';
     document.getElementById('close-room').style.display = 'none';
@@ -233,7 +249,6 @@ class InterviewRoom extends React.Component {
 
     var context = this; //for firepad / codeshare
     $(document).ready(function(){
-
         // Make sure tabs and side-nav function properly after rendered
         $('ul.tabs').tabs();
         $(".button-collapse").sideNav({
@@ -297,7 +312,7 @@ class InterviewRoom extends React.Component {
                 {/* Room info, webcam, roles, participants, session buttons */}
                 <div className="col s12 card blue-grey darken-1">
                     <div className="card-content white-text">
-                        <span className="card-title">Interview Session <span className="new badge red" data-badge-caption="">00:00</span></span>
+                        <span className="card-title">Interview Session <span id="timeElapsed" className="new badge red" data-badge-caption="">00:00</span></span>
                         <div id="room-name-container" className="input-field col s12">
                             <input type="text" id="room-id"></input>
                             <label htmlFor="room-id">Room Number</label>
@@ -322,10 +337,14 @@ class InterviewRoom extends React.Component {
                 {/* Home, URL, Record buttons */}
                 <div id="interviewerControls" className="col s12 blue-grey darken-1">
                     <div className="row">
-                        <a href="/" className="col s4 btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></a>
+                        {/*<button id="homeButton" className="col s4 btn waves-effect waves-light" onClick={this.goHome.bind(this)}><span className="glyphicons glyphicons-home"></span></button>*/}
+                        <a id="homeButton" href="/" className="col s4 btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></a>
                         <a id="urlButton" className="col s4 btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
                         <button id="start" className="col s4 btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
                         <button id="stop" className="col s4 btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
+                    </div>
+                    <div id="browserWarning" className="row">
+                        Video session recording is only compatible with Chrome 58 and above!
                     </div>
                     <hr></hr>
                     <form className="col s12">
@@ -341,20 +360,23 @@ class InterviewRoom extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <button id="saveScreen" className="col s6 btn waves-effect waves-light blue" onClick={this.takeScreenSnapshot.bind(this)}><span className="glyphicons glyphicons-log-book"></span>Save Screen</button>
+                            <button id="saveScreen" className="col s6 btn waves-effect waves-light blue" onClick={this.takeScreenSnapshot.bind(this)}><span className="glyphicons glyphicons-log-book"></span>Screenshot</button>
                             <button id="clearScreen" className="col s6 btn waves-effect waves-light blue lighten-2" onClick={this.clearScreen.bind(this)}><span className="glyphicons glyphicons-ban-circle"></span>Clear Screen</button>
 
                             <li className="divider"></li>
 
-                            <a className="col s12 btn waves-effect waves-light green" onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a>
-                            <a className="col s12 btn waves-effect waves-light yellow darken-3" onClick={this.endInterview.bind({ context: this, type: 'ul' })}><span className="social social-google-drive"></span>Upload to Drive</a>
-
+                            <a className='dropdown-button btn col s12 green' data-activates='sessionFileDropdown' data-hover='true' data-stopPropagation='true' data-outDuration='100' data-inDuration='100'><span className="glyphicons glyphicons-handshake"></span>Session Files</a>
+                            <ul id='sessionFileDropdown' className='dropdown-content'>
+                                <li className="col s12 green" ><a className="white-text" onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
+                                <li className="col s12 yellow darken-3"><a className="white-text" onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a></li>
+                                <li className="col s12 yellow darken-4"><a className="white-text" href={"https://drive.google.com/drive/folders/" + this.state.interviewInfo.drive_link} target="_blank">Open Drive</a></li>
                             {/*<a className="dropdown-button btn col s12 green" href="#" data-activates="endInterview"><span className="glyphicons glyphicons-handshake"></span>End Interview</a>
                             <ul id='endInterview' className='dropdown-content'>
                                 <li><a onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
                                 <li className="divider"></li>
                                 <li><a onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a></li>
                             </ul>*/}
+                            </ul>
                         </div>
                     </form>
                 </div>

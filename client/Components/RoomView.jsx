@@ -124,7 +124,7 @@ class RoomView extends React.Component {
               {
                 this.state.pastInterviews.map(function(interview, key) {
                   return (
-                    <div className="collection-item">
+                    <div className="collection-item" key={key}>
 
                       <a>{interview.start}</a>
                       <a>{interview.interviewee_name}</a>
