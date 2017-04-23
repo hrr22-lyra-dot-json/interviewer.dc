@@ -99,7 +99,9 @@ main {
 
 .add-room-button:before,  .view-cal-events-button:before {
   font-size: 2rem;
-  color: white;
+  color: hsl(​ 0°, ​ 0%, ​ 100%);
+
+;
 }
 
 .rooms-section-icons:before {
@@ -177,6 +179,14 @@ a.powered-by-firepad {
 
 .intermediary-header {
   margin: 3rem 0;
+}
+
+.intermediary-section section .collection {
+  max-height: 25vh;
+}
+
+section.row {
+  margin-bottom: .5rem;
 }
 
 /*******************************
