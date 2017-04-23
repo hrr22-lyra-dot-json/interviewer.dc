@@ -218,7 +218,7 @@ class DrawableCanvas extends React.Component {
 
   render() {
     return (
-      <div style={{height: 100 + '%'}}>
+      <div id="whiteboard" className="col s12">
         <canvas style = {this.canvasStyle}
           onMouseDown = {this.handleOnMouseDown.bind(this)}
           onTouchStart = {this.handleOnMouseDown.bind(this)}
@@ -228,16 +228,18 @@ class DrawableCanvas extends React.Component {
           onTouchEnd = {this.handleonMouseUp.bind(this)}
         >
         </canvas>
-        <button onClick={this.changePointer.bind(this, 'brushButton')}>Brush</button>
-        <button onClick={this.changePointer.bind(this, 'eraserButton')}>Eraser</button>
-        <select id="widthSelector" defaultValue="4" style={{display: 'inline'}} onChange={this.onSelectChange.bind(this, 'widthSelector')}>
-          <option value="1">1</option>
-          <option value="4">4</option>
-          <option value="8">8</option>
-          <option value="16">16</option>
-          <option value="32">32</option>
-        </select>
-        <button id="clearButton" onClick={this.handleClear.bind(this)}>Clear</button>
+        <div id="whiteboardOptions">
+          <button onClick={this.changePointer.bind(this, 'brushButton')}>Brush</button>
+          <button onClick={this.changePointer.bind(this, 'eraserButton')}>Eraser</button>
+          <select id="widthSelector" defaultValue="4" onChange={this.onSelectChange.bind(this, 'widthSelector')}>
+            <option value="1">1</option>
+            <option value="4">4</option>
+            <option value="8">8</option>
+            <option value="16">16</option>
+            <option value="32">32</option>
+          </select>
+          <button id="clearButton" onClick={this.handleClear.bind(this)}>Clear</button>
+        </div>
       </div>
     );
   }
