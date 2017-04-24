@@ -15,7 +15,10 @@ var googleConfig = require('../google-config.js');
 var mixpanelConfig = require('../mixpanel-config.js');
 
 // create an instance of the mixpanel client
-var mixpanel = Mixpanel.init(mixpanelConfig.clientID);
+
+var mixPanelId = process.env.mixPanelClientId || mixpanelConfig.clientID;
+
+var mixpanel = Mixpanel.init(mixPanelId);
 
 
 //////////////////////
