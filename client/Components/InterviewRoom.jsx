@@ -219,9 +219,9 @@ class InterviewRoom extends React.Component {
 
     // If you click the browser's back button, it will usually cause errors
     // This will act like you are clicking the "home" button
-    window.onpopstate = function() {
-        window.location.replace(window.location.origin);
-    }
+    // window.onpopstate = function() {
+    //     window.location.replace(window.location.origin);
+    // }
 
     // Set initial button states
     document.getElementById('stop').style.display = 'none';
@@ -282,6 +282,12 @@ class InterviewRoom extends React.Component {
         // Make editor available to take values out later
         context.codeMirror = codeMirror;
     });
+  }
+
+  componentWillUnmount() {
+    console.log('umounted');
+    // window.location.replace(window.location.origin);
+    document.getElementById('homeButton').click();
   }
 
   render() {
@@ -363,18 +369,21 @@ class InterviewRoom extends React.Component {
 
                             <li className="divider"></li>
 
-                            <a className='dropdown-button btn col s12 green' data-activates='sessionFileDropdown' data-hover='true' data-stopPropagation='true' data-outDuration='100' data-inDuration='100'><span className="glyphicons glyphicons-handshake"></span>Session Files</a>
+                            <a className="col btn s4 green white-text" onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span></a>
+                            <a className="col btn s4 yellow darken-3 white-text" onClick={this.endInterview.bind({ context: this, type: 'ul' })}><span className="glyphicons glyphicons-cloud-upload"></span></a>
+                            <a id="testClickDrive" className="col btn s4 yellow darken-4 white-text" href={"https://drive.google.com/drive/folders/" + this.state.interviewInfo.drive_link} target="_blank"><span className="social social-google-drive"></span></a>
+
+                            {/*<a className='dropdown-button btn col s12 green' data-activates='sessionFileDropdown' data-hover='true' data-stopPropagation='true' data-outDuration='100' data-inDuration='100'><span className="glyphicons glyphicons-handshake"></span>Session Files</a>
                             <ul id='sessionFileDropdown' className='dropdown-content'>
                                 <li className="col s12 green" ><a className="white-text" onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
                                 <li className="col s12 yellow darken-3"><a className="white-text" onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a></li>
                                 <li className="col s12 yellow darken-4"><a className="white-text" href={"https://drive.google.com/drive/folders/" + this.state.interviewInfo.drive_link} target="_blank">Open Drive</a></li>
-                            {/*<a className="dropdown-button btn col s12 green" href="#" data-activates="endInterview"><span className="glyphicons glyphicons-handshake"></span>End Interview</a>
+                            <a className="dropdown-button btn col s12 green" href="#" data-activates="endInterview"><span className="glyphicons glyphicons-handshake"></span>End Interview</a>
                             <ul id='endInterview' className='dropdown-content'>
                                 <li><a onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
                                 <li className="divider"></li>
                                 <li><a onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a></li>
                             </ul>*/}
-                            </ul>
                         </div>
                     </form>
                 </div>
