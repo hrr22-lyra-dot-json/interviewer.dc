@@ -31,3 +31,7 @@ client/lib/other
 .sass-cache
 client/styles/output.css
 client/styles/output.css.map
+./google-config.js
+/google-config.js
+./mixpanel-config.js
+/mixpanel-config.js
