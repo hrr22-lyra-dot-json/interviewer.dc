@@ -1,0 +1,43 @@
+/*******************************
+*       LOGIN SPLASH PAGE      *
+********************************/
+
+.splash-icons:before {
+  color: $primaryOrange;
+}
+
+.splash-logo {
+  width: 15rem;
+  margin: 1rem;
+}
+
+.splash-header-row {
+  max-height: 35rem;
+  padding: 0 0 -1.5rem 0;
+  margin-bottom: 3rem;
+}
+
+.splash-header {
+  margin-bottom: -5px;
+  max-height: 35rem;
+}
+
+.splash-try-button {
+  margin: 3rem 0;
+}
+
+#splash-img-top, #splash-img-bottom {
+  height: 40rem;
+}
+
+.footer-copyright {
+  height: 4rem;
+  color: $white;
+}
+
+#toast-container {
+  top: auto !important;
+  right: auto !important;
+  bottom: 7%;
+  left:7%;
+}
