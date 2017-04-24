@@ -91,6 +91,7 @@ exports.start = function() {
   // Buttons
   document.getElementById('start').style.display = 'none';
   document.getElementById('stop').style.display = 'inline';
+  document.getElementById('timeElapsed').classList.toggle('red');
   // document.getElementById('save').disabled = true;
 
   // Set states
@@ -113,6 +114,7 @@ exports.start = function() {
 exports.stop = function() {
   document.getElementById('stop').style.display = 'none';
   document.getElementById('start').style.display = 'inline';
+  document.getElementById('timeElapsed').classList.toggle('red');
 
   isStoppedRecording = true;
   isRecordingStarted = false;

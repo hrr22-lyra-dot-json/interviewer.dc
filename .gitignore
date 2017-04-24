@@ -29,3 +29,5 @@ client/lib/other
 
 # SASS cache files
 .sass-cache
+client/styles/output.css
+client/styles/output.css.map
