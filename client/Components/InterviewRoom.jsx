@@ -316,7 +316,7 @@ class InterviewRoom extends React.Component {
                 {/* Room info, webcam, roles, participants, session buttons */}
                 <div className="col s12 card blue-grey darken-1">
                     <div className="card-content white-text">
-                        <span className="card-title">Interview Session <span id="timeElapsed" className="new badge red" data-badge-caption="">00:00</span></span>
+                        <span className="card-title">Interview Session <span id="timeElapsed" className="new badge" data-badge-caption="">00:00</span></span>
                         <div id="room-name-container" className="input-field col s12">
                             <input type="text" id="room-id"></input>
                             <label htmlFor="room-id">Room Number</label>
