@@ -17,7 +17,7 @@
     "sass:compile": "node-sass --include-path sass client/styles/input.scss client/styles/output.css",
     "build": "node_modules/.bin/webpack --config webpack.config.js",
     "quick": "npm run sass:compile && npm run build && npm start",
-    "heroku-postbuild": "node_modules/.bin/webpack -p --config webpack.config.js"
+    "heroku-postbuild": "node_modules/.bin/webpack -p --config webpack.config.js && npm run build"
   },
   "repository": {
     "type": "git",
