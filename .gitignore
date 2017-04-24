@@ -26,3 +26,6 @@ mochawesome-reports
 *.dev
 client/dist
 client/lib/other
+
+# SASS cache files
+.sass-cache

@@ -14,8 +14,9 @@
     "db:reseed": "npm run db:unseed && npm run db:seed",
     "db:setup": "npm run db:create && npm run db:unseed && npm run db:seed",
     "db:drop": "sequelize db:migrate:undo:all",
+    "sass:compile": "node-sass --include-path sass client/styles/input.scss client/styles/output.css",
     "build": "node_modules/.bin/webpack --config webpack.config.js",
-    "quick": "npm run build && npm start",
+    "quick": "npm run sass:compile && npm run build && npm start",
     "heroku-postbuild": "node_modules/.bin/webpack -p --config webpack.config.js"
   },
   "repository": {
@@ -43,6 +44,7 @@
     "moment": "^2.18.1",
     "morgan": "^1.8.1",
     "mysql": "^2.13.0",
+    "node-sass": "^4.5.2",
     "passport": "^0.2.2",
     "passport-google-oauth": "^1.0.0",
     "passport-google-oauth2": "^0.1.6",
