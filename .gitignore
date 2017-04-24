@@ -27,9 +27,5 @@ mochawesome-reports
 client/dist
 client/lib/other
 
-# SASS cache files and pre-processed files
-*.scss
+# SASS cache files
 .sass-cache
-css-modules
-input.scss
-output.css.map
