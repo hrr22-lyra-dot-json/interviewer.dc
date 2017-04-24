@@ -345,7 +345,7 @@ class InterviewRoom extends React.Component {
                         <a id="homeButton" href="/" className="col s4 btn waves-effect waves-light"><span className="glyphicons glyphicons-home"></span></a>
                         <a id="urlButton" className="col s4 btn waves-effect waves-light" target="_blank"><span className="glyphicons glyphicons-link"></span></a>
                         <button id="start" className="col s4 btn red darken-4 waves-effect waves-light" onClick={this.start}><span className="glyphicons glyphicons-record"></span></button>
-                        <button id="stop" className="col s4 btn red darken-4 waves-effect waves-light pulse" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
+                        <button id="stop" className="col s4 btn red darken-4 waves-effect waves-light" onClick={this.stop}><span className="glyphicons glyphicons-stop"></span></button>
                     </div>
                     <div id="browserWarning" className="row">
                         Video session recording is only compatible with Chrome 58 and above!
