@@ -19,7 +19,12 @@ const customStyles = {
     zIndex: 10
   },
   content : {
-    bottom: 'auto'
+    top                   : '30%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
   }
 };
 
