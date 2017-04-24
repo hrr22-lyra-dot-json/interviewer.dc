@@ -1,4 +1,12 @@
 /*******************************
+*     GLOBAL VARIABLES         *
+********************************/
+
+$primaryBlue: hsla(212, 75%, 55%, 1);
+$secondaryBlue: hsla(212, 80%, 42%, 1);
+$primaryOrange: hsla(10, 86%, 56%, 1);
+
+/*******************************
 *            GLOBALS           *
 ********************************/
 
@@ -30,7 +38,7 @@ main {
 }
 
 .idc-orange {
-  background-color: #EF4C2D;
+  background-color: $primaryOrange;
 }
 
 .errorClass {
@@ -42,7 +50,7 @@ main {
 ********************************/
 
 .splash-icons:before {
-  color: #EF4C2D;
+  color: $primaryOrange;
 }
 
 .splash-logo {
@@ -99,17 +107,15 @@ main {
 
 .add-room-button:before,  .view-cal-events-button:before {
   font-size: 2rem;
-  color: hsl(​ 0°, ​ 0%, ​ 100%);
-
-;
+  color: hsla(0, 0%, 100%, 1)
 }
 
 .rooms-section-icons:before {
-  color: #1565C0;
+  color: $secondaryBlue;
 }
 
 .rooms-section-icons:hover:before {
-  color: #3787E3;
+  color: $primaryBlue;
   cursor: pointer;
 }
 
@@ -125,8 +131,8 @@ main {
 
  /* label underline focus color */
  .input-field input[type=text]:focus {
-   border-bottom: 1px solid #1565C0;
-   box-shadow: 0 1px 0 0 #1565C0;
+   border-bottom: 1px solid $secondaryBlue;
+   box-shadow: 0 1px 0 0 $secondaryBlue;
  }
 
  /*******************************
