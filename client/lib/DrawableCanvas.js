@@ -22,8 +22,7 @@ class DrawableCanvas extends React.Component {
       backgroundColor: '#FFFFFF',
       cursor: 'crosshair'
     };
-    this.trackingX = [];
-    this.trackingY = [];
+    this.tracker = [];
   }
 
   componentDidMount() {
@@ -51,23 +50,23 @@ class DrawableCanvas extends React.Component {
         if (canvas.width !== data.width || canvas.height !== data.height) {
           let widthMultiplier = canvas.width / data.width;
           let heightMultiplier = canvas.height / data.height;
-          for (let i = 0; i < data.X.length-1 && i < data.Y.length-1; i++) {
+          for (let i = 0; i < data.lines.length-1; i++) {
             context.draw(
-              data.X[i] * widthMultiplier,
-              data.Y[i] * heightMultiplier,
-              data.X[i+1] * widthMultiplier,
-              data.Y[i+1] * heightMultiplier,
+              data.lines[i][0] * widthMultiplier,
+              data.lines[i][1] * heightMultiplier,
+              data.lines[i+1][0] * widthMultiplier,
+              data.lines[i+1][1] * heightMultiplier,
               data.brushColor,
               data.lineWidth
             );
           }
         } else {
-          for (let i = 0; i < data.X.length-1 && i < data.Y.length-1; i++) {
+          for (let i = 0; i < data.lines.length-1; i++) {
             context.draw(
-              data.X[i],
-              data.Y[i],
-              data.X[i+1],
-              data.Y[i+1],
+              data.lines[i][0],
+              data.lines[i][1],
+              data.lines[i+1][0],
+              data.lines[i+1][1],
               data.brushColor,
               data.lineWidth
             );
@@ -94,8 +93,7 @@ class DrawableCanvas extends React.Component {
         lastX: lastX,
         lastY: lastY
       });
-      this.trackingX.push(lastX);
-      this.trackingY.push(lastY);
+      this.tracker.push([lastX, lastY]);
     }
     else{
       let lastX = e.clientX - rect.left;
@@ -104,8 +102,7 @@ class DrawableCanvas extends React.Component {
         lastX: e.clientX - rect.left,
         lastY: e.clientY - rect.top
       });
-      this.trackingX.push(lastX);
-      this.trackingY.push(lastY);
+      this.tracker.push([lastX, lastY]);
     }
 
     this.setState({
@@ -129,14 +126,16 @@ class DrawableCanvas extends React.Component {
         currentY = e.clientY - rect.top;
       }
 
-
       this.draw(lastX, lastY, currentX, currentY);
       this.setState({
         lastX: currentX,
         lastY: currentY,
       });
-      this.trackingX.push(currentX);
-      this.trackingY.push(currentY);
+      this.tracker.push([currentX, currentY]);
+
+      if (this.tracker.length === 10) {
+        this.sendData('drawing');
+      }
     }
   }
 
@@ -144,19 +143,7 @@ class DrawableCanvas extends React.Component {
     this.setState({
       drawing: false
     });
-    this.props.webrtc.send({
-      type: 'draw',
-      data: {
-        X: this.trackingX,
-        Y: this.trackingY,
-        width: ReactDOM.findDOMNode(this).children[0].width,
-        height: ReactDOM.findDOMNode(this).children[0].height,
-        brushColor: this.brushColor,
-        lineWidth: this.lineWidth
-      }
-    });
-    this.trackingX = [];
-    this.trackingY = [];
+    this.sendData();
   }
 
   draw(lX, lY, cX, cY, brushColor, lineWidth) {
@@ -167,6 +154,26 @@ class DrawableCanvas extends React.Component {
     this.state.context.lineTo(cX,cY);
     this.state.context.closePath();
     this.state.context.stroke();
+  }
+
+  sendData(condition) {
+    let tracker = this.tracker;
+    this.tracker = [];
+
+    if (condition === 'drawing') {
+      this.tracker.push(tracker[tracker.length-1]);
+    }
+
+    this.props.webrtc.send({
+      type: 'draw',
+      data: {
+        lines: tracker,
+        width: ReactDOM.findDOMNode(this).children[0].width,
+        height: ReactDOM.findDOMNode(this).children[0].height,
+        brushColor: this.brushColor,
+        lineWidth: this.lineWidth
+      }
+    });
   }
 
   handleClear() {
