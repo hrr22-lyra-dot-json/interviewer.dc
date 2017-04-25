@@ -132,7 +132,7 @@ class InterviewRoom extends React.Component {
     document.getElementById('prompt-text').innerHTML = '(No question selected)';
     document.getElementById('questionNote').value = '';
     this.codeMirror.setValue('');
-    document.querySelector('#whiteboard button').click();
+    document.getElementById('clearButton').click();
   }
 
   endInterview() {
