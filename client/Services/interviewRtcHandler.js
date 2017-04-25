@@ -33,7 +33,7 @@ exports.initializeConnection = function() {
   connection.videosContainer = document.getElementById('videos-container');
   connection.onstream = function(event) {
     // var width = parseInt(connection.videosContainer.clientWidth / 2) - 20;
-    var width = 150;
+    var width = 140;
     var mediaElement = getMediaElement(event.mediaElement, {
       title: event.userid,
       buttons: [],
