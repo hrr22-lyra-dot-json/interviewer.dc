@@ -230,8 +230,7 @@ class InterviewRoom extends React.Component {
     document.getElementById('close-room').style.display = 'none';
 
     // Auto-fill room name and focus fields temporarily
-    document.getElementById('room-id').value = this.roomid;
-    document.getElementById('room-id').focus();
+    document.getElementById('room-id').innerHTML = this.roomid;
     document.getElementById("questionNote").focus();
 
     // Initialize Recorder functionality and Socket.io connection server
@@ -319,11 +318,11 @@ class InterviewRoom extends React.Component {
                 <div className="col s12 card blue-grey darken-1">
                     <div className="card-content white-text">
                         <span className="card-title">Interview Session <span id="timeElapsed" className="new badge" data-badge-caption="">00:00</span></span>
-                        <div id="room-name-container" className="input-field col s12">
-                            <input type="text" id="room-id"></input>
-                            <label htmlFor="room-id">Room Number</label>
+                        <div id="room-name-container" className="chip">
+                            <span className="glyphicons glyphicons-call-ip"></span>
+                            <span>Room Number: </span>
+                            <span id="room-id"></span>
                         </div>
-
                         <div className="chip">
                             <span className="glyphicons glyphicons-lock"></span>
                             <span id="userRoleText"></span>

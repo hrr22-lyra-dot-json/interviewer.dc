@@ -4,12 +4,12 @@
 
 // Get room id of current page
 exports.getRoomId = function() {
-  return document.getElementById('room-id').value;
+  return document.getElementById('room-id').innerHTML;
 };
 
 exports.validateRoomid = function(roomid) {
   if (typeof roomid === 'string') {
-    document.getElementById('room-id').value = roomid;
+    document.getElementById('room-id').innerHTML = roomid;
     return roomid;
   } else {
     return exports.getRoomId();
@@ -59,13 +59,13 @@ exports.restrictClientElements = function() {
 exports.disableInputButtons = function() {
   document.getElementById('open-room').style.display = 'none';
   // document.getElementById('join-room').disabled = true;
-  document.getElementById('room-id').disabled = true;
+  // document.getElementById('room-id').disabled = true;
 };
 
 exports.enableInputButtons = function() {
   document.getElementById('open-room').style.display = 'inline';
   // document.getElementById('join-room').disabled = false;
-  document.getElementById('room-id').disabled = true; // CHANGED SO IT ISN'T EDITABLE ANYMORE
+  // document.getElementById('room-id').disabled = true; // CHANGED SO IT ISN'T EDITABLE ANYMORE
 };
 
 // Helper function to change text of leave/close room based on role
