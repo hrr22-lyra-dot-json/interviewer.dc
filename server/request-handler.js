@@ -12,6 +12,13 @@ var fs = require('fs');
 var readline = require('readline');
 var refresh = require('passport-oauth2-refresh');
 var Mixpanel = require('mixpanel');
+//var mixpanelConfig = require('../mixpanel-config.js');
+
+// create an instance of the mixpanel client
+
+var mixPanelId = process.env.mixPanelClientId || require('../mixpanel-config.js').clientID;
+
+var mixpanel = Mixpanel.init(mixPanelId);
 
 
 function ensureAuthenticated(req, res, next) {
@@ -25,7 +32,7 @@ function ensureAuthenticated(req, res, next) {
 
 
 // create an instance of the mixpanel client
-var mixpanel = Mixpanel.init('be1a32b66209f5dda2d8b0e853bfefb9');
+
 
 
 
