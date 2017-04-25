@@ -19,7 +19,7 @@ class DrawableCanvas extends React.Component {
     this.lineWidth = 4;
     this.canvasStyle = {
       backgroundColor: '#FFFFFF',
-      cursor: 'pointer'
+      cursor: 'crosshair'
     };
     this.trackingX = [];
     this.trackingY = [];
@@ -206,7 +206,7 @@ class DrawableCanvas extends React.Component {
   getDefaultStyle() {
     return {
       backgroundColor: '#FFFFFF',
-      cursor: 'pointer'
+      cursor: 'crosshair'
     };
   }
 
