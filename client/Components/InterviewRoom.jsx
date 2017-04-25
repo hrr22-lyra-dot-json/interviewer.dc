@@ -84,7 +84,9 @@ class InterviewRoom extends React.Component {
     this.uploadService = uploadService.uploadBlobToDrive;
   }
 
-  addQuestion() {
+  addQuestion(e) {
+    e.preventDefault();
+
     var question = document.getElementById('newQuestion').value;
     if (question.length > 0) {
         document.getElementById('newQuestion').value = '';
@@ -390,7 +392,20 @@ class InterviewRoom extends React.Component {
             </div>
         </div>
 
-        {/* Questions Side Nav */}
+        {/* Help - Left Side Nav */}
+        <ul id="interviewerHelpPanel" className="side-nav">
+            <li>
+                Stuff
+            </li>
+        </ul>
+        <div id="interviewerHelpPanelButton" className="fixed-action-btn left">
+            <a href="#" data-activates="interviewerHelpPanel" className="button-collapse btn-floating btn-large">
+                <span className="glyphicons glyphicons-question-sign"></span>
+            </a>
+        </div>
+
+
+        {/* Questions Right Side Nav */}
         <ul id="interviewerQuestionPanel" className="side-nav">
             <li>
                 <div className="col s12 collection with-header">
@@ -412,13 +427,13 @@ class InterviewRoom extends React.Component {
                         </div>
                     </div>
                     <div className="row">
-                        <button id="addQuestion" className="col s12 btn waves-effect waves-light blue" onClick={this.addQuestion.bind(this)}>Add Question</button>
+                        <button id="addQuestion" className="col s12 btn blue" onClick={this.addQuestion.bind(this)}>Add Question</button>
                     </div>
                 </form>
             </li>
         </ul>
         <div id="interviewerQuestionPanelButton" className="fixed-action-btn">
-            <a href="#" data-activates="interviewerQuestionPanel" className="button-collapse btn-floating btn-large waves-effect waves-light">
+            <a href="#" data-activates="interviewerQuestionPanel" className="button-collapse btn-floating btn-large">
                 <span className="glyphicons glyphicons-list"></span>
             </a>
         </div>
