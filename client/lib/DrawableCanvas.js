@@ -182,12 +182,19 @@ class DrawableCanvas extends React.Component {
       this.brushColor = this.canvasStyle.backgroundColor;
     } else if (id === 'widthSelector') {
       this.lineWidth = option;
+    } else if (id === 'colorSelector') {
+      this.brushColor = option;
     }
   }
 
   onSelectChange(id, event) {
-    this.changePointer(id, event.target.value);
-    document.getElementById(id).value = event.target.value;
+    if (id === 'widthSelector') {
+      this.changePointer(id, event.target.value);
+      document.getElementById(id).value = event.target.value;
+    } else if (id === 'colorSelector') {
+      this.changePointer(id, event.target.value);
+      document.getElementById(id).value = event.target.value;
+    }
   }
 
   resetCanvas() {
@@ -229,6 +236,11 @@ class DrawableCanvas extends React.Component {
         >
         </canvas>
         <div id="whiteboardOptions">
+          <select id="colorSelector" defaultValue="Black" onChange={this.onSelectChange.bind(this, 'colorSelector')}>
+            <option value="#000000">Black</option>
+            <option value="#ff0000">Red</option>
+            <option value="#0000FF">Blue</option>
+          </select>
           <button onClick={this.changePointer.bind(this, 'brushButton')}>Brush</button>
           <button onClick={this.changePointer.bind(this, 'eraserButton')}>Eraser</button>
           <select id="widthSelector" defaultValue="4" onChange={this.onSelectChange.bind(this, 'widthSelector')}>
