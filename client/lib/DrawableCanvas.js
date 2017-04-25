@@ -96,11 +96,11 @@ class DrawableCanvas extends React.Component {
       this.tracker.push([lastX, lastY]);
     }
     else{
-      let lastX = e.clientX - rect.left;
+      let lastX = e.clientX - rect.left - 7.5;
       let lastY = e.clientY - rect.top;
       this.setState({
-        lastX: e.clientX - rect.left,
-        lastY: e.clientY - rect.top
+        lastX: lastX,
+        lastY: lastY
       });
       this.tracker.push([lastX, lastY]);
     }
@@ -122,7 +122,7 @@ class DrawableCanvas extends React.Component {
         currentY = e.targetTouches[0].pageY - rect.top;
       }
       else{
-        currentX = e.clientX - rect.left;
+        currentX = e.clientX - rect.left - 7.5;
         currentY = e.clientY - rect.top;
       }
 
@@ -161,6 +161,8 @@ class DrawableCanvas extends React.Component {
     this.tracker = [];
 
     if (condition === 'drawing') {
+      // Connect the last point of this series to the first point of the next
+      // Only if the mouse is still held down
       this.tracker.push(tracker[tracker.length-1]);
     }
 
