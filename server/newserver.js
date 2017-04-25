@@ -11,12 +11,12 @@ const refresh = require('passport-oauth2-refresh')
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 var Mixpanel = require('mixpanel');
-var googleConfig = require('../google-config.js');
-var mixpanelConfig = require('../mixpanel-config.js');
+//var googleConfig = require('../google-config.js');
+//var mixpanelConfig = require('../mixpanel-config.js');
 
 // create an instance of the mixpanel client
 
-var mixPanelId = process.env.mixPanelClientId || mixpanelConfig.clientID;
+var mixPanelId = process.env.mixPanelClientId || require('../mixpanel-config.js').clientID;
 
 var mixpanel = Mixpanel.init(mixPanelId);
 
@@ -32,9 +32,9 @@ passport.deserializeUser(function(obj, done) {
 
 
 var strat = new GoogleStrategy({
-    clientID: process.env.clientID || googleConfig.clientID,
-    clientSecret: process.env.clientSecret || googleConfig.clientSecret,
-    callbackURL: process.env.callbackURL || googleConfig.callbackURL,
+    clientID: process.env.clientID || require('../google-config.js').clientID,
+    clientSecret: process.env.clientSecret || require('../google-config.js').clientSecret,
+    callbackURL: process.env.callbackURL || require('../google-config.js').callbackURL,
     //grant_type: 'authorization_code',
     passReqToCallback   : true,
     accessType: 'offline'
