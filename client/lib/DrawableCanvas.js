@@ -15,6 +15,7 @@ class DrawableCanvas extends React.Component {
       history: []
     };
 
+    this.tool = 'brush';
     this.brushColor = '#000000';
     this.lineWidth = 4;
     this.canvasStyle = {
@@ -177,12 +178,14 @@ class DrawableCanvas extends React.Component {
 
   changePointer(id, option) {
     if (id === 'brushButton') {
+      this.tool = 'brush';
       this.brushColor = '#000000';
     } else if (id === 'eraserButton') {
+      this.tool = 'eraser';
       this.brushColor = this.canvasStyle.backgroundColor;
     } else if (id === 'widthSelector') {
       this.lineWidth = option;
-    } else if (id === 'colorSelector') {
+    } else if (id === 'colorSelector' && this.tool === 'brush') {
       this.brushColor = option;
     }
   }
