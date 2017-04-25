@@ -77,15 +77,13 @@ main {
 .toggle-buttons {
   margin: 2.5rem auto; }
 
-.rooms-section-icons:before {
-  font-size: 1.5rem; }
-
 .add-room-button:before, .view-cal-events-button:before {
   font-size: 2rem;
   color: white; }
 
 .rooms-section-icons:before {
-  color: #1565c1; }
+  color: #1565c1;
+  font-size: 1.5rem; }
 
 .rooms-section-icons:hover:before {
   color: #3687e2;
