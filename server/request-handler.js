@@ -11,6 +11,26 @@ var googleAuth = require('google-auth-library');
 var fs = require('fs');
 var readline = require('readline');
 var refresh = require('passport-oauth2-refresh');
+var Mixpanel = require('mixpanel');
+
+
+function ensureAuthenticated(req, res, next) {
+  console.log('isauthed', req.user)
+  if (req.isAuthenticated()) { console.log('isauthed', req.user);
+  return next(); }
+  res.redirect('/');
+}
+
+
+
+
+// create an instance of the mixpanel client
+var mixpanel = Mixpanel.init('be1a32b66209f5dda2d8b0e853bfefb9');
+
+
+
+
+
 // const utils = require('../lib/server_utility.js');
 
 /*
@@ -18,73 +38,73 @@ var refresh = require('passport-oauth2-refresh');
 ** Expected response: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
-exports.createInterviewFolder = function(req, res) {
-  var retries = 3;
-  console.log('hahaha had it all allong or did I', req.user)
+// exports.createInterviewFolder = function(req, res) {
+//   var retries = 3;
+//   console.log('hahaha had it all allong or did I', req.user)
 
-  User.find({where:{id: req.body.owner_id}})
-  .then(function(user) {
-    Token.find({where: {owner_id: user.id}})
-    .then(function(token) {
-      if(!token) {  console.log('error 1');
-        return send401Response();
-      }
-      var makeRequest = function() {
-        var fileMetadata = {
-          'name' : req.body.interviewee,
-          'mimeType' : 'application/vnd.google-apps.folder',
-          'parents': [req.body.room_folder_id]
-        };
-        retries--;
-        console.log('run number', (3 - retries))
-        if(!retries) {
-          console.log('error 2')        // Couldn't refresh the access token.
-          return send401Response();
-        }
-    // Set the credentials and make the request.
-        var auth = new google.auth.OAuth2;
-        auth.setCredentials({
-          access_token: token.token,
-          refresh_token: token.refreshToken
-        });
+//   User.find({where:{id: req.body.owner_id}})
+//   .then(function(user) {
+//     Token.find({where: {owner_id: user.id}})
+//     .then(function(token) {
+//       if(!token) {  console.log('error 1');
+//         return send401Response();
+//       }
+//       var makeRequest = function() {
+//         var fileMetadata = {
+//           'name' : req.body.interviewee,
+//           'mimeType' : 'application/vnd.google-apps.folder',
+//           'parents': [req.body.room_folder_id]
+//         };
+//         retries--;
+//         console.log('run number', (3 - retries))
+//         if(!retries) {
+//           console.log('error 2')        // Couldn't refresh the access token.
+//           return send401Response();
+//         }
+//     // Set the credentials and make the request.
+//         var auth = new google.auth.OAuth2;
+//         auth.setCredentials({
+//           access_token: token.token,
+//           refresh_token: token.refreshToken
+//         });
 
-        var drive = google.drive('v3');
-        drive.files.create({
-          auth: auth,
-          resource: fileMetadata,
-          fields: 'id'
-        }, function(err, file) {
-          if (err) {
-            console.log('The API failed to create folder error: ' + err);
-            refresh.requestNewAccessToken('google', token.refreshToken, function(err, accessToken) {
-              if(err || !accessToken) {     console.log('error 3', err);
-                return send401Response(); }
-          // Save the new accessToken for future use
-              token.update({ token: accessToken }, function(token) {
-                console.log('retrywithnewtoken')
-           // Retry the request.
-                makeRequest();
-              });
-            });
-          } else {
+//         var drive = google.drive('v3');
+//         drive.files.create({
+//           auth: auth,
+//           resource: fileMetadata,
+//           fields: 'id'
+//         }, function(err, file) {
+//           if (err) {
+//             console.log('The API failed to create folder error: ' + err);
+//             refresh.requestNewAccessToken('google', token.refreshToken, function(err, accessToken) {
+//               if(err || !accessToken) {     console.log('error 3', err);
+//                 return send401Response(); }
+//           // Save the new accessToken for future use
+//               token.update({ token: accessToken }, function(token) {
+//                 console.log('retrywithnewtoken')
+//            // Retry the request.
+//                 makeRequest();
+//               });
+//             });
+//           } else {
 
-            Interview.find({where:{id: req.body.interview_id}})
-            .then(function(interview) {
-              interview.update({drive_link: file.id})
-            })
-            .then(function(updatedInterview) {
-              res.status(201).send(updatedInterview);
-            }).catch(function(err) {
-              console.error(err);
-              res.status(500).send(err);
-            });
-          }
-        })
-      }
-      makeRequest();
-    })
-  })
-}
+//             Interview.find({where:{id: req.body.interview_id}})
+//             .then(function(interview) {
+//               interview.update({drive_link: file.id})
+//             })
+//             .then(function(updatedInterview) {
+//               res.status(201).send(updatedInterview);
+//             }).catch(function(err) {
+//               console.error(err);
+//               res.status(500).send(err);
+//             });
+//           }
+//         })
+//       }
+//       makeRequest();
+//     })
+//   })
+// }
 
 exports.addMeeting = function(req, res) {
     console.log('hahaha had it all allong should have it here', req.user)
@@ -142,6 +162,14 @@ exports.addMeeting = function(req, res) {
             meetingObj.folder_id = file.id;
             Meeting.create(meetingObj)
             .then(function(newMeeting) {
+              mixpanel.people.append(req.user.user.googleId, 'Rooms', {folderId: newMeeting.folder_id,
+                jobPosition: newMeeting.job_position});
+
+              mixpanel.track('Added_room', {
+                distinct_id: req.user.user.googleId,
+                folderId: newMeeting.folder_id,
+                jobPosition: newMeeting.job_position
+              });
               res.status(201).send();
             }).catch(function(err) {
               console.error(err);
@@ -202,27 +230,27 @@ exports.deleteMeeting = function(req, res) {
 ** Expected response if user does not exist: 201 Created status, {username(string): 'username', email(string): 'user email'}
 ** Expected response on database error: 500 Internal Server Error status
 */
-exports.addUser = function(req, res) {
-  // See if email already exists in database
-  User.findOne({where: {email: req.body.email}})
-  .then(function(foundUser)  {
-    if (foundUser) {
-      res.status(409).send(foundUser);
-    } else {
-      // username and email do not exist in database so create new user
-      User.create(req.body)
-      .then(function(newUser) {
-        res.status(201).send(newUser);
-      }).catch(function(err) {
-        console.error(err);
-        res.status(500).send(err);
-      });
-    }
-  }).catch(function(err) {
-    console.error(err);
-    res.status(500).send(err);
-  });
-};
+// exports.addUser = function(req, res) {
+//   // See if email already exists in database
+//   User.findOne({where: {email: req.body.email}})
+//   .then(function(foundUser)  {
+//     if (foundUser) {
+//       res.status(409).send(foundUser);
+//     } else {
+//       // username and email do not exist in database so create new user
+//       User.create(req.body)
+//       .then(function(newUser) {
+//         res.status(201).send(newUser);
+//       }).catch(function(err) {
+//         console.error(err);
+//         res.status(500).send(err);
+//       });
+//     }
+//   }).catch(function(err) {
+//     console.error(err);
+//     res.status(500).send(err);
+//   });
+// };
 
 exports.getUserInfo = function(req, res) {
   User.findOne({where: {id: req.body.interviewerId}})
@@ -245,19 +273,19 @@ exports.getUserInfo = function(req, res) {
 ** Expected response if user does not exist: 201 Created status, {username(string): 'username', email(string): 'user email'}
 ** Expected response on database error: 500 Internal Server Error status
 */
-exports.checkGmailUser = function(req, res) {
-  User.findOrCreate({where: {email: req.body.email}, defaults: {username: req.body.username}})
-  .spread(function(newUser, created) {
-    if (created) {
-      res.status(201).send(newUser);
-    } else {
-      res.status(200).send(newUser);
-    }
-  }).catch(function(err) {
-    console.error(err);
-    res.status(500).send(err);
-  });
-};
+// exports.checkGmailUser = function(req, res) {
+//   User.findOrCreate({where: {email: req.body.email}, defaults: {username: req.body.username}})
+//   .spread(function(newUser, created) {
+//     if (created) {
+//       res.status(201).send(newUser);
+//     } else {
+//       res.status(200).send(newUser);
+//     }
+//   }).catch(function(err) {
+//     console.error(err);
+//     res.status(500).send(err);
+//   });
+// };
 
 /*
 ** Expected request body: {user_id(integer): 'user id', meeting_id(integer): 'meeting id'}
@@ -265,49 +293,49 @@ exports.checkGmailUser = function(req, res) {
 ** Expected response if usermeeting does not exist: 201 Created status
 ** Expected response on database error: 500 Internal Server Error status
 */
-exports.addUserMeeting = function(req, res) {
-  UserMeeting.findOrCreate({where: req.body})
-  .spread(function(newUserMeeting, created) {
-    if (created) {
-      console.log(newUserMeeting);
-      res.status(201).send(newUserMeeting);
-    } else {
-      res.status(409).send(newUserMeeting);
-    }
-  }).catch(function(err) {
-    console.error(err);
-    res.status(500).send(err);
-  });
-};
+// exports.addUserMeeting = function(req, res) {
+//   UserMeeting.findOrCreate({where: req.body})
+//   .spread(function(newUserMeeting, created) {
+//     if (created) {
+//       console.log(newUserMeeting);
+//       res.status(201).send(newUserMeeting);
+//     } else {
+//       res.status(409).send(newUserMeeting);
+//     }
+//   }).catch(function(err) {
+//     console.error(err);
+//     res.status(500).send(err);
+//   });
+// };
 
 /*
 ** Expected response: 200 OK status, [{id(integer): 'id', user_id(integer): 'user id', meeting_id(integer): 'meeting id', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]
 ** Expected response on database error: 500 Internal Server Error status
 */
-exports.listAllUserMeetings = function(req, res) {
-  UserMeeting.findAll()
-  .then(function(foundUserMeetings) {
-    res.status(200).send(foundUserMeetings);
-  }).catch(function(err) {
-    console.error(err);
-    res.status(500).send(err);
-  });
-};
+// exports.listAllUserMeetings = function(req, res) {
+//   UserMeeting.findAll()
+//   .then(function(foundUserMeetings) {
+//     res.status(200).send(foundUserMeetings);
+//   }).catch(function(err) {
+//     console.error(err);
+//     res.status(500).send(err);
+//   });
+// };
 
 /*
 ** Expected request query: {user_id(integer): 'user id'}
 ** Expected response: 200 OK status, [{id(integer): 'id', user_id(integer): 'user id', meeting_id(integer): 'meeting id', createdAt(date): 'creation date', updatedAt(date): 'last updated date'}]
 ** Expected response on database error: 500 Internal Server Error status
 */
-exports.listUserMeetings = function(req, res) {
-  UserMeeting.findAll({where: req.query})
-  .then(function(foundUserMeetings) {
-    res.status(200).send(foundUserMeetings);
-  }).catch(function(err) {
-    console.error(err);
-    res.status(500).send(err);
-  });
-};
+// exports.listUserMeetings = function(req, res) {
+//   UserMeeting.findAll({where: req.query})
+//   .then(function(foundUserMeetings) {
+//     res.status(200).send(foundUserMeetings);
+//   }).catch(function(err) {
+//     console.error(err);
+//     res.status(500).send(err);
+//   });
+// };
 
 /*
 ** Expected request query: {id(integer): 'id'}

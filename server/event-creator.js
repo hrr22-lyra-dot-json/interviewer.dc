@@ -88,9 +88,9 @@ exports.createEvent = function(req, res, next) {
         }
         var event = {
           'summary': req.body.job_position + ' interview for ' + req.body.interviewee_name,
-          'location': 'http://127.0.0.1:3000/#/interviewroom?roomid=' + interview.id,
+          'location': 'http://interviewer-dc.herokuapp.com/#/interviewroom?roomid=' + interview.id,
           "source": {
-            "url": 'http://127.0.0.1:3000/#/interviewroom?roomid=' + interview.id,
+            "url": 'http://interviewer-dc.herokuapp.com/#/interviewroom?roomid=' + interview.id,
             "title": 'Link to Interviewroom'
           },
           'description': 'Interview',
@@ -157,38 +157,6 @@ exports.createEvent = function(req, res, next) {
 }
 
 
-//         }
-//       var calendar = google.calendar('v3');
-//       calendar.events.insert({
-//         auth: auth,
-//         calendarId: 'primary',
-//         resource: event,
-//         sendNotifications: true
-//       }, function(err, event) {
-//         if (err) {
-//           console.log('The API failed to create event; error: ' + err);
-//           refresh.requestNewAccessToken('google', token.refreshToken, function(err, accessToken) {
-//             if(err || !accessToken) {
-//               console.log('error 3', err);
-//               return send401Response();
-//             }
-//             token.update({ token: accessToken }, function(token) {
-//               console.log('retrywithnewtoken')
-//               makeRequest();
-//               });
-//             });
-//         } else {
-//           if (event) {
-//             console.log('Event created: %s', event.htmlLink);
-//             res.status(201).send();
-//           } else {
-//             console.log('failed  run');
-//           }
-//         }
-//       })
-//     })
-//   })
-// }
 
 
 
