@@ -51,7 +51,7 @@ button.rbc-input::-moz-focus-inner {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
-  $white-space: nowrap; }
+  white-space: nowrap; }
 
 .rbc-rtl {
   direction: rtl; }
@@ -62,7 +62,7 @@ button.rbc-input::-moz-focus-inner {
 .rbc-header {
   overflow: hidden;
   text-overflow: ellipsis;
-  $white-space: nowrap;
+  white-space: nowrap;
   padding: 0 3px;
   text-align: center;
   vertical-align: middle;
@@ -101,7 +101,7 @@ button.rbc-input::-moz-focus-inner {
   padding: .375rem 1rem;
   border-radius: 4px;
   line-height: normal;
-  $white-space: nowrap; }
+  white-space: nowrap; }
 
 .rbc-toolbar button:active,
 .rbc-toolbar button.rbc-active {
@@ -130,7 +130,7 @@ button.rbc-input::-moz-focus-inner {
 
 .rbc-btn-group {
   display: inline-block;
-  $white-space: nowrap; }
+  white-space: nowrap; }
 
 .rbc-btn-group > button:first-child:not(:last-child) {
   border-top-right-radius: 0;
@@ -224,7 +224,7 @@ button.rbc-input::-moz-focus-inner {
   font-size: 85%;
   height: auto;
   line-height: normal;
-  $white-space: nowrap; }
+  white-space: nowrap; }
 
 .rbc-month-view {
   position: relative;
@@ -474,7 +474,7 @@ button.rbc-input::-moz-focus-inner {
   min-height: 0; }
 
 .rbc-time-view .rbc-time-gutter {
-  $white-space: nowrap; }
+  white-space: nowrap; }
 
 .rbc-time-view .rbc-allday-cell {
   width: 100%;

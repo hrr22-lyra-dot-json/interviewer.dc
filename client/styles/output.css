@@ -77,15 +77,13 @@ main {
 .toggle-buttons {
   margin: 2.5rem auto; }
 
-.rooms-section-icons:before {
-  font-size: 1.5rem; }
-
 .add-room-button:before, .view-cal-events-button:before {
   font-size: 2rem;
   color: white; }
 
 .rooms-section-icons:before {
-  color: #1565c1; }
+  color: #1565c1;
+  font-size: 1.5rem; }
 
 .rooms-section-icons:hover:before {
   color: #3687e2;
@@ -220,7 +218,8 @@ button.rbc-input::-moz-focus-inner {
 .rbc-show-more {
   display: block;
   overflow: hidden;
-  text-overflow: ellipsis; }
+  text-overflow: ellipsis;
+  white-space: nowrap; }
 
 .rbc-rtl {
   direction: rtl; }
@@ -231,6 +230,7 @@ button.rbc-input::-moz-focus-inner {
 .rbc-header {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   padding: 0 3px;
   text-align: center;
   vertical-align: middle;
@@ -268,7 +268,8 @@ button.rbc-input::-moz-focus-inner {
   border: 1px solid #cccccc;
   padding: .375rem 1rem;
   border-radius: 4px;
-  line-height: normal; }
+  line-height: normal;
+  white-space: nowrap; }
 
 .rbc-toolbar button:active,
 .rbc-toolbar button.rbc-active {
@@ -296,7 +297,8 @@ button.rbc-input::-moz-focus-inner {
   border-color: #adadad; }
 
 .rbc-btn-group {
-  display: inline-block; }
+  display: inline-block;
+  white-space: nowrap; }
 
 .rbc-btn-group > button:first-child:not(:last-child) {
   border-top-right-radius: 0;
@@ -389,7 +391,8 @@ button.rbc-input::-moz-focus-inner {
   font-weight: bold;
   font-size: 85%;
   height: auto;
-  line-height: normal; }
+  line-height: normal;
+  white-space: nowrap; }
 
 .rbc-month-view {
   position: relative;
@@ -633,6 +636,9 @@ button.rbc-input::-moz-focus-inner {
   width: 100%;
   border: 1px solid #dedede;
   min-height: 0; }
+
+.rbc-time-view .rbc-time-gutter {
+  white-space: nowrap; }
 
 .rbc-time-view .rbc-allday-cell {
   width: 100%;
