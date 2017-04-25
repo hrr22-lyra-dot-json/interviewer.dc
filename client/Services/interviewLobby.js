@@ -122,7 +122,7 @@ exports.initializeLobby = function() {
   // console.log('roomid phase 2', roomid);
 
   if (roomid && roomid.length) {
-    document.getElementById('room-id').value = roomid;
+    document.getElementById('room-id').innerHTML = roomid;
     localStorage.setItem(connection.socketMessageEvent, roomid);
   // auto-join-room
     (function reCheckRoomPresence() {

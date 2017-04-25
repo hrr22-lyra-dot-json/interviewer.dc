@@ -54,6 +54,17 @@ var looper = function() {
   });
 };
 
+// Helper function to calculate file size
+var getFormattedSize = function(num) {
+  if (num > 1024) {
+    return Math.floor(num / 1024) + ' KB';
+  } else if (num > 1048576) {
+    return Math.floor(num / 1048576) + ' MB';
+  } else {
+    return num + ' B';
+  }
+};
+
 exports.initializeRecorder = function() {
   // Create canvas area to record
   elementToShare = document.getElementById('elementToShare');
@@ -125,6 +136,15 @@ exports.stop = function() {
       currentAudioBlob = aBlob;
       // document.getElementById('save').disabled = false;
 
+      if (currentVideoBlob) {
+
+        document.getElementById('webmBadge').innerHTML = getFormattedSize(currentVideoBlob.size);
+        document.getElementById('webmBadge').classList.remove('red');
+      }
+      if (currentAudioBlob) {
+        document.getElementById('wavBadge').innerHTML = getFormattedSize(currentAudioBlob.size);
+        document.getElementById('wavBadge').classList.remove('red');
+      }
       console.log('VIDEO BLOB', currentVideoBlob);
       console.log('AUDIO BLOB', currentAudioBlob);
     });

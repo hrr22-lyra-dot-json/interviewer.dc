@@ -84,7 +84,9 @@ class InterviewRoom extends React.Component {
     this.uploadService = uploadService.uploadBlobToDrive;
   }
 
-  addQuestion() {
+  addQuestion(e) {
+    e.preventDefault();
+
     var question = document.getElementById('newQuestion').value;
     if (question.length > 0) {
         document.getElementById('newQuestion').value = '';
@@ -118,7 +120,10 @@ class InterviewRoom extends React.Component {
     console.log(snapshot);
     this.state.snapshots.push(snapshot);
 
-    Materialize.toast(`Screen saved!`, 2000);
+    if (this.state.snapshots.length > 0) {
+        document.getElementById('pdfBadge').innerHTML = this.state.snapshots.length + ' total';
+        document.getElementById('pdfBadge').classList.remove('red');
+    }
   }
 
   clearScreen(e) {
@@ -127,7 +132,7 @@ class InterviewRoom extends React.Component {
     document.getElementById('prompt-text').innerHTML = '(No question selected)';
     document.getElementById('questionNote').value = '';
     this.codeMirror.setValue('');
-    document.querySelector('#whiteboard button').click();
+    document.getElementById('clearButton').click();
   }
 
   endInterview() {
@@ -228,8 +233,7 @@ class InterviewRoom extends React.Component {
     document.getElementById('close-room').style.display = 'none';
 
     // Auto-fill room name and focus fields temporarily
-    document.getElementById('room-id').value = this.roomid;
-    document.getElementById('room-id').focus();
+    document.getElementById('room-id').innerHTML = this.roomid;
     document.getElementById("questionNote").focus();
 
     // Initialize Recorder functionality and Socket.io connection server
@@ -317,11 +321,11 @@ class InterviewRoom extends React.Component {
                 <div className="col s12 card blue-grey darken-1">
                     <div className="card-content white-text">
                         <span className="card-title">Interview Session <span id="timeElapsed" className="new badge" data-badge-caption="">00:00</span></span>
-                        <div id="room-name-container" className="input-field col s12">
-                            <input type="text" id="room-id"></input>
-                            <label htmlFor="room-id">Room Number</label>
+                        <div id="room-name-container" className="chip">
+                            <span className="glyphicons glyphicons-call-ip"></span>
+                            <span>Room Number: </span>
+                            <span id="room-id"></span>
                         </div>
-
                         <div className="chip">
                             <span className="glyphicons glyphicons-lock"></span>
                             <span id="userRoleText"></span>
@@ -350,47 +354,50 @@ class InterviewRoom extends React.Component {
                     <div id="browserWarning" className="row">
                         Video session recording is only compatible with Chrome 58 and above!
                     </div>
+
                     <hr></hr>
-                    <form className="col s12">
-                        <div className="row">
-                            <div id="promptContainer" className="col s12 blue-grey white-text">
-                                <span><strong>Prompt/Question: </strong></span><span id="prompt-text">(No question selected)</span>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="input-field col s12">
-                                <textarea id="questionNote" className="materialize-textarea" placeholder="Insert notes here..."></textarea>
-                                <label htmlFor="questionNote">Question Notes</label>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <button id="saveScreen" className="col s6 btn waves-effect waves-light blue" onClick={this.takeScreenSnapshot.bind(this)}><span className="glyphicons glyphicons-log-book"></span>Screenshot</button>
-                            <button id="clearScreen" className="col s6 btn waves-effect waves-light blue lighten-2" onClick={this.clearScreen.bind(this)}><span className="glyphicons glyphicons-ban-circle"></span>Clear Screen</button>
 
-                            <li className="divider"></li>
+                    <div id="promptContainer" className="col s12 blue-grey white-text">
+                        <span><strong>Prompt/Question: </strong></span><span id="prompt-text">(No question selected)</span>
+                    </div>
+                    <div className="input-field col s12">
+                        <textarea id="questionNote" className="materialize-textarea" placeholder="Insert notes here..."></textarea>
+                        <label htmlFor="questionNote">Question Notes</label>
+                    </div>
+                    <button id="saveScreen" className="col s6 btn waves-effect waves-light blue" onClick={this.takeScreenSnapshot.bind(this)}><span className="glyphicons glyphicons-log-book"></span>Screenshot</button>
+                    <button id="clearScreen" className="col s6 btn waves-effect waves-light blue lighten-2" onClick={this.clearScreen.bind(this)}><span className="glyphicons glyphicons-ban-circle"></span>Clear Screen</button>
 
-                            <a className="col btn s4 green white-text" onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span></a>
-                            <a className="col btn s4 yellow darken-3 white-text" onClick={this.endInterview.bind({ context: this, type: 'ul' })}><span className="glyphicons glyphicons-cloud-upload"></span></a>
-                            <a id="testClickDrive" className="col btn s4 yellow darken-4 white-text" href={"https://drive.google.com/drive/folders/" + this.state.interviewInfo.drive_link} target="_blank"><span className="social social-google-drive"></span></a>
+                    <hr></hr>
 
-                            {/*<a className='dropdown-button btn col s12 green' data-activates='sessionFileDropdown' data-hover='true' data-stopPropagation='true' data-outDuration='100' data-inDuration='100'><span className="glyphicons glyphicons-handshake"></span>Session Files</a>
-                            <ul id='sessionFileDropdown' className='dropdown-content'>
-                                <li className="col s12 green" ><a className="white-text" onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
-                                <li className="col s12 yellow darken-3"><a className="white-text" onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a></li>
-                                <li className="col s12 yellow darken-4"><a className="white-text" href={"https://drive.google.com/drive/folders/" + this.state.interviewInfo.drive_link} target="_blank">Open Drive</a></li>
-                            <a className="dropdown-button btn col s12 green" href="#" data-activates="endInterview"><span className="glyphicons glyphicons-handshake"></span>End Interview</a>
-                            <ul id='endInterview' className='dropdown-content'>
-                                <li><a onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span>Download</a></li>
-                                <li className="divider"></li>
-                                <li><a onClick={this.endInterview.bind({ context: this, type: 'ul' })}>Upload to Drive</a></li>
-                            </ul>*/}
-                        </div>
-                    </form>
+                    <a className="col btn s4 green white-text" onClick={this.endInterview.bind({ context: this, type: 'dl' })}><span className="glyphicons glyphicons-download-alt"></span></a>
+                    <a className="col btn s4 yellow darken-3 white-text" onClick={this.endInterview.bind({ context: this, type: 'ul' })}><span className="glyphicons glyphicons-cloud-upload"></span></a>
+                    <a id="testClickDrive" className="col btn s4 yellow darken-4 white-text" href={"https://drive.google.com/drive/folders/" + this.state.interviewInfo.drive_link} target="_blank"><span className="social social-google-drive"></span></a>
+
+                    <div className="row blue-grey darken-1">
+                        <ul id="availableFileList" className="collection col s12">
+                            <li className="collection-item blue-grey darken-1 white-text"><span id="pdfBadge" className="new badge red" data-badge-caption="">unavailable</span>Session Screenshots (.pdf)</li>
+                            <li className="collection-item blue-grey darken-1 white-text"><span id="webmBadge" className="new badge red" data-badge-caption="">unavailable</span>Video Recording (.webm)</li>
+                            <li className="collection-item blue-grey darken-1 white-text"><span id="wavBadge" className="new badge red" data-badge-caption="">unavailable</span>Audio Recording (.wav)</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {/* Questions Side Nav */}
+        {/* Help - Left Side Nav */}
+        {/* <ul id="interviewerHelpPanel" className="side-nav">
+            <li>
+                Stuff
+            </li>
+        </ul>
+        <div id="interviewerHelpPanelButton" className="fixed-action-btn left">
+            <a href="#" data-activates="interviewerHelpPanel" className="button-collapse btn-floating btn-large">
+                <span className="glyphicons glyphicons-question-sign"></span>
+            </a>
+        </div>*/}
+
+
+        {/* Questions Right Side Nav */}
         <ul id="interviewerQuestionPanel" className="side-nav">
             <li>
                 <div className="col s12 collection with-header">
@@ -412,13 +419,13 @@ class InterviewRoom extends React.Component {
                         </div>
                     </div>
                     <div className="row">
-                        <button id="addQuestion" className="col s12 btn waves-effect waves-light blue" onClick={this.addQuestion.bind(this)}>Add Question</button>
+                        <button id="addQuestion" className="col s12 btn blue" onClick={this.addQuestion.bind(this)}>Add Question</button>
                     </div>
                 </form>
             </li>
         </ul>
         <div id="interviewerQuestionPanelButton" className="fixed-action-btn">
-            <a href="#" data-activates="interviewerQuestionPanel" className="button-collapse btn-floating btn-large waves-effect waves-light">
+            <a href="#" data-activates="interviewerQuestionPanel" className="button-collapse btn-floating btn-large">
                 <span className="glyphicons glyphicons-list"></span>
             </a>
         </div>
