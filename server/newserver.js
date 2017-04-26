@@ -120,8 +120,9 @@ var strat = new GoogleStrategy({
               } else {
                 newUser.update({drive_folder_id:file.id})
                 .then(function(UpdatedUser) {
+                  var tokenToSend = {token: newToken.token}
                   mixpanel.people.set(profile.id, 'folder_id', UpdatedUser.drive_folder_id);
-                  done(null, {user: UpdatedUser, token: newToken })
+                  done(null, {user: UpdatedUser, token: tokenToSend })
                 })
               }
             })
