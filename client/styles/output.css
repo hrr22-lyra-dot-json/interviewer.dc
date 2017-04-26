@@ -177,10 +177,6 @@ a.powered-by-firepad {
 .ReactModal__Content--after-open {
   height: 460px; }
 
-.rbc-event {
-  width: 100% !important;
-  color: white !important; }
-
 .rbc-btn {
   color: inherit;
   font: inherit;
@@ -348,17 +344,18 @@ button.rbc-input::-moz-focus-inner {
   padding: 2px 5px;
   background-color: #3174ad;
   border-radius: 5px;
-  color: #fff;
+  width: 100% !important;
+  color: white !important;
   font-size: 0.875em;
   -webkit-transition: -webkit-transform 0.5s ease;
   -moz-transition: -moz-transform 0.5s ease;
   transition: transform 0.5s ease; }
 
 .rbc-event:hover {
-  z-index: 22;
-  width: auto !important;
-  height: auto !important;
-  opacity: 1; }
+  z-index: 22 !important;
+  height: 3rem !important;
+  opacity: 1 !important;
+  background-color: #3687e2 !important; }
 
 .rbc-event.rbc-selected {
   background-color: #265985; }
