@@ -189,7 +189,7 @@ class CalendarInterviewee extends React.Component {
                 </form>
 
                 <button className="btn btn-default blue darken-3" onClick={this.addAvailability}>Confirm</button>
-                <button className="btn btn-default red" onClick={this.closeModal}>close</button>
+                <button className="btn btn-default red right" onClick={this.closeModal}>close</button>
 
                 <blockquote>Good luck!</blockquote>
 
