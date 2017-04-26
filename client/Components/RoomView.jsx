@@ -81,7 +81,7 @@ class RoomView extends React.Component {
                   <input id="newQuestion" value={this.state.newQuestion} placeholder="Type in new question..." onChange={this.handleChange.bind(this)}/>
                 </div>
                 <div className="col s2 right">
-                  <a className="waves-effect waves-light btn blue darken-3" onClick={this.addQuestion.bind(this)}><span className="glyphicons glyphicons-plus"></span></a>
+                  <a className="waves-effect waves-light btn blue darken-3 right" onClick={this.addQuestion.bind(this)}><span className="glyphicons glyphicons-plus"></span></a>
                 </div>
               </div>
               {

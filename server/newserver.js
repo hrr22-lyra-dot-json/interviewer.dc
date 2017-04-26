@@ -272,6 +272,41 @@ require('./socket.io/Signaling-Server.js')(socketserver, function(socket) {
 //////////////////////////////// MISC ////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-console.log('[Server + socket.io server port]: ' + port);
-module.exports = app;
+console.log(`[Server + socket.io server port]: ${port}
 
+                          ........:oo:........
+                       o//ssssssssyhhysssss+////o                   .'''''''''''''''''.
+                 mddmmm/::ddddddddddddddmmmyss::/mmN               |   PARTY OR DIE   |
+                 o..+oodddmmmhhhhhhhhhhhdmmmmmdddooy               | ,................'
+              h::oyyhddmmm+++///////////++++++mmmddy::s            |/
+           Nyyo[[sddhyyyyy::::::::::::::::::::yyymmh//oyym
+           h..:oohmm+:://///::::////////////////+mmmmms..sNN
+           m++sddmmm+::hddhhy::+ddddddddddddddhhhmmmmmdhh+++d
+        Nsssyyhmmhssooodmmhhh::+mmdyyyyyyyyddddddmmmmmmmmo::d
+      mmd../mmmmmo::shhdmmhhh::+mmhooooooooyhhmmmmmmmmmmmyssdmm
+      +++++smmdddo::///dmmhhh::+mmhooooooooooommmmmddddmmmdd/++m
+      ''+hhhmmhoo/:::::oooooossymmhooooooooyyymmdoooooydddmmo//N
+      ++:mmmmmy:::::::::::::/yyhmmhooooooooyhhmmd:::::+yyhmmyssddd
+      ooommmmmy:::::::::::::://ommhooooooooooommd:::::://shhdmm+..
+      yyhmmh++/::::::::::::::::+mmhooooooooyyymmd::::::::/++hmm+//
+      dddmmh++/::::::::::::::::+mmhooooooooyhhddh:::::::::::hmmysshhd
+      mmmmmdhhs::::::::::::::::+mmhoooooooohhhhhy:::::::::::hmmhhh''+
+      mmmmmh++/::::::::::::::::+mmdhhsooooodmm++/:::::::::::hmmsss''+
+      dddmmhoo+::::::::::::::::+dddddyssyyydmm::::::::::::::hmmsoo++o
+      dddmmdhho::::::::::::::::+hhdmmddddmmmmm::::::::::::::hmmsooNNN
+      mmmmmh///::::::::::::::::+hhdmmmmmmmmddd::::::::::::::hmmsoo++/
+      yyhmmdss+::::::::::::::::/ooydddmmmmmsoo::::::::::::::yddhyy::+
+      ++ommmmmy:::::::::::::::::::ohhdmmddd/::::::::::::::::shhdmmsssNNNmmN
+      ..+mmmmmy:::::::::::::::::::://shh+//:::::::::::::::::://dmmmmdoo+..o
+      ''+dddmmhss+:::::::::::::::::::+++/::::::::::::::::::::::ooodddhhysshNNy++m
+      ''+hhdmmdhhs///:::::::::::::::::::::::::::::::::::::::::::::yyymmmmmmmmo++hNNmdd
+      ''+hhdmmdhhhhh+:::::::::::::::::::::::::::::::::::::::::::::::/hhhhhdmmmmmsoo...
+      ''+ddmmmdhhhhhyyyyyyyyyyyo:::::::::::::::::::::::::::::::::::::+++++sdddmmdhhsss//+
+      ''+mmmmmhsshhhhhhhhhhhhhhy++/:::::::::::::::::::::::::::::::::::::::+ssyyydmmddd///hhd
+      ''+mmmmmy::shhhhhhhhhhhhhhhhs:::::::::::::::::::::::::::::::::::::::::::::ymmmmmmmh../
+      ''+mmmmmy:://////////////ohhhyy+::::::::::::::::::::::::::::::::::::::::::///hddmmmhhs++s
+      ''+mmmmmhssssssssssssssssydddddysssssssssssssssssssssssssssssssssssssssssssssdddmmmmmy::s
+      ''+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmhooh
+
+      [Server + socket.io server port]: ${port}`);
+module.exports = app;
