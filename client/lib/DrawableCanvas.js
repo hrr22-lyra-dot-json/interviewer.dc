@@ -15,6 +15,7 @@ class DrawableCanvas extends React.Component {
       history: []
     };
 
+    this.rect;
     this.tool = 'brush';
     this.brushColor = '#000000';
     this.lineWidth = 4;
@@ -23,6 +24,11 @@ class DrawableCanvas extends React.Component {
       cursor: 'crosshair'
     };
     this.tracker = [];
+
+    this.originalOffsetW;
+    this.originalOffsetH;
+    this.offsetWidth = 0;
+    this.offsetHeight = 0;
   }
 
   componentDidMount() {
@@ -36,6 +42,8 @@ class DrawableCanvas extends React.Component {
     let ctx = canvas.getContext('2d');
     ctx.lineJoin = 'round';
     ctx.lineCap = 'butt';
+    this.originalOffsetW = canvas.offsetWidth;
+    this.originalOffsetH = canvas.offsetHeight;
 
     this.setState({
       canvas: canvas,
@@ -96,8 +104,8 @@ class DrawableCanvas extends React.Component {
       this.tracker.push([lastX, lastY]);
     }
     else{
-      let lastX = e.clientX - rect.left - 7.5;
-      let lastY = e.clientY - rect.top;
+      let lastX = (e.clientX - rect.left) * (this.state.canvas.width / rect.width);
+      let lastY = (e.clientY - rect.top) * (this.state.canvas.height / rect.height);
       this.setState({
         lastX: lastX,
         lastY: lastY
@@ -122,8 +130,8 @@ class DrawableCanvas extends React.Component {
         currentY = e.targetTouches[0].pageY - rect.top;
       }
       else{
-        currentX = e.clientX - rect.left - 7.5;
-        currentY = e.clientY - rect.top;
+        currentX = (e.clientX - rect.left) * (this.state.canvas.width / rect.width);
+        currentY = (e.clientY - rect.top) * (this.state.canvas.height / rect.height);
       }
 
       this.draw(lastX, lastY, currentX, currentY);
