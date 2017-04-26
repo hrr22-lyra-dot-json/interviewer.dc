@@ -353,8 +353,9 @@ button.rbc-input::-moz-focus-inner {
 
 .rbc-event:hover {
   z-index: 22 !important;
-  height: 3rem !important;
+  height: auto !important;
   opacity: 1 !important;
+  flex-flow: row wrap !important;
   background-color: #3687e2 !important; }
 
 .rbc-event.rbc-selected {
