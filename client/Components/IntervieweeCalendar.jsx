@@ -183,13 +183,12 @@ class CalendarInterviewee extends React.Component {
                 <p>Confirm your interview with {this.state.interviewerInfo.username} on {new Date(this.state.booking.start).toLocaleDateString()} at {new Date(this.state.booking.start).toLocaleTimeString()}.</p>
                 <p>Please enter your name and email, the interview details will be sent to this email address and the event invite must be accepted to be confirmed.</p>
 
-                <form>
+                <form onSubmit={this.addAvailability}>
                   <input id="intervieweeName" placeholder="Type in your full name..." onChange={this.handleChangeName.bind(this)}/>
-                  <input id="intervieweeEmail" type="email" placeholder="Type in your email address..." onChange={this.handleChangeEmail.bind(this)}/>
+                  <input id="intervieweeEmail" className="validate" type="email" placeholder="Type in your email address..." onChange={this.handleChangeEmail.bind(this)}/>
+                  <button className="btn btn-default blue darken-3" type="submit">Confirm</button>
+                  <button className="btn btn-default red right" onClick={this.closeModal}>close</button>
                 </form>
-
-                <button className="btn btn-default blue darken-3" onClick={this.addAvailability}>Confirm</button>
-                <button className="btn btn-default red right" onClick={this.closeModal}>close</button>
 
                 <blockquote>Good luck!</blockquote>
 
