@@ -370,19 +370,6 @@ class InterviewRoom extends React.Component {
             </div>
         </div>
 
-        {/* Help - Left Side Nav */}
-        {/* <ul id="interviewerHelpPanel" className="side-nav">
-            <li>
-                Stuff
-            </li>
-        </ul>
-        <div id="interviewerHelpPanelButton" className="fixed-action-btn left">
-            <a href="#" data-activates="interviewerHelpPanel" className="button-collapse btn-floating btn-large">
-                <span className="glyphicons glyphicons-question-sign"></span>
-            </a>
-        </div>*/}
-
-
         {/* Questions Right Side Nav */}
         <ul id="interviewerQuestionPanel" className="side-nav">
             <li>
