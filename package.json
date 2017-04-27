@@ -5,13 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server/newserver.js",
-    "start:old": "node server/server.js",
     "test": "nyc mocha test/ServerSpec.js --reporter mochawesome && casperjs test/EndSpec.js",
     "test-server": "nyc mocha test/ServerSpec.js --reporter mochawesome",
     "db:create": "sequelize db:migrate",
-    "db:seed": "sequelize db:seed:all",
-    "db:unseed": "sequelize db:seed:undo:all",
-    "db:reseed": "npm run db:unseed && npm run db:seed",
     "db:setup": "npm run db:create && npm run db:unseed && npm run db:seed",
     "db:drop": "sequelize db:migrate:undo:all",
     "sass:compile": "node-sass --include-path sass client/styles/input.scss client/styles/output.css",
