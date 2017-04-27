@@ -81,7 +81,6 @@ exports.initializeRecorder = function() {
   // videoRecorder
   canvasRecorder = new CanvasRecorder(canvas2d, {
     disableLogs: false,
-    // frameInterval: 20,
     initCallback: looper
   });
 
@@ -93,7 +92,7 @@ exports.initializeRecorder = function() {
       getNativeBlob: true   // default is false
     });
   }).catch(function(err) {
-    console.error('Media Error: ', err);
+    // console.error('Media Error: ', err);
   });
 };
 
@@ -103,7 +102,6 @@ exports.start = function() {
   document.getElementById('start').style.display = 'none';
   document.getElementById('stop').style.display = 'inline';
   document.getElementById('timeElapsed').classList.toggle('red');
-  // document.getElementById('save').disabled = true;
 
   // Set states
   isStoppedRecording = false;
@@ -134,7 +132,6 @@ exports.stop = function() {
     currentVideoBlob = vBlob;
     audioRecorder.stop(function(aBlob) {
       currentAudioBlob = aBlob;
-      // document.getElementById('save').disabled = false;
 
       if (currentVideoBlob) {
 
@@ -145,8 +142,6 @@ exports.stop = function() {
         document.getElementById('wavBadge').innerHTML = getFormattedSize(currentAudioBlob.size);
         document.getElementById('wavBadge').classList.remove('red');
       }
-      console.log('VIDEO BLOB', currentVideoBlob);
-      console.log('AUDIO BLOB', currentAudioBlob);
     });
   });
 

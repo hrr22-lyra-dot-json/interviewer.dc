@@ -19,11 +19,8 @@ exports.validateRoomid = function(roomid) {
 // Display/hide URL link for current room (for admins)
 exports.showRoomURL = function(roomid) {
   var roomQueryStringURL = '?roomid=' + roomid;
-  // var fullURL = window.location.href + roomQueryStringURL;
   var fullURL = window.location.href.split('?_k=').shift() + roomQueryStringURL;
   var html = '<u><a href="' + fullURL + '" target="_blank">Full Room URL</a></u>';
-  // var html = '<u><a href="' + window.location.href + '" target="_blank">' + roomid + '</a></u>';
-  // var html = '<u><a href="' + window.location.href.split('?_k=').shift() + '" target="_blank">' + roomid + '</a></u>';
 
   // Enable room url link button
   document.getElementById('urlButton').href = fullURL;
@@ -58,14 +55,10 @@ exports.restrictClientElements = function() {
 // helper functions to disable/enable all buttons
 exports.disableInputButtons = function() {
   document.getElementById('open-room').style.display = 'none';
-  // document.getElementById('join-room').disabled = true;
-  // document.getElementById('room-id').disabled = true;
 };
 
 exports.enableInputButtons = function() {
   document.getElementById('open-room').style.display = 'inline';
-  // document.getElementById('join-room').disabled = false;
-  // document.getElementById('room-id').disabled = true; // CHANGED SO IT ISN'T EDITABLE ANYMORE
 };
 
 // Helper function to change text of leave/close room based on role

@@ -1,24 +1,24 @@
-import { EventEmitter } from 'events'
-import axios from 'axios'
+import { EventEmitter } from 'events';
+import axios from 'axios';
 
 export default class QuestionService extends EventEmitter {
   constructor() {
-    super()
+    super();
   }
 
   addOne(question) {
-    this.addAQuestion(question, this.getThem.bind(this))
+    this.addAQuestion(question, this.getThem.bind(this));
   }
   getThem(roomDbId) {
-    this.getQuestions(roomDbId, this.gotQuestions.bind(this))
+    this.getQuestions(roomDbId, this.gotQuestions.bind(this));
   }
 
   addAQuestion(question, callback) {
     axios.post('/api/Question', question//meeting_id:roomDbId, question: question
     )
     .then(function(response) {
-      callback(question.meeting_id)
-    })
+      callback(question.meeting_id);
+    });
   }
 
   getQuestions(roomDbId, callback) {
@@ -28,10 +28,10 @@ export default class QuestionService extends EventEmitter {
       }
     })
     .then(function(response) {
-      callback(response.data)
-    })
+      callback(response.data);
+    });
   }
   gotQuestions(questions) {
-    this.emit('got_questions', questions)
+    this.emit('got_questions', questions);
   }
 }
