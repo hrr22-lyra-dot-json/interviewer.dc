@@ -3,16 +3,11 @@ import React from 'react'
 import moment from 'moment'
 import events from '../events'
 import BigCalendar from 'react-big-calendar'
-//import CalendarService from '../Services/CalendarService.js'
-//import CalendarAuth from './CalendarAuth.jsx'
 import Modal from 'react-modal';
 import Select from 'react-select';
 import TimeslotService from '../Services/TimeslotService.js'
 import googleCalendar from '../Services/cService.js'
 import newAuth from '../Services/newAuthenticationService.js'
-
-
-
 
 const customStyles = {
   overlay: {
@@ -29,37 +24,51 @@ const customStyles = {
 };
 
 var slotServ = new TimeslotService();
-//const googleCalendarService = new googleCalendar()
 const userinfo = new newAuth()
-
-// a localizer for BigCalendar
-//BigCalendar.momentLocalizer(moment)
 
 class CalendarInterviewee extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:'', end:''}, selectable:false, slotLength: 30, booking:{start:'', end:''}, interviewerInfo:'', intervieweeName:'', intervieweeEmail:'', error:''};
-    this.state.error = ''
+    this.state = {
+      events: [],
+      availableSlots: [],
+      modalIsOpen: false,
+      slotInfo:{
+        start: '',
+        end: ''
+      },
+      selectable:false,
+      slotLength: 30,
+      booking:{
+        start: '',
+        end: ''
+      },
+      interviewerInfo: '',
+      intervieweeName: '',
+      intervieweeEmail: '',
+      error: ''
+    };
 
+    this.state.error = '';
+
+    // console.log('query', props.location.query);
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
-    console.log('query', props.location.query);
     this.interviewer = Number(props.location.query.interviewer)
-
+    // console.log('thestate', props.location.state)
     this.state.roomDetails = props.location.state
-    console.log('thestate', props.location.state)
+
     userinfo.getInfo(this.interviewer)
     userinfo.on('got_info', (info) => {
-      console.log('got info:', info)
-    this.setState({interviewerInfo: info.data})
+      // console.log('got info:', info)
+      this.setState({interviewerInfo: info.data})
     })
+
     this.job_position = props.location.query.job_position
     this.roomDbId = props.location.query.roomDbId
 
     slotServ.getThem(this.interviewer)
-    //this.setState({eventsAndSlots:this.state.events.concat(this.state.availableSlots)})
-
     slotServ.on('got_slots', (slots) => {
-      console.log('length', slots.data.length)
+      // console.log('length', slots.data.length)
       if (!slots.data.length) {
         var errorMessage = 'Your interviewer has no availabilities, contact them directly.'
         this.setState({error: errorMessage})
@@ -68,16 +77,17 @@ class CalendarInterviewee extends React.Component {
       this.setState({availableSlots: slots.data})
       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
     })
+
     slotServ.on('slot_error', (error) => {
       this.setState({error: error})
     })
+
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.addInfo = this.addInfo.bind(this)
     this.addAvailability = this.addAvailability.bind(this)
     this.logChange = this.logChange.bind(this)
-
   }
 
   addInfo(slotInfo) {
@@ -87,30 +97,28 @@ class CalendarInterviewee extends React.Component {
   }
   logChange(val) {
     this.setState({slotLength: val.value})
-    console.log("Selected: ", val);
-
+    // console.log("Selected: ", val);
   }
 
   openModal() {
     this.setState({modalIsOpen: true});
-    //this.setState({modalIsOpen: true});
   }
 
   afterOpenModal() {
     // references are now sync'd and can be accessed.
-    //this.refs.subtitle.style.color = '#f00';
+    // this.refs.subtitle.style.color = '#f00';
   }
 
   closeModal() {
     this.setState({modalIsOpen: false});
   }
   addAvailability(slotLength, slotInfo) {
+    // console.log('booking', booking)
     var booking = this.state.booking
-    console.log('booking', booking)
     this.setState({modalIsOpen: false});
-    //post request to availability slots database
 
-    var eventor = {interviewer_id: this.interviewer,
+    var eventor = {
+      interviewer_id: this.interviewer,
       job_position: this.job_position,
       interviewee_name: this.state.intervieweeName,
       interviewee_email: this.state.intervieweeEmail,
@@ -121,22 +129,23 @@ class CalendarInterviewee extends React.Component {
       end: new Date(booking.end),
       roomDbId: this.roomDbId
     }
+
     slotServ.createEvent(eventor, booking, this.interviewer);
     Materialize.toast(`Appointment booked for ${eventor.job_position} on ${eventor.start.toDateString()} at ${eventor.start.toTimeString()}!`, 6000);
   }
 
-
   eventClick(event) {
-
     if (event.title === 'Book Interview') {
+      // console.log('this is the event:', event);
       this.setState({booking:event})
-      console.log('this is the event:', event);
       this.openModal();
     }
   }
+
   handleChangeName(event) {
     this.setState({intervieweeName: event.target.value});
   }
+
   handleChangeEmail(event) {
     this.setState({intervieweeEmail: event.target.value});
   }
@@ -144,7 +153,6 @@ class CalendarInterviewee extends React.Component {
   render () {
     return (
       <div>
-
         <nav className="splash-nav blue darken-3">
           <div className="nav-wrapper">
             <a href="/#/home" className="brand-logo center">Interviewer.DC</a>
@@ -152,7 +160,6 @@ class CalendarInterviewee extends React.Component {
         </nav>
 
         <div className="container calendar-section">
-
           <div className="row">
             <div className="col s12">
               <div className="card">
@@ -169,15 +176,19 @@ class CalendarInterviewee extends React.Component {
             </div>
           </div>
 
-          <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
+          <CalView
+            events={this.state.eventsAndSlots}
+            selectable={this.state.selectable}
+            selectSlot={this.addInfo.bind(this)}
+            eventClick={this.eventClick.bind(this)} />
+
             <div className="container">
-            <Modal
-              isOpen={this.state.modalIsOpen}
-              onAfterOpen={this.afterOpenModal}
-              onRequestClose={this.closeModal}
-              style={customStyles}
-              contentLabel="Book interview"
-              >
+              <Modal
+                isOpen={this.state.modalIsOpen}
+                onAfterOpen={this.afterOpenModal}
+                onRequestClose={this.closeModal}
+                style={customStyles}
+                contentLabel="Book interview" >
 
                 <h2 ref="subtitle">Book interview</h2>
                 <p>Confirm your interview with {this.state.interviewerInfo.username} on {new Date(this.state.booking.start).toLocaleDateString()} at {new Date(this.state.booking.start).toLocaleTimeString()}.</p>
@@ -191,14 +202,11 @@ class CalendarInterviewee extends React.Component {
                 </form>
 
                 <blockquote>Good luck!</blockquote>
-
               </Modal>
             </div>
             <p className="errorClass"> {this.state.error}</p>
           </div>
-
       </div>
-
     )
   }
 }

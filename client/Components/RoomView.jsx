@@ -12,28 +12,25 @@ class RoomView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {roomDetails:props.info, questionList: [] , interviews:[], newQuestion:'', upcomingInterviews:[], pastInterviews:[]}
-    console.log('roominfo', this.state.roomDetails)
+    // console.log('roominfo', this.state.roomDetails)
     this.roomSelect = props.roomSelect;
 
     interviewService.getThem({roomid:this.state.roomDetails.id, owner_id:JSON.parse(localStorage.getItem('googleUser')).user.id})
 
     interviewService.on('got_interviews', (interviews) => {
       if (interviews) {
-
         var upcoming = interviews.filter(function(interview) {
           return (new Date(interview.start)).getTime() >= (new Date()).getTime()
         }).sort(function(a, b) {
           return (new Date(a.start)).getTime() - (new Date(b.start)).getTime()
         })
 
-        console.log('upcoming', upcoming)
-
         var past = interviews.filter(function(interview) {
           return (new Date(interview.start)).getTime() <= (new Date()).getTime()
         })
-        console.log('past', past)
 
-
+        // console.log('upcoming', upcoming)
+        // console.log('past', past)
 
         this.setState({interviews: interviews, upcomingInterviews: upcoming, pastInterviews:past })
       }
@@ -41,7 +38,7 @@ class RoomView extends React.Component {
     questionService.getThem(this.state.roomDetails.id)
 
     questionService.on('got_questions', (questions) => {
-        console.log('questions', questions)
+        // console.log('questions', questions)
         this.setState({questionList: questions})
     })
 
@@ -60,8 +57,6 @@ class RoomView extends React.Component {
   goHome() {
     this.roomSelect(null)
   }
-
-
 
   render() {
     var roomDatabaseId = this.state.roomDetails.id
@@ -106,7 +101,7 @@ class RoomView extends React.Component {
                       <a   >{interview.interviewee_name}</a>
                       <a   >{interview.interviewee_email}</a>
                       <a href={'https://drive.google.com/drive/folders/' + interview.drive_link}>Link to Google drive folder</a>
-                      <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                      <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId }} >
                       <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
                       </Link>
                     </div>
@@ -129,7 +124,7 @@ class RoomView extends React.Component {
                       <a>{interview.start}</a>
                       <a>{interview.interviewee_name}</a>
                       <a>{interview.interviewee_email}</a>
-                      <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                      <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId }} >
                         <div className="secondary-content">
                           <span className="glyphicons glyphicons-exit rooms-section-icons right"></span>
                         </div>
@@ -143,15 +138,8 @@ class RoomView extends React.Component {
 
         </div>
       </div>
-
-      )
-
+    )
   }
-
 }
-
-
-
-
 
 module.exports = RoomView

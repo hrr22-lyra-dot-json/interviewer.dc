@@ -1,29 +1,23 @@
 import React from 'react'
-//import AuthService from '../Services/AuthService.js'
 import newAuth from '../Services/newAuthenticationService.js'
-
 
 const hell = new newAuth()
 
-
 export class Login extends React.Component {
-
   render() {
-
-    console.log('props', this.props);
-
+    // console.log('props', this.props);
     return (
-      <div className="splash">
 
+      <div className="splash">
         <nav className="splash-nav blue darken-3">
           <div className="nav-wrapper">
             <a href="#" className="brand-logo center">Interviewer Direct Connection</a>
             {/* <a href="/auth/google">Login with Google</a>
 
             <ul className="right"><li><button onClick={hell.isIn.bind(hell)} className="right" className="btn waves-effect waves-light indigo darken-4">Sign In</button></li></ul> */}
-            <ul className="right"><li><a href="/auth/google" className="right" className="btn waves-effect waves-light indigo darken-4">Sign In</a></li></ul>
-
-
+            <ul className="right">
+              <li><a href="/auth/google" className="right" className="btn waves-effect waves-light indigo darken-4">Sign In</a></li>
+            </ul>
           </div>
         </nav>
 
@@ -54,7 +48,6 @@ export class Login extends React.Component {
             <a href="/auth/google" className="right" className="btn waves-effect waves-light indigo darken-4">Try It Out!</a>
           </div>
         </div>
-
 
         <footer className="page-footer blue darken-3">
           <div className="footer-copyright indigo darken-4 valign-wrapper">

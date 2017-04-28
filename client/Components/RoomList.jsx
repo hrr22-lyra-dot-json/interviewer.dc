@@ -20,7 +20,6 @@ const customStyles = {
 
 var roomService = new RoomService()
 
-
 class RoomList extends React.Component {
   constructor (props) {
     super(props)
@@ -31,9 +30,8 @@ class RoomList extends React.Component {
       roomService.getThem(JSON.parse(localStorage.getItem('googleUser')).user.id)
     }
 
-
     roomService.on('got_rooms', (rooms) => {
-      console.log('rooms', rooms.data)
+      // console.log('rooms', rooms.data)
       this.setState({rooms: rooms.data})
     })
 
