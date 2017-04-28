@@ -1,7 +1,6 @@
 import React from 'react';
 import RoomList from './RoomList.jsx'
 
-
 export class Nav extends React.Component {
   constructor(props) {
     super(props)
@@ -16,7 +15,6 @@ export class Nav extends React.Component {
   }
 
   render() {
-
     return (
       <nav className="splash-nav blue darken-3">
         <ul id="slide-out" className="side-nav">
@@ -25,8 +23,7 @@ export class Nav extends React.Component {
             </div>
           </nav>
           <RoomList roomSelect={this.props.roomSelect}/>
-          <footer className="center-align">
-          </footer>
+          <footer className="center-align"></footer>
         </ul>
 
         <div className="nav-wrapper">
@@ -52,39 +49,3 @@ export class Nav extends React.Component {
 }
 
 export default Nav;
-
-
-// const Nav = ({name, room, roomSelect}) => (
-//
-//   <nav className="splash-nav blue darken-3">
-//     <ul id="slide-out" className="side-nav">
-//       <nav className="splash-nav blue darken-3">
-//         <div className="nav-wrapper valign-wrapper">
-//         </div>
-//       </nav>
-//       <RoomList roomSelect={roomSelect}/>
-//       <footer className="center-align">
-//       </footer>
-//     </ul>
-//
-//     <div className="nav-wrapper">
-//       <a href="/" className="breadcrumb"> Interviewer DC</a>
-//       <a href="#" className={ room ? 'breadcrumb show' : 'hide' }>{room}</a>
-//       <ul className="right">
-//         <li>
-//           <a className='dropdown-button breadcrumb' href='#' data-activates='sign-out-dropdown' data-hover='true' data-belowOrigin='true'>Hello, {name}!</a>
-//
-//           <ul id='sign-out-dropdown' className='dropdown-content'>
-//             <li><a href="/logout"><span className="glyphicons glyphicons-log-out"></span>Sign Out</a></li>
-//           </ul>
-//         </li>
-//       </ul>
-//       <a href="#" data-activates="slide-out" className="left">
-//         <span data-activates="slide-out" className="glyphicons glyphicons-menu-hamburger"></span>
-//       </a>
-//
-//     </div>
-//   </nav>
-// )
-//
-// module.exports = Nav;
