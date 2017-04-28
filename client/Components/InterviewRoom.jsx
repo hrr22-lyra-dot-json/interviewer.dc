@@ -40,9 +40,9 @@ class InterviewRoom extends React.Component {
         interviewInfo:{}
     }
 
-    console.log('this', this)
-    console.log('props', props.location);
-    console.log('window', window);
+    // console.log('this', this)
+    // console.log('props', props.location);
+    // console.log('window', window);
 
     this.search = props.location.search;
     if (props.location.state === null) {
@@ -56,14 +56,12 @@ class InterviewRoom extends React.Component {
     }
 
     questionService.getThem(this.roomDbId)
-    //interviewService.getOne(this.roomid)
 
     interviewService.on('got_interview', (interview) => {
         this.setState({interviewInfo: interview})
     })
 
     questionService.on('got_questions', (questions) => {
-        // console.log('questions', questions)
         this.setState({questionList: questions})
     })
 
@@ -95,7 +93,6 @@ class InterviewRoom extends React.Component {
   }
 
   showQuestion() {
-    console.log(this);
     var currContent = this.context.codeMirror.getValue();
     var preLines = '';
     if (currContent) {
@@ -117,7 +114,6 @@ class InterviewRoom extends React.Component {
         whiteboard: document.querySelector('#whiteboard canvas').toDataURL(),
         time: document.getElementById('timeElapsed').innerHTML
     };
-    console.log(snapshot);
     this.state.snapshots.push(snapshot);
 
     if (this.state.snapshots.length > 0) {
@@ -136,8 +132,6 @@ class InterviewRoom extends React.Component {
   }
 
   endInterview() {
-    // console.log(this);
-
     var _context = this.context;
     var _type = this.type;
 
@@ -222,12 +216,6 @@ class InterviewRoom extends React.Component {
         document.getElementById('browserWarning').style.display = 'none';
     }
 
-    // If you click the browser's back button, it will usually cause errors
-    // This will act like you are clicking the "home" button
-    // window.onpopstate = function() {
-    //     window.location.replace(window.location.origin);
-    // }
-
     // Set initial button states
     document.getElementById('stop').style.display = 'none';
     document.getElementById('close-room').style.display = 'none';
@@ -289,8 +277,6 @@ class InterviewRoom extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log('umounted');
-    // window.location.replace(window.location.origin);
     document.getElementById('homeButton').click();
   }
 
@@ -383,19 +369,6 @@ class InterviewRoom extends React.Component {
                 </div>
             </div>
         </div>
-
-        {/* Help - Left Side Nav */}
-        {/* <ul id="interviewerHelpPanel" className="side-nav">
-            <li>
-                Stuff
-            </li>
-        </ul>
-        <div id="interviewerHelpPanelButton" className="fixed-action-btn left">
-            <a href="#" data-activates="interviewerHelpPanel" className="button-collapse btn-floating btn-large">
-                <span className="glyphicons glyphicons-question-sign"></span>
-            </a>
-        </div>*/}
-
 
         {/* Questions Right Side Nav */}
         <ul id="interviewerQuestionPanel" className="side-nav">

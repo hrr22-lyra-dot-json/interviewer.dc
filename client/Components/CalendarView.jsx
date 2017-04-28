@@ -1,30 +1,27 @@
 import React from 'react'
 import moment from 'moment'
-//import events from '../events'
 import BigCalendar from 'react-big-calendar'
-//import CalendarAuth from './CalendarAuth.jsx'
+
 // a localizer for BigCalendar
-BigCalendar.momentLocalizer(moment)
+BigCalendar.momentLocalizer(moment);
+
 function Event({ event }) {
   if(event.description === 'Interview') {
     return (
-    <span style={{ color: 'magenta'}}>
-      <strong>
-      {event.title}
-      </strong>
-      { event.desc && (':  ' + event.desc)}
-    </span>
+      <span style={{ color: 'magenta'}}>
+        <strong>{event.title}</strong>
+        { event.desc && (':  ' + event.desc)}
+      </span>
   )} else {
     return (
       <span style={{ color: 'blue'}}>
-        <strong>
-        {event.title}
-        </strong>
+        <strong>{event.title}</strong>
         { event.desc && (':  ' + event.desc)}
       </span>
     )
   }
 }
+
 var eventStyleGetter = function(event, start, end, isSelected) {
     // console.log(event);
     var backgroundColor = '#' + event.hexColor;
@@ -40,13 +37,9 @@ var eventStyleGetter = function(event, start, end, isSelected) {
 
     var style = {
         backgroundColor: backgroundColor,
-        //borderRadius: '0px',
         opacity: 0.8,
         color: 'black',
         border: '0px',
-        //display: 'block',
-        // -webkit-transition: -webkit-transform 0.5s ease;
-        // -moz-transition: -moz-transform 0.5s ease;
         transition: 'transform 0.5s ease'
     };
     return {
@@ -55,36 +48,29 @@ var eventStyleGetter = function(event, start, end, isSelected) {
 }
 
 var CalView = ({events, selectable, selectSlot, eventClick}) => (
-
-      <div>
-      <BigCalendar
+  <div>
+    <BigCalendar
       selectable={selectable}
-        timeslots={8}
-        style={{height: '75vh'}}
-        step={15}
-        events={events}
-        scrollToTime={new Date(1970, 1, 1, 6)}
-        defaultDate={new Date()}
-        onSelectEvent={(event) =>
-            {if (event.title === 'Book Interview') {
-                mbox.confirm('Are you sure you want to delete this event?', (yes, e = event) => {
-                if (yes) eventClick(e);
-            })}}}
-       onSelectSlot={(slotInfo) => {selectSlot(slotInfo);
-       }}
-       defaultView='week'
-       eventPropGetter={(eventStyleGetter)}
+      timeslots={8}
+      style={{height: '75vh'}}
+      step={15}
+      events={events}
+      scrollToTime={new Date(1970, 1, 1, 6)}
+      defaultDate={new Date()}
+      onSelectEvent={(event) =>
+        {if (event.title === 'Book Interview') {
+          mbox.confirm('Are you sure you want to delete this event?', (yes, e = event) => {
+            if (yes) eventClick(e);
+          })
+        }}
+      }
+      onSelectSlot={(slotInfo) => {
+        selectSlot(slotInfo);
+      }}
+      defaultView='week'
+      eventPropGetter={(eventStyleGetter)}
+    />
+  </div>
+)
 
-      />
-      </div>
-    )
-
-
-module.exports = CalView
-
-// components={{
-//             event: Event,
-//             start: Start
-//           }}
-
-
+module.exports = CalView;

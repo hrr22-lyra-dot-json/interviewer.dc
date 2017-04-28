@@ -15,14 +15,20 @@ class DrawableCanvas extends React.Component {
       history: []
     };
 
+    this.rect;
+    this.tool = 'brush';
     this.brushColor = '#000000';
     this.lineWidth = 4;
     this.canvasStyle = {
       backgroundColor: '#FFFFFF',
-      cursor: 'pointer'
+      cursor: 'crosshair'
     };
-    this.trackingX = [];
-    this.trackingY = [];
+    this.tracker = [];
+
+    this.originalOffsetW;
+    this.originalOffsetH;
+    this.offsetWidth = 0;
+    this.offsetHeight = 0;
   }
 
   componentDidMount() {
@@ -36,6 +42,8 @@ class DrawableCanvas extends React.Component {
     let ctx = canvas.getContext('2d');
     ctx.lineJoin = 'round';
     ctx.lineCap = 'butt';
+    this.originalOffsetW = canvas.offsetWidth;
+    this.originalOffsetH = canvas.offsetHeight;
 
     this.setState({
       canvas: canvas,
@@ -50,23 +58,23 @@ class DrawableCanvas extends React.Component {
         if (canvas.width !== data.width || canvas.height !== data.height) {
           let widthMultiplier = canvas.width / data.width;
           let heightMultiplier = canvas.height / data.height;
-          for (let i = 0; i < data.X.length-1 && i < data.Y.length-1; i++) {
+          for (let i = 0; i < data.lines.length-1; i++) {
             context.draw(
-              data.X[i] * widthMultiplier,
-              data.Y[i] * heightMultiplier,
-              data.X[i+1] * widthMultiplier,
-              data.Y[i+1] * heightMultiplier,
+              data.lines[i][0] * widthMultiplier,
+              data.lines[i][1] * heightMultiplier,
+              data.lines[i+1][0] * widthMultiplier,
+              data.lines[i+1][1] * heightMultiplier,
               data.brushColor,
               data.lineWidth
             );
           }
         } else {
-          for (let i = 0; i < data.X.length-1 && i < data.Y.length-1; i++) {
+          for (let i = 0; i < data.lines.length-1; i++) {
             context.draw(
-              data.X[i],
-              data.Y[i],
-              data.X[i+1],
-              data.Y[i+1],
+              data.lines[i][0],
+              data.lines[i][1],
+              data.lines[i+1][0],
+              data.lines[i+1][1],
               data.brushColor,
               data.lineWidth
             );
@@ -93,18 +101,16 @@ class DrawableCanvas extends React.Component {
         lastX: lastX,
         lastY: lastY
       });
-      this.trackingX.push(lastX);
-      this.trackingY.push(lastY);
+      this.tracker.push([lastX, lastY]);
     }
     else{
-      let lastX = e.clientX - rect.left;
-      let lastY = e.clientY - rect.top;
+      let lastX = (e.clientX - rect.left) * (this.state.canvas.width / rect.width);
+      let lastY = (e.clientY - rect.top) * (this.state.canvas.height / rect.height);
       this.setState({
-        lastX: e.clientX - rect.left,
-        lastY: e.clientY - rect.top
+        lastX: lastX,
+        lastY: lastY
       });
-      this.trackingX.push(lastX);
-      this.trackingY.push(lastY);
+      this.tracker.push([lastX, lastY]);
     }
 
     this.setState({
@@ -124,18 +130,20 @@ class DrawableCanvas extends React.Component {
         currentY = e.targetTouches[0].pageY - rect.top;
       }
       else{
-        currentX = e.clientX - rect.left;
-        currentY = e.clientY - rect.top;
+        currentX = (e.clientX - rect.left) * (this.state.canvas.width / rect.width);
+        currentY = (e.clientY - rect.top) * (this.state.canvas.height / rect.height);
       }
-
 
       this.draw(lastX, lastY, currentX, currentY);
       this.setState({
         lastX: currentX,
         lastY: currentY,
       });
-      this.trackingX.push(currentX);
-      this.trackingY.push(currentY);
+      this.tracker.push([currentX, currentY]);
+
+      if (this.tracker.length === 10) {
+        this.sendData('drawing');
+      }
     }
   }
 
@@ -143,19 +151,7 @@ class DrawableCanvas extends React.Component {
     this.setState({
       drawing: false
     });
-    this.props.webrtc.send({
-      type: 'draw',
-      data: {
-        X: this.trackingX,
-        Y: this.trackingY,
-        width: ReactDOM.findDOMNode(this).children[0].width,
-        height: ReactDOM.findDOMNode(this).children[0].height,
-        brushColor: this.brushColor,
-        lineWidth: this.lineWidth
-      }
-    });
-    this.trackingX = [];
-    this.trackingY = [];
+    this.sendData();
   }
 
   draw(lX, lY, cX, cY, brushColor, lineWidth) {
@@ -168,6 +164,28 @@ class DrawableCanvas extends React.Component {
     this.state.context.stroke();
   }
 
+  sendData(condition) {
+    let tracker = this.tracker;
+    this.tracker = [];
+
+    if (condition === 'drawing') {
+      // Connect the last point of this series to the first point of the next
+      // Only if the mouse is still held down
+      this.tracker.push(tracker[tracker.length-1]);
+    }
+
+    this.props.webrtc.send({
+      type: 'draw',
+      data: {
+        lines: tracker,
+        width: ReactDOM.findDOMNode(this).children[0].width,
+        height: ReactDOM.findDOMNode(this).children[0].height,
+        brushColor: this.brushColor,
+        lineWidth: this.lineWidth
+      }
+    });
+  }
+
   handleClear() {
     this.props.webrtc.send({
       type: 'clear'
@@ -177,17 +195,26 @@ class DrawableCanvas extends React.Component {
 
   changePointer(id, option) {
     if (id === 'brushButton') {
+      this.tool = 'brush';
       this.brushColor = '#000000';
     } else if (id === 'eraserButton') {
+      this.tool = 'eraser';
       this.brushColor = this.canvasStyle.backgroundColor;
     } else if (id === 'widthSelector') {
       this.lineWidth = option;
+    } else if (id === 'colorSelector' && this.tool === 'brush') {
+      this.brushColor = option;
     }
   }
 
   onSelectChange(id, event) {
-    this.changePointer(id, event.target.value);
-    document.getElementById(id).value = event.target.value;
+    if (id === 'widthSelector') {
+      this.changePointer(id, event.target.value);
+      document.getElementById(id).value = event.target.value;
+    } else if (id === 'colorSelector') {
+      this.changePointer(id, event.target.value);
+      document.getElementById(id).value = event.target.value;
+    }
   }
 
   resetCanvas() {
@@ -199,7 +226,7 @@ class DrawableCanvas extends React.Component {
   getDefaultStyle() {
     return {
       backgroundColor: '#FFFFFF',
-      cursor: 'pointer'
+      cursor: 'crosshair'
     };
   }
 
@@ -229,6 +256,11 @@ class DrawableCanvas extends React.Component {
         >
         </canvas>
         <div id="whiteboardOptions">
+          <select id="colorSelector" defaultValue="Black" onChange={this.onSelectChange.bind(this, 'colorSelector')}>
+            <option value="#000000">Black</option>
+            <option value="#ff0000">Red</option>
+            <option value="#0000FF">Blue</option>
+          </select>
           <button onClick={this.changePointer.bind(this, 'brushButton')}>Brush</button>
           <button onClick={this.changePointer.bind(this, 'eraserButton')}>Eraser</button>
           <select id="widthSelector" defaultValue="4" onChange={this.onSelectChange.bind(this, 'widthSelector')}>

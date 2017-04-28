@@ -12,28 +12,25 @@ class RoomView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {roomDetails:props.info, questionList: [] , interviews:[], newQuestion:'', upcomingInterviews:[], pastInterviews:[]}
-    console.log('roominfo', this.state.roomDetails)
+    // console.log('roominfo', this.state.roomDetails)
     this.roomSelect = props.roomSelect;
 
     interviewService.getThem({roomid:this.state.roomDetails.id, owner_id:JSON.parse(localStorage.getItem('googleUser')).user.id})
 
     interviewService.on('got_interviews', (interviews) => {
       if (interviews) {
-
         var upcoming = interviews.filter(function(interview) {
           return (new Date(interview.start)).getTime() >= (new Date()).getTime()
         }).sort(function(a, b) {
           return (new Date(a.start)).getTime() - (new Date(b.start)).getTime()
         })
 
-        console.log('upcoming', upcoming)
-
         var past = interviews.filter(function(interview) {
           return (new Date(interview.start)).getTime() <= (new Date()).getTime()
         })
-        console.log('past', past)
 
-
+        // console.log('upcoming', upcoming)
+        // console.log('past', past)
 
         this.setState({interviews: interviews, upcomingInterviews: upcoming, pastInterviews:past })
       }
@@ -41,7 +38,7 @@ class RoomView extends React.Component {
     questionService.getThem(this.state.roomDetails.id)
 
     questionService.on('got_questions', (questions) => {
-        console.log('questions', questions)
+        // console.log('questions', questions)
         this.setState({questionList: questions})
     })
 
@@ -154,15 +151,8 @@ class RoomView extends React.Component {
 
         </div>
       </div>
-
-      )
+    )
   }
 }
-
-
-
-
-
-
 
 module.exports = RoomView
