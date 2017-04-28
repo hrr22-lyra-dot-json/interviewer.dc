@@ -12,7 +12,7 @@ var CalView = ({events, selectable, selectSlot, eventClick}) => (
       <BigCalendar
       selectable={selectable}
         timeslots={8}
-        style={{height: '420px'}}
+        style={{height: '65vh'}}
         step={15}
         events={events}
         scrollToTime={new Date(1970, 1, 1, 6)}

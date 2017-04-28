@@ -356,9 +356,7 @@ button.rbc-input::-moz-focus-inner {
 
 .rbc-event:hover {
   z-index: 22 !important;
-  height: auto !important;
   opacity: 1 !important;
-  flex-flow: row wrap !important;
   background-color: #3687e2 !important; }
 
 .rbc-event.rbc-selected {
@@ -545,6 +543,10 @@ button.rbc-input::-moz-focus-inner {
 
 .rbc-agenda-time-cell .rbc-continues-prior:before {
   content: '« '; }
+
+.rbc-agenda-date-cell,
+.rbc-agenda-time-cell {
+  white-space: nowrap; }
 
 .rbc-agenda-event-cell {
   width: 100%; }
@@ -735,3 +737,6 @@ button.rbc-input::-moz-focus-inner {
   border-radius: 50%;
   width: 8px;
   height: 8px; }
+
+.rbc-day-slot, .rbc-time-gutter {
+  height: 200vh; }
