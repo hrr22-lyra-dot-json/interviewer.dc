@@ -6,7 +6,6 @@ import BigCalendar from 'react-big-calendar'
 import TimeslotService from '../Services/TimeslotService.js'
 import RoomService from '../Services/RoomService.js'
 import googleCalendar from '../Services/cService.js'
-//import CalendarAuth from './CalendarAuth.jsx'
 import RoomList from './RoomList.jsx'
 import Modal from 'react-modal';
 import Select from 'react-select';
@@ -43,7 +42,18 @@ var roomServ = new RoomService()
 class Calendar extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {events:[], availableSlots:[], modalIsOpen: false, slotInfo:{start:new Date(), end:new Date()}, selectable:true, slotLength: 30, interviews:[]};
+    this.state = {
+      events: [],
+      availableSlots: [],
+      modalIsOpen: false,
+      slotInfo: {
+        start: new Date(),
+        end: new Date()
+      },
+      selectable: true,
+      slotLength: 30,
+      interviews: []
+    };
 
     this.state.eventsAndSlots = this.state.events.concat(this.state.availableSlots)
 
@@ -52,14 +62,14 @@ class Calendar extends React.Component {
     }
 
     slotService.on('got_slots', (slots) => {
-      console.log('slots', slots.data)
+      // console.log('slots', slots.data)
       this.setState({availableSlots: slots.data})
       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots.concat(this.state.interviews))})
     })
 
     googleCalendarService.on('events_loaded', (evv) => {
        this.setState({events: evv})
-       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots.concat(this.state.interviews))})//.concat(this.state.interviews)
+       this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots.concat(this.state.interviews))})
      })
 
     interviewService.getThem({owner_id:JSON.parse(localStorage.getItem('googleUser')).user.id})
@@ -72,22 +82,8 @@ class Calendar extends React.Component {
         slot.end = new Date(slot.end)
         slot.description = 'dbInterview'
       })
-
-
-        // var upcoming = interviews.filter(function(interview) {
-        //   return (new Date(interview.start)).getTime() >= (new Date()).getTime()
-        // }).sort(function(a, b) {
-        //   return (new Date(a.start)).getTime() - (new Date(b.start)).getTime()
-        // })
-
-        // console.log('upcoming', upcoming)
-
-        // var past = interviews.filter(function(interview) {
-        //   return (new Date(interview.start)).getTime() <= (new Date()).getTime()
-        // })
-        // console.log('past', past)
         this.setState({interviews: interviews})
-        this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots.concat(this.state.interviews))})//.concat(this.state.interviews)
+        this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots.concat(this.state.interviews))})
       }
     })
 
@@ -97,7 +93,6 @@ class Calendar extends React.Component {
     this.addInfo = this.addInfo.bind(this)
     this.addAvailability = this.addAvailability.bind(this)
     this.logChange = this.logChange.bind(this)
-
   }
 
   addInfo(slotInfo) {
@@ -107,12 +102,11 @@ class Calendar extends React.Component {
 
   logChange(val) {
     this.setState({slotLength: val.value})
-    console.log("Selected: ", val);
+    // console.log("Selected: ", val);
   }
 
   openModal() {
     this.setState({modalIsOpen: true});
-    //this.setState({modalIsOpen: true});
   }
 
   afterOpenModal() {
@@ -133,7 +127,7 @@ class Calendar extends React.Component {
     var endTime = mainSlot.end.valueOf()
     var newTimeSlots = [];
     var userid = JSON.parse(localStorage.getItem('googleUser')).user.id
-    console.log('guserid', userid);
+    // console.log('guserid', userid);
 
     while(startTime + slotSizeMs < endTime) {
       var newSlot = {}
@@ -148,7 +142,8 @@ class Calendar extends React.Component {
     //post newtime slots to database with callback GET request to get freshly added timeslots
     //this will go away as we use get request to show available slots
     //this.setState({eventsAndSlots: this.state.events.concat(this.state.availableSlots)})
-    console.log('start:', startTime )
+
+    // console.log('start:', startTime )
     this.setState({modalIsOpen: false, selectable:true});
     //post request to availability slots database
     Materialize.toast(`Availability added!`, 4000)
@@ -156,11 +151,10 @@ class Calendar extends React.Component {
 
   handleAuthClicker () {
     googleCalendarService.getItems
-    //this.calService;
   }
 
   eventClick(event) {
-    console.log('this is the event', event)
+    // console.log('this is the event', event)
     if (event.title === 'Book Interview') {
       Materialize.toast(`Appointment slot for ${event.title} on ${event.start.toDateString()} at ${event.start.toTimeString()} deleted`, 6000)
       slotService.deleteSlot(event.id, slotService.getThem.bind(slotService), JSON.parse(localStorage.getItem('googleUser')).user.id )
@@ -170,9 +164,7 @@ class Calendar extends React.Component {
   render () {
     return (
       <div className="container calendar-section">
-
         <div className="row toggle-buttons">
-
           <button id="authorize-button" className="btn waves-effect waves-light blue darken-3 view-cal-events-button right" onClick={googleCalendarService.getThem.bind(googleCalendarService)}>
             Toggle GCal Events
           </button>
@@ -180,14 +172,18 @@ class Calendar extends React.Component {
           <pre id="content"></pre>
         </div>
 
-        <CalView events={this.state.eventsAndSlots} selectable={this.state.selectable}  selectSlot={this.addInfo.bind(this)} eventClick={this.eventClick.bind(this)} />
+        <CalView
+          events={this.state.eventsAndSlots}
+          selectable={this.state.selectable}
+          selectSlot={this.addInfo.bind(this)}
+          eventClick={this.eventClick.bind(this)} />
 
           <Modal
             isOpen={this.state.modalIsOpen}
             onAfterOpen={this.afterOpenModal}
             onRequestClose={this.closeModal}
             style={customStyles}
-            contentLabel="Add Availability">
+            contentLabel="Add Availability" >
 
             <h2 ref="subtitle">Add Availability</h2>
             <p>Add availability slot for interviews from {this.state.slotInfo.start.toString()}
@@ -199,11 +195,9 @@ class Calendar extends React.Component {
               options={options}
               onChange={this.logChange}
               searchable={false}
-              clearable={false}
-            />
+              clearable={false} />
             <button className="btn btn-default blue darken-3" onClick={this.addAvailability}>Confirm</button>
             <button className="btn btn-default red right" onClick={this.closeModal}>close</button>
-
           </Modal>
       </div>
     )

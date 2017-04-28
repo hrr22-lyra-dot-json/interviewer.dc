@@ -10,11 +10,7 @@ exports.getConnection = function() {
 };
 
 exports.initializeConnection = function() {
-  console.log(window.location);
   connection.socketURL = '/';
-  // connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-  // connection.socketURL = window.location.hostname + ':' + socketport + '/';
-  // connection.socketURL = 'https://interviewer-dc.herokuapp.com:1337/';
 
   // Initial connection setup
   connection.socketMessageEvent = 'interviewer.dc-room';
@@ -32,7 +28,6 @@ exports.initializeConnection = function() {
   // handling video sources
   connection.videosContainer = document.getElementById('videos-container');
   connection.onstream = function(event) {
-    // var width = parseInt(connection.videosContainer.clientWidth / 2) - 20;
     var width = 140;
     var mediaElement = getMediaElement(event.mediaElement, {
       title: event.userid,
@@ -63,11 +58,6 @@ exports.initializeConnection = function() {
   };
 
   connection.onclose = function() {
-    // Known bug: the count is always ahead by 1
-    // If 2 other people are in room, and one leaves, count will be 2
-    // If the last person leaves, count will be 1
-    // Events are delayed "1 person"
-    // If same person leaves and joins the room, there will be 2 unique instances (one expired, one new)
     if (connection.getAllParticipants().length) {
       helpers.setRoomStatusText('Connected: ' + connection.getAllParticipants().join(', '));
     } else {

@@ -11,17 +11,11 @@ const refresh = require('passport-oauth2-refresh')
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 var Mixpanel = require('mixpanel');
-//var googleConfig = require('../google-config.js');
-//var mixpanelConfig = require('../mixpanel-config.js');
-
-// create an instance of the mixpanel client
 
 var mixPanelId = process.env.mixPanelClientId || require('../mixpanel-config.js').clientID;
 
 var mixpanel = Mixpanel.init(mixPanelId);
 
-
-//////////////////////
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
@@ -41,16 +35,7 @@ var strat = new GoogleStrategy({
     //   prompt: 'consent',
   },
 
-//   mixpanel.people.set('billybob', {
-//     $first_name: 'Billy',
-//     $last_name: 'Bob',
-//     $created: (new Date('jan 1 2013')).toISOString(),
-//     plan: 'premium',
-//     games_played: 1,
-//     points: 0},
-//     {
-//     $ip: '127.0.0.1'
-// });
+
 
 // // create or update a user in Mixpanel Engage without altering $last_seen
 // // - pass option $ignore_time: true to prevent the $last_seen property from being updated
@@ -120,8 +105,9 @@ var strat = new GoogleStrategy({
               } else {
                 newUser.update({drive_folder_id:file.id})
                 .then(function(UpdatedUser) {
+                  var tokenToSend = {token: newToken.token}
                   mixpanel.people.set(profile.id, 'folder_id', UpdatedUser.drive_folder_id);
-                  done(null, {user: UpdatedUser, token: newToken })
+                  done(null, {user: UpdatedUser, token: tokenToSend })
                 })
               }
             })
