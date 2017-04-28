@@ -172,9 +172,9 @@ button.rbc-input::-moz-focus-inner {
   cursor: pointer;
   padding: 2px 5px;
   background-color: #3174ad;
-  border-radius: 5px;
   width: 100% !important;
   color: $white !important;
+  border-bottom: 1px solid $white !important;
   font-size: 0.875em;
   -webkit-transition: -webkit-transform 0.5s ease;
   -moz-transition: -moz-transform 0.5s ease;
