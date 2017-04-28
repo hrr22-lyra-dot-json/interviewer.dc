@@ -123,6 +123,9 @@ main {
 section.row {
   margin-bottom: .5rem; }
 
+.upcoming-interview-collection-item {
+  margin: 0 .5rem; }
+
 /*******************************
 *        Interview Page        *
 ********************************/

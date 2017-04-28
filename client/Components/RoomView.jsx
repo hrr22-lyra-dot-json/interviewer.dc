@@ -61,8 +61,6 @@ class RoomView extends React.Component {
     this.roomSelect(null)
   }
 
-
-
   render() {
     var roomDatabaseId = this.state.roomDetails.id
     return (
@@ -99,16 +97,24 @@ class RoomView extends React.Component {
               </div>
               {
                 this.state.upcomingInterviews.map(function(interview, key) {
+                  var interviewDate = interview.start.toString().slice(0, 10);
+                  var interviewTime = interview.start.toString().slice(11, 16);
                   return (
                     <div className="collection-item" key={key}>
-
-                      <a   >{interview.start}</a>
-                      <a   >{interview.interviewee_name}</a>
-                      <a   >{interview.interviewee_email}</a>
-                      <a href={'https://drive.google.com/drive/folders/' + interview.drive_link}>Link to Google drive folder</a>
-                      <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
-                      <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
-                      </Link>
+                      <div className="row">
+                        <div className="col s3 m2"><span className="truncate">{interviewDate}</span></div>
+                        <div className="col s2 m2"><span className="truncate">{interviewTime}</span></div>
+                        <div className="col s3 m2"><span className="truncate">{interview.interviewee_name}</span></div>
+                        <div className="col m4 hide-on-small-only"><span className="truncate">{interview.interviewee_email}</span></div>
+                        <div className="col s1 right">
+                          <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                            <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
+                          </Link>
+                        </div>
+                        <div className="col s1 right">
+                          <a href={'https://drive.google.com/drive/folders/' + interview.drive_link}><span className="social social-google-drive rooms-section-icons"></span></a>
+                        </div>
+                      </div>
                     </div>
                   )
                 })
@@ -124,16 +130,17 @@ class RoomView extends React.Component {
               {
                 this.state.pastInterviews.map(function(interview, key) {
                   return (
-                    <div className="collection-item" key={key}>
-
-                      <a>{interview.start}</a>
-                      <a>{interview.interviewee_name}</a>
-                      <a>{interview.interviewee_email}</a>
-                      <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                    <div className="collection-item container" key={key}>
+                      <div className="row">
+                        <div className="col s3">{interview.start}</div>
+                        <div className="col s3">{interview.interviewee_name}</div>
+                        <div className="col s3">{interview.interviewee_email}</div>
                         <div className="secondary-content">
-                          <span className="glyphicons glyphicons-exit rooms-section-icons right"></span>
+                          <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} className="right" >
+                            <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
+                          </Link>
                         </div>
-                      </Link>
+                      </div>
                     </div>
                   )
                 })
@@ -145,10 +152,10 @@ class RoomView extends React.Component {
       </div>
 
       )
-
   }
-
 }
+
+
 
 
 

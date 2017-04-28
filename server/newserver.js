@@ -272,7 +272,7 @@ require('./socket.io/Signaling-Server.js')(socketserver, function(socket) {
 //////////////////////////////// MISC ////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-console.log(`[Server + socket.io server port]: ${port}
+console.log(`
 
                           ........:oo:........
                        o//ssssssssyhhysssss+////o                   .'''''''''''''''''.
@@ -308,5 +308,5 @@ console.log(`[Server + socket.io server port]: ${port}
       ''+mmmmmhssssssssssssssssydddddysssssssssssssssssssssssssssssssssssssssssssssdddmmmmmy::s
       ''+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmhooh
 
-      [Server + socket.io server port]: ${port}`);
+[Server + socket.io server port]: ${port}`);
 module.exports = app;
