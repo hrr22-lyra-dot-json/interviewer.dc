@@ -75,7 +75,7 @@ class RoomView extends React.Component {
                 <div className="col s10 left">
                   <input id="newQuestion" value={this.state.newQuestion} placeholder="Type in new question..." onChange={this.handleChange.bind(this)}/>
                 </div>
-                <div className="col s2 right">
+                <div className="col s1 right">
                   <a className="waves-effect waves-light btn blue darken-3 right" onClick={this.addQuestion.bind(this)}><span className="glyphicons glyphicons-plus"></span></a>
                 </div>
               </div>
@@ -94,16 +94,24 @@ class RoomView extends React.Component {
               </div>
               {
                 this.state.upcomingInterviews.map(function(interview, key) {
+                  var interviewDate = interview.start.toString().slice(0, 10);
+                  var interviewTime = interview.start.toString().slice(11, 16);
                   return (
                     <div className="collection-item" key={key}>
-
-                      <a   >{interview.start}</a>
-                      <a   >{interview.interviewee_name}</a>
-                      <a   >{interview.interviewee_email}</a>
-                      <a href={'https://drive.google.com/drive/folders/' + interview.drive_link}>Link to Google drive folder</a>
-                      <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId }} >
-                      <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
-                      </Link>
+                      <div className="row">
+                        <div className="col s3 m2"><span className="truncate">{interviewDate}</span></div>
+                        <div className="col s3 m2"><span className="truncate">{interviewTime}</span></div>
+                        <div className="col s4 m2"><span className="truncate">{interview.interviewee_name}</span></div>
+                        <div className="col m4 hide-on-small-only"><span className="truncate">{interview.interviewee_email}</span></div>
+                        <div className="col s1 right">
+                          <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                            <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
+                          </Link>
+                        </div>
+                        <div className="col s1 right">
+                          <a href={'https://drive.google.com/drive/folders/' + interview.drive_link}><span className="social social-google-drive rooms-section-icons"></span></a>
+                        </div>
+                      </div>
                     </div>
                   )
                 })
@@ -120,15 +128,20 @@ class RoomView extends React.Component {
                 this.state.pastInterviews.map(function(interview, key) {
                   return (
                     <div className="collection-item" key={key}>
-
-                      <a>{interview.start}</a>
-                      <a>{interview.interviewee_name}</a>
-                      <a>{interview.interviewee_email}</a>
-                      <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId }} >
-                        <div className="secondary-content">
-                          <span className="glyphicons glyphicons-exit rooms-section-icons right"></span>
+                      <div className="row">
+                        <div className="col s3 m2"><span className="truncate">{interviewDate}</span></div>
+                        <div className="col s3 m2"><span className="truncate">{interviewTime}</span></div>
+                        <div className="col s4 m2"><span className="truncate">{interview.interviewee_name}</span></div>
+                        <div className="col m4 hide-on-small-only"><span className="truncate">{interview.interviewee_email}</span></div>
+                        <div className="col s1 right">
+                          <Link to={{ pathname: '/interviewroom', state: interview.id + '$' + roomDatabaseId/*, query: {roomname: room.job_position + room.owner_id}*/ }} >
+                            <span className="glyphicons glyphicons-exit rooms-section-icons"></span>
+                          </Link>
                         </div>
-                      </Link>
+                        <div className="col s1 right">
+                          <a href={'https://drive.google.com/drive/folders/' + interview.drive_link}><span className="social social-google-drive rooms-section-icons"></span></a>
+                        </div>
+                      </div>
                     </div>
                   )
                 })

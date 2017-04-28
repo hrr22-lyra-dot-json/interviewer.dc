@@ -41,6 +41,12 @@ Interviewer.DC supports a list of actions to be preformed on the database from t
 `npm run db:setup` run db:create -> db:unseed -> db:seed<br />
 `npm run db:drop` will drop the tables from the database if they exist.<br />
 
+## SASS Stylesheets
+Interviewer.DC stylesheets are written in SASS/SCSS. To compile, run the following command from the command prompt:
+
+`npm run sass:compile` will compile the input.scss file into an output.css file in the same directory as the input.scss file.<br />
+Note:  `npm run quick` will run `npm run sass:compile` as well.
+
 ## Testing
 
 To test the app, run the following (requires [PhantomJS](http://phantomjs.org/) and [CasperJS](http://casperjs.org/), which I recommend installing via [Homebrew](https://brew.sh/) - they must be installed globally):
